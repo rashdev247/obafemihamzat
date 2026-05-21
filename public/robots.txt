@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://drobafemihamzat.vercel.app
+
+# Sitemaps
+Sitemap: https://drobafemihamzat.vercel.app/sitemap.xml
