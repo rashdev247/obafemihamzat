@@ -72,7 +72,7 @@ export default function AboutPage() {
                 </p>
                 <p>
                   His transition into public service marked the beginning of one
-                  of Lagos State's most consequential governance journeys:
+                  of Lagos State&apos;s most consequential governance journeys:
                   technology reform, public works, transport modernization, and
                   steady executive leadership.
                 </p>
