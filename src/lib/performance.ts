@@ -44,11 +44,7 @@ export function initPerformanceMonitoring() {
 export function preloadCriticalResources() {
   if (typeof window === 'undefined') return;
 
-  const criticalImages = [
-    '/images/plushealthone.png',
-    '/images/plushealthtwo.png',
-    '/images/doctor.png'
-  ];
+  const criticalImages: string[] = [];
 
   criticalImages.forEach(src => {
     const link = document.createElement('link');

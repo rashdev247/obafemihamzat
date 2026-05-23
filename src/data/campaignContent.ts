@@ -39,23 +39,116 @@ export const campaignImages = {
 export const movementStats = [
   {
     value: "25+",
-    label: "Years",
-    description: "Public service and leadership",
+    label: "Years Service",
+    description: "Continuous public service, technology, and governance",
   },
   {
-    value: "2-Term",
+    value: "2x",
     label: "Deputy Governor",
-    description: "Serving Lagos State since 2019",
+    description: "Elected in 2019 and re-elected in 2023",
   },
   {
-    value: "Millions",
-    label: "Impacted",
-    description: "Through infrastructure and innovation",
+    value: "1st",
+    label: "Oracle ERP",
+    description: "Led Africa-first public-sector Oracle ERP deployment",
   },
   {
-    value: "One",
-    label: "Vision",
-    description: "A Lagos that works for everyone",
+    value: "2013",
+    label: "Lagos Man",
+    description: "Recognized for service, reform, and innovation",
+  },
+];
+
+export const primaryResult = {
+  videoUrl:
+    "https://res.cloudinary.com/duafntunw/video/upload/v1779466522/AQPRK7XozdV_u-3CU_a009KbdWTG1RuEbGg4doFeWbGJwvxGNSOw7e7reWznsr4gEDQMzzYvwFF4RkK99SyNc80KtPNsxDGM4TBHZx0_fu8kds.mp4",
+  mediaSlides: [
+    {
+      type: "video",
+      src: "https://res.cloudinary.com/duafntunw/video/upload/v1779466522/AQPRK7XozdV_u-3CU_a009KbdWTG1RuEbGg4doFeWbGJwvxGNSOw7e7reWznsr4gEDQMzzYvwFF4RkK99SyNc80KtPNsxDGM4TBHZx0_fu8kds.mp4",
+      title: "Primary declaration video",
+      caption: "Campaign film from the APC primary result declaration.",
+    },
+    {
+      type: "image",
+      src: "https://res.cloudinary.com/duafntunw/image/upload/v1779460463/primary-election-images-1_mu24qh.jpg",
+      title: "Primary election moment 01",
+      caption: "The result declaration begins at the APC secretariat in Ikeja.",
+    },
+    {
+      type: "image",
+      src: "https://res.cloudinary.com/duafntunw/image/upload/v1779460454/primary-election-images-2_io60ho.jpg",
+      title: "Primary election moment 02",
+      caption: "Party leaders and supporters gather for the official outcome.",
+    },
+    {
+      type: "image",
+      src: "https://res.cloudinary.com/duafntunw/image/upload/v1779460448/primary-election-images-3_hgwchi.jpg",
+      title: "Primary election moment 03",
+      caption: "A chronological look at the May 21 primary proceedings.",
+    },
+    {
+      type: "image",
+      src: "https://res.cloudinary.com/duafntunw/image/upload/v1779460437/primary-election-images-4_hjezlb.jpg",
+      title: "Primary election moment 04",
+      caption: "The APC Lagos 2027 campaign enters its next phase.",
+    },
+  ],
+  label: "APC primary result",
+  title:
+    "Kadri Obafemi Hamzat emerges APC candidate for the 2027 Lagos governorship election.",
+  description:
+    "The incumbent Deputy Governor of Lagos State secured the APC governorship ticket after polling 657,974 votes in the primary held on 21 May 2026.",
+  location: "APC Secretariat, Ikeja",
+  resultDate: "21 May 2026",
+  resultSummary:
+    "Hamzat defeated his sole rival, who received one vote, with the result declared at the APC secretariat in Ikeja.",
+  highlights: [
+    {
+      value: "657,974",
+      label: "Votes polled",
+    },
+    {
+      value: "1",
+      label: "Vote for sole rival",
+    },
+    {
+      value: "2019",
+      label: "Deputy Governor since",
+    },
+  ],
+};
+
+export const heroSlides = [
+  {
+    image: campaignImages.impact,
+    title: "Experience Meets Vision",
+    caption:
+      "A tested public servant ready to move Lagos into its next chapter.",
+  },
+  {
+    image: campaignImages.leadership,
+    title: "Leadership In Motion",
+    caption:
+      "A campaign grounded in listening, consultation, and steady delivery.",
+  },
+  {
+    image: campaignImages.infrastructure,
+    title: "Infrastructure That Connects",
+    caption:
+      "Roads, rail, waterways, and public works shaped around everyday movement.",
+  },
+  {
+    image: campaignImages.youth,
+    title: "A Future Built With Youth",
+    caption:
+      "Digital skills, enterprise, education, and opportunity for the next generation.",
+  },
+  {
+    image: campaignImages.community,
+    title: "Grassroots Energy",
+    caption:
+      "A people-powered campaign listening across communities, markets, campuses, and wards.",
   },
 ];
 
@@ -103,29 +196,34 @@ export const biographyTimeline = [
 
 export const visionPillars = [
   {
-    title: "Digital Lagos",
+    title: "Digital Lagos 2.0",
     summary:
       "A smarter government, connected economy, digital public services, innovation hubs, and AI-ready civic systems.",
   },
   {
-    title: "Jobs & Economy",
+    title: "Infrastructure Revolution",
     summary:
-      "More SMEs, youth empowerment, investment pathways, entrepreneurship funding, and business-friendly reforms.",
+      "Roads, rail, waterways, smart mobility, and priority corridors that move Lagosians faster and safer.",
   },
   {
-    title: "Education",
+    title: "Education & Human Capital",
     summary:
       "Modern public schools, STEM learning, digital literacy, vocational empowerment, and teacher development.",
   },
   {
-    title: "Transport & Infrastructure",
-    summary:
-      "Roads, rail, waterways, and smart mobility systems that move people faster, safer, and more predictably.",
-  },
-  {
-    title: "Healthcare",
+    title: "Healthcare for All",
     summary:
       "Stronger primary healthcare, maternal care, emergency response, digital health, and community clinics.",
+  },
+  {
+    title: "Economic Prosperity",
+    summary:
+      "More SMEs, youth empowerment, investment pathways, entrepreneurship funding, and business-friendly reforms.",
+  },
+  {
+    title: "Security & Safety",
+    summary:
+      "Smarter safety infrastructure, community response systems, and faster emergency coordination.",
   },
 ];
 
@@ -134,19 +232,19 @@ export const achievements = [
     title: "Digital Transformation",
     description:
       "Technology-led reforms helped position Lagos as one of Africa's most digitally ambitious governments.",
-    metric: "Digital-first",
+    metric: "11 ERP modules",
   },
   {
-    title: "Infrastructure Delivery",
+    title: "Lekki-Ikoyi Link Bridge",
     description:
-      "Contributions across transportation, public works, and modernization projects helped improve Lagos' urban systems.",
-    metric: "Mega-city scale",
+      "Contributions to landmark infrastructure strengthened connectivity, reduced travel pressure, and supported commerce.",
+    metric: "First cable-stayed",
   },
   {
     title: "Public Service Reform",
     description:
       "Systems thinking, technology integration, and administrative discipline improved public sector delivery.",
-    metric: "Better systems",
+    metric: "Ghost workers cut",
   },
   {
     title: "Youth & Innovation",

@@ -1,3 +1,6 @@
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import "@fontsource-variable/figtree/wght.css";
 import "@/styles/globals.css";
 import "nprogress/nprogress.css";
 import type { AppProps } from "next/app";
@@ -107,6 +110,8 @@ function Main({ Component, pageProps }: Pick<AppPropsWithLayout, 'Component' | '
 
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const gaId = process.env.NEXT_PUBLIC_GA_ID;
+  const shouldLoadAnalytics =
+    process.env.NODE_ENV === "production" && Boolean(gaId);
   
   // Initialize performance monitoring and preload critical resources
   useEffect(() => {
@@ -119,7 +124,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     <ConsentProvider>
       {/* <CookieConsentBanner /> */}
       {/* Google Analytics (gtag.js) - Deferred for better performance */}
-      {gaId && (
+      {shouldLoadAnalytics && (
         <>
           <Script
             src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
@@ -139,7 +144,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           />
         </>
       )}
-      <AnalyticsScripts />
+      {shouldLoadAnalytics && <AnalyticsScripts />}
       <ProgressBar />
       <Main Component={Component} pageProps={pageProps} />
     </ConsentProvider>

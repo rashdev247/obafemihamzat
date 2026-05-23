@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import dynamic from "next/dynamic";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "./hooks/useMobile";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/Sheet";
@@ -17,12 +16,6 @@ import Collapse from "./ui/Collapse";
 import CustomMenu from "./ui/CustomMenu";
 import getMenuItemsWithActiveIcons, { menuItems } from "@/data/menuData";
 
-// Dynamic import for BookADemo modal - only loads when needed
-const BookADemo = dynamic(() => import("./Modals/BookADemo"), {
-  ssr: false,
-  loading: () => <div>Loading...</div>,
-});
-
 export type MenuSection = {
   title: string;
   items?: { name: string; path: string }[];
@@ -32,7 +25,6 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [showDropDown, setShowDropDown] = useState(false);
-  const [openedModal, setOpenedModal] = useState(false);
   const [displayUserGuide, setDisplayUserGuide] = useState(false);
   const [selectedMenu, setSelectedMenu] = useState("");
   const [expandMenu, setExpendMenu] = useState(false);
@@ -109,7 +101,9 @@ const Navbar = () => {
                       }}
                     >
                       <div className="flex items-center py-0 gap-2">
-                        <DynamicIcon name={typeof icon === 'string' ? icon : ''} />
+                        <DynamicIcon
+                          name={typeof icon === "string" ? icon : ""}
+                        />
                         <span>{label}</span>
                         {withMenu && <IconArrowDown />}
                       </div>
@@ -118,14 +112,13 @@ const Navbar = () => {
                       <Collapse opened={showMenu}>
                         {items?.map((item) => (
                           <React.Fragment key={item.name}>
-                            {item.path?.startsWith('http') ? (
+                            {item.path?.startsWith("http") ? (
                               <a
                                 href={item.path}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="flex items-center gap-2 text-white font-semibold text-[16px] pb-4  cursor-pointer hover:text-[white]"
                                 onClick={() => {
-                                  setOpenedModal(false);
                                   setMenuOpen(false);
                                   setDisplayUserGuide(false);
                                 }}
@@ -141,7 +134,6 @@ const Navbar = () => {
                                     setDisplayUserGuide(true);
                                   } else {
                                     router.push(`/${item.path}`);
-                                    setOpenedModal(false);
                                     setMenuOpen(false);
                                     setDisplayUserGuide(false);
                                   }
@@ -152,7 +144,8 @@ const Navbar = () => {
                               </article>
                             )}
                             {item.name === "User guides" &&
-                              displayUserGuide && 'subItems' in item && (
+                              displayUserGuide &&
+                              "subItems" in item && (
                                 <div className="flex flex-row gap-2.5 ml-2 mb-4">
                                   {item?.subItems?.map((subItem) => {
                                     return (
@@ -173,13 +166,12 @@ const Navbar = () => {
                       </Collapse>
                     )}
                   </React.Fragment>
-                )
+                ),
               )}
 
               <div className="flex flex-col w-full mt-5 space-y-[12px]">
                 <a
                   href="#"
-                  onClick={() => setOpenedModal(true)}
                   className="w-full flex cursor-pointer text-center items-center justify-center py-2 px-4 text-sm rounded-card border border-white text-white sm:block animate-fade-in animation-delay-500 transition-all duration-300 hover:bg-white hover:text-primary-900 hover:shadow-lg hover:scale-105"
                 >
                   Book a Demo
@@ -214,7 +206,7 @@ const Navbar = () => {
               }`
           : `py-3 w-full max-w-[1200px] xl:mt-3 ${
               isMobile ? "rounded-none" : "rounded-2xl"
-            }`
+            }`,
       )}
       style={{
         boxShadow: "-4px 4px 24px 3px rgba(11, 12, 125, 0.04)",
@@ -223,12 +215,18 @@ const Navbar = () => {
       <div
         className={cn(
           "container text-textColor mx-auto px-6 flex items-center justify-between",
-          scrolled ? "gap-5 xl:gap-5" : "gap-5 xl:gap-5"
+          scrolled ? "gap-5 xl:gap-5" : "gap-5 xl:gap-5",
         )}
       >
         <div className="flex items-center">
           <Link href="/" className="flex items-center animate-fade-in">
-            <Image src="/logo.webp" alt="Logo" width={60} height={60} priority />
+            <Image
+              src="/logo.webp"
+              alt="Logo"
+              width={60}
+              height={60}
+              priority
+            />
           </Link>
         </div>
         {scrolled && !expandMenu && (
@@ -275,7 +273,7 @@ const Navbar = () => {
                 icon?: string;
               }) => {
                 const isDropdownActive = (
-                  items?: { path: string; subItems?: { path: string }[] }[]
+                  items?: { path: string; subItems?: { path: string }[] }[],
                 ) => {
                   if (!items) return false;
                   // Check top-level items
@@ -283,7 +281,9 @@ const Navbar = () => {
                     return true;
                   // Check subItems if present
                   return items.some((item) =>
-                    item.subItems?.some((sub) => location.pathname === sub.path)
+                    item.subItems?.some(
+                      (sub) => location.pathname === sub.path,
+                    ),
                   );
                 };
 
@@ -311,12 +311,14 @@ const Navbar = () => {
                               ? "text-primary-900 after:w-full after:bg-secondary-500"
                               : "text-text-secondary after:w-0 after:bg-text-secondary"
                             : location.pathname.includes(href as string)
-                            ? "text-primary-900 after:w-full after:bg-secondary-500"
-                            : "text-text-secondary after:w-0 after:bg-text-secondary"
+                              ? "text-primary-900 after:w-full after:bg-secondary-500"
+                              : "text-text-secondary after:w-0 after:bg-text-secondary",
                         )}
                       >
                         <div className="flex items-center gap-2">
-                          <DynamicIcon name={typeof icon === 'string' ? icon : ''} />
+                          <DynamicIcon
+                            name={typeof icon === "string" ? icon : ""}
+                          />
                           <span>{label}</span>
                           {withMenu && <IconArrowDown />}
                         </div>
@@ -331,7 +333,8 @@ const Navbar = () => {
 
                           return (
                             <div key={value.name} className="relative group">
-                              {!hasSubItems && value.path?.startsWith('http') ? (
+                              {!hasSubItems &&
+                              value.path?.startsWith("http") ? (
                                 <a
                                   href={value.path}
                                   target="_blank"
@@ -395,7 +398,7 @@ const Navbar = () => {
                     )}
                   </CustomMenu>
                 );
-              }
+              },
             )}
           </nav>
         )}
@@ -422,7 +425,7 @@ const Navbar = () => {
                 icon?: string;
               }) => {
                 const isDropdownActive = (
-                  items?: { path: string; subItems?: { path: string }[] }[]
+                  items?: { path: string; subItems?: { path: string }[] }[],
                 ) => {
                   if (!items) return false;
                   // Check top-level items
@@ -430,7 +433,9 @@ const Navbar = () => {
                     return true;
                   // Check subItems if present
                   return items.some((item) =>
-                    item.subItems?.some((sub) => location.pathname === sub.path)
+                    item.subItems?.some(
+                      (sub) => location.pathname === sub.path,
+                    ),
                   );
                 };
 
@@ -458,12 +463,14 @@ const Navbar = () => {
                               ? "text-primary-900 after:w-full after:bg-secondary-500"
                               : "text-text-secondary after:w-0 after:bg-text-secondary"
                             : location.pathname.includes(href as string)
-                            ? "text-primary-900 after:w-full after:bg-secondary-500"
-                            : "text-text-secondary after:w-0 after:bg-text-secondary"
+                              ? "text-primary-900 after:w-full after:bg-secondary-500"
+                              : "text-text-secondary after:w-0 after:bg-text-secondary",
                         )}
                       >
                         <div className="flex items-center gap-2">
-                          <DynamicIcon name={typeof icon === 'string' ? icon : ''} />
+                          <DynamicIcon
+                            name={typeof icon === "string" ? icon : ""}
+                          />
                           <span>{label}</span>
                           {withMenu && <IconArrowDown />}
                         </div>
@@ -478,7 +485,8 @@ const Navbar = () => {
 
                           return (
                             <div key={value.name} className="relative group">
-                              {!hasSubItems && value.path?.startsWith('http') ? (
+                              {!hasSubItems &&
+                              value.path?.startsWith("http") ? (
                                 <a
                                   href={value.path}
                                   target="_blank"
@@ -540,14 +548,13 @@ const Navbar = () => {
                     )}
                   </CustomMenu>
                 );
-              }
+              },
             )}
           </nav>
         )}
 
         <div className="hidden lg:flex space-x-4">
           <a
-            onClick={() => setOpenedModal(true)}
             className="btn-ghost whitespace-nowrap cursor-pointer flex items-center justify-center px-4 text-sm h-[41px] rounded-card font-semibold animate-fade-in animation-delay-500 transition-all duration-300 hover:shadow-lg hover:scale-105"
           >
             Book a Demo
@@ -564,9 +571,6 @@ const Navbar = () => {
         {/* Mobile Menu Button and Sheet */}
         <div className="lg:hidden">{renderMobileMenu()}</div>
       </div>
-      {openedModal && (
-        <BookADemo openedModal={openedModal} setOpenedModal={setOpenedModal} />
-      )}
 
       {showDropDown && (
         <div ref={ref}>
@@ -576,7 +580,9 @@ const Navbar = () => {
                 scrolled ? "top-[69px]" : "top-[78px]"
               } bg-white shadow-2xl rounded-2xl h-[auto] z-50`}
               style={{
-                animation: showDropDown ? 'fadeIn 0.3s ease-in' : 'fadeOut 0.3s ease-out'
+                animation: showDropDown
+                  ? "fadeIn 0.3s ease-in"
+                  : "fadeOut 0.3s ease-out",
               }}
             >
               <div className="container mx-auto py-6 cursor-pointer">

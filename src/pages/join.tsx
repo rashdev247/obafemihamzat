@@ -99,7 +99,7 @@ export default function JoinPage() {
                 title="Choose how you want to serve."
                 description="This form is ready for backend connection later. For now, it captures the full campaign participation model and confirms the volunteer flow."
               />
-              <div className="mt-8 rounded-card bg-[var(--campaign-green-900)] p-6 text-white">
+              <div className="campaign-dark-section mt-8 rounded-card bg-[var(--campaign-green-900)] p-6 text-white">
                 <UsersRound aria-hidden="true" className="h-8 w-8 text-secondary-400" />
                 <p className="mt-5 font-heading text-2xl font-black leading-tight text-white">
                   Become a ward voice, campus organizer, media partner, donor
@@ -254,7 +254,7 @@ export default function JoinPage() {
           </div>
         </section>
 
-        <section id="newsletter" className="bg-[var(--campaign-green-950)] px-6 py-20 text-white">
+        <section id="newsletter" className="campaign-dark-section bg-[var(--campaign-green-950)] px-6 py-20 text-white">
           <div className="container mx-auto grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
             <div>
               <Mail aria-hidden="true" className="h-10 w-10 text-secondary-400" />

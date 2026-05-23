@@ -42,7 +42,7 @@ function CampaignHeader() {
             <Link
               key={item.href}
               href={item.href}
-              className={`rounded-card px-4 py-2 text-sm font-bold transition-colors duration-200 ${
+              className={`rounded-card px-4 py-2 text-sm font-bold transition-all duration-300 hover:-translate-y-0.5 ${
                 isActive(item.href)
                   ? "bg-[var(--campaign-green-900)] text-white"
                   : "text-text-secondary hover:bg-bg-secondary hover:text-primary-900"
@@ -58,14 +58,14 @@ function CampaignHeader() {
             href={campaignSite.officialUrl}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex h-11 items-center gap-2 rounded-card border border-[rgba(6,59,46,0.18)] px-4 text-sm font-bold text-[var(--campaign-green-900)] transition-colors duration-200 hover:border-secondary-500 hover:bg-secondary-500/10"
+            className="button-lift inline-flex h-11 items-center gap-2 rounded-card border border-[rgba(6,59,46,0.18)] px-4 text-sm font-bold text-[var(--campaign-green-900)] transition-all duration-300 hover:border-secondary-500 hover:bg-secondary-500/10"
           >
             Official site
             <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
           </a>
           <Link
             href="/join"
-            className="inline-flex h-11 items-center rounded-card bg-secondary-500 px-5 text-sm font-black text-primary-900 transition-colors duration-200 hover:bg-secondary-400"
+            className="button-lift inline-flex h-11 items-center rounded-card bg-secondary-500 px-5 text-sm font-black text-primary-900 transition-all duration-300 hover:bg-secondary-400"
           >
             Join Movement
           </Link>
@@ -73,7 +73,7 @@ function CampaignHeader() {
 
         <button
           type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-card border border-[rgba(6,59,46,0.18)] text-[var(--campaign-green-900)] lg:hidden"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-card border border-[rgba(6,59,46,0.18)] text-[var(--campaign-green-900)] transition-all duration-300 hover:border-secondary-500 hover:bg-secondary-500/10 lg:hidden"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           onClick={() => setOpen((value) => !value)}
@@ -90,7 +90,7 @@ function CampaignHeader() {
                 key={item.href}
                 href={item.href}
                 onClick={() => setOpen(false)}
-                className={`rounded-card px-4 py-3 text-sm font-bold ${
+                className={`rounded-card px-4 py-3 text-sm font-bold transition-all duration-300 ${
                   isActive(item.href)
                     ? "bg-[var(--campaign-green-900)] text-white"
                     : "bg-bg-secondary text-text-primary"
@@ -108,7 +108,7 @@ function CampaignHeader() {
 
 function CampaignFooter() {
   return (
-    <footer className="bg-[var(--campaign-green-950)] text-white">
+    <footer className="campaign-dark-section bg-[var(--campaign-green-950)] text-white">
       <div className="container mx-auto px-6 py-14">
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr_1fr]">
           <div>
@@ -133,7 +133,7 @@ function CampaignFooter() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-sm font-bold text-white/78 transition-colors duration-200 hover:text-secondary-400"
+                className="text-sm font-bold text-white/78 transition-colors duration-300 hover:text-secondary-400"
               >
                 {item.label}
               </Link>
@@ -142,7 +142,7 @@ function CampaignFooter() {
               href={campaignSite.officialUrl}
               target="_blank"
               rel="noreferrer"
-              className="text-sm font-bold text-white/78 transition-colors duration-200 hover:text-secondary-400"
+              className="text-sm font-bold text-white/78 transition-colors duration-300 hover:text-secondary-400"
             >
               Official Website
             </a>
@@ -160,11 +160,11 @@ function CampaignFooter() {
                 id="campaign-email"
                 type="email"
                 placeholder="Email address"
-                className="h-12 rounded-card border border-white/16 bg-white/10 px-4 text-sm text-white outline-none transition-colors placeholder:text-white/50 focus:border-secondary-500"
+                className="h-12 rounded-card border border-white/16 bg-white/10 px-4 text-sm text-white outline-none transition-all duration-300 placeholder:text-white/50 focus:border-secondary-500 focus:bg-white/14"
               />
               <button
                 type="submit"
-                className="h-12 rounded-card bg-secondary-500 px-5 text-sm font-black text-primary-900 transition-colors duration-200 hover:bg-secondary-400"
+                className="button-lift h-12 rounded-card bg-secondary-500 px-5 text-sm font-black text-primary-900 transition-all duration-300 hover:bg-secondary-400"
               >
                 Subscribe
               </button>

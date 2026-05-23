@@ -140,7 +140,7 @@ export default function VisionPage() {
           </div>
         </section>
 
-        <section className="bg-[var(--campaign-green-950)] px-6 py-20 text-white">
+        <section className="campaign-dark-section bg-[var(--campaign-green-950)] px-6 py-20 text-white">
           <div className="container mx-auto grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
             <div>
               <SectionIntro

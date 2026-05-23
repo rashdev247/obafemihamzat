@@ -22,6 +22,11 @@ const nextConfig: NextConfig = {
       hostname: 'images.ctfassets.net', // Contentful CDN
       pathname: '/**',
     },
+      {
+        protocol: 'https',
+        hostname: 'res.cloudinary.com',
+        pathname: '/duafntunw/**',
+      },
     ],
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60,

@@ -64,7 +64,7 @@ export function SectionIntro({
       )}
       <h2
         className={`font-heading text-3xl font-black leading-tight md:text-5xl ${
-          inverse ? "text-white" : "text-text-primary"
+          inverse ? "text-white" : "text-[var(--campaign-green-950)]"
         }`}
       >
         {title}
@@ -91,19 +91,19 @@ type PageHeroProps = {
 
 export function PageHero({ title, description, image, children }: PageHeroProps) {
   return (
-    <section className="relative overflow-hidden bg-[var(--campaign-green-950)] text-white">
+    <section className="campaign-dark-section relative overflow-hidden bg-[var(--campaign-green-950)] text-white">
       <div
         aria-hidden="true"
         className="absolute inset-0 opacity-[0.12]"
         style={{
           backgroundImage:
-            "linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)",
+            "linear-gradient(rgba(255,255,255,0.34) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.34) 1px, transparent 1px)",
           backgroundSize: "60px 60px",
         }}
       />
       <div className="container relative z-10 mx-auto grid min-h-[520px] items-center gap-12 px-6 py-16 lg:grid-cols-[0.92fr_1.08fr]">
         <div>
-          <h1 className="max-w-[11ch] font-heading text-5xl font-black leading-[0.98] text-white md:text-7xl">
+          <h1 className="max-w-[11ch] font-heading text-5xl font-black leading-[0.98] text-white [text-shadow:0_10px_38px_rgba(0,0,0,0.3)] md:text-7xl">
             {title}
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-white/75 md:text-xl">
@@ -113,7 +113,7 @@ export function PageHero({ title, description, image, children }: PageHeroProps)
         </div>
         <div className="relative min-h-[420px]">
           <div className="absolute -left-5 top-7 h-24 w-24 border-[14px] border-secondary-500/45" />
-          <div className="relative h-[420px] overflow-hidden rounded-card shadow-[0_30px_90px_rgba(0,0,0,0.25)] md:h-[520px]">
+          <div className="interactive-card relative h-[420px] overflow-hidden rounded-card shadow-[0_30px_90px_rgba(0,0,0,0.25)] md:h-[520px]">
             <Image
               src={image}
               alt=""
@@ -147,13 +147,13 @@ export function CTAGroup({
     <div className="mt-8 flex flex-col gap-3 sm:flex-row">
       <Link
         href={primaryHref}
-        className="inline-flex h-12 items-center justify-center rounded-card bg-secondary-500 px-6 text-sm font-black text-primary-900 transition-colors duration-200 hover:bg-secondary-400"
+        className="button-lift inline-flex h-12 items-center justify-center rounded-card bg-secondary-500 px-6 text-sm font-black text-primary-900 transition-all duration-300 hover:bg-secondary-400"
       >
         {primaryLabel}
       </Link>
       <Link
         href={secondaryHref}
-        className="inline-flex h-12 items-center justify-center rounded-card border border-white/35 bg-white/10 px-6 text-sm font-black text-white backdrop-blur transition-colors duration-200 hover:bg-white hover:text-[var(--campaign-green-900)]"
+        className="button-lift inline-flex h-12 items-center justify-center rounded-card border border-white/35 bg-white/10 px-6 text-sm font-black text-white backdrop-blur transition-all duration-300 hover:bg-white hover:text-[var(--campaign-green-900)]"
       >
         {secondaryLabel}
       </Link>
@@ -170,18 +170,18 @@ type ImagePanelProps = {
 
 export function ImagePanel({ image, title, caption, className = "" }: ImagePanelProps) {
   return (
-    <figure className={`relative overflow-hidden rounded-card bg-primary-900 ${className}`}>
+    <figure className={`interactive-card group relative overflow-hidden rounded-card bg-primary-900 ${className}`}>
       <Image
         src={image}
         alt={title}
         fill
         sizes="(max-width: 1024px) 100vw, 46vw"
-        className="object-cover"
+        className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-primary-900/82 via-primary-900/10 to-transparent" />
       {(title || caption) && (
         <figcaption className="absolute inset-x-0 bottom-0 p-6 text-white">
-          <div className="h-1 w-14 bg-secondary-500" />
+          <div className="h-1 w-14 bg-secondary-500 transition-all duration-300 group-hover:w-20" />
           <p className="mt-4 font-heading text-2xl font-black leading-tight">
             {title}
           </p>
@@ -194,7 +194,7 @@ export function ImagePanel({ image, title, caption, className = "" }: ImagePanel
 
 export function CampaignCTA() {
   return (
-    <section className="bg-[var(--campaign-green-950)] px-6 py-20 text-white">
+    <section className="campaign-dark-section bg-[var(--campaign-green-950)] px-6 py-20 text-white">
       <div className="container mx-auto grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
         <SectionIntro
           inverse
@@ -205,13 +205,13 @@ export function CampaignCTA() {
         <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
           <Link
             href="/join#movement-form"
-            className="inline-flex h-12 items-center justify-center rounded-card bg-secondary-500 px-6 text-sm font-black text-primary-900 transition-colors duration-200 hover:bg-secondary-400"
+            className="button-lift inline-flex h-12 items-center justify-center rounded-card bg-secondary-500 px-6 text-sm font-black text-primary-900 transition-all duration-300 hover:bg-secondary-400"
           >
             Volunteer Now
           </Link>
           <Link
             href="/join#newsletter"
-            className="inline-flex h-12 items-center justify-center rounded-card border border-white/30 px-6 text-sm font-black text-white transition-colors duration-200 hover:bg-white hover:text-[var(--campaign-green-900)]"
+            className="button-lift inline-flex h-12 items-center justify-center rounded-card border border-white/30 px-6 text-sm font-black text-white transition-all duration-300 hover:bg-white hover:text-[var(--campaign-green-900)]"
           >
             Get Updates
           </Link>
