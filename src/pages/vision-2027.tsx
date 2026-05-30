@@ -86,8 +86,15 @@ export default function VisionPage() {
     <CampaignLayout>
       <CampaignHead
         title="Vision 2027"
-        description="Explore Dr. Obafemi Hamzat's Lagos 2027 vision across digital governance, jobs, education, transport, infrastructure, and healthcare."
+        description="Explore Dr. Kadri Obafemi Hamzat's Lagos 2027 vision for digital governance, jobs, education, transport, infrastructure, healthcare, and security."
         path="/vision-2027"
+        keywords={[
+          "Obafemi Hamzat Vision 2027",
+          "Lagos 2027 manifesto",
+          "Digital Lagos 2.0",
+          "Lagos infrastructure plan",
+          "Lagos jobs education healthcare",
+        ]}
       />
 
       <main>

@@ -96,7 +96,7 @@ export const primaryResult = {
   ],
   label: "APC primary result",
   title:
-    "Kadri Obafemi Hamzat emerges APC candidate for the 2027 Lagos governorship election.",
+    "Hamzat emerges APC’s Lagos 2027 governorship candidate.",
   description:
     "The incumbent Deputy Governor of Lagos State secured the APC governorship ticket after polling 657,974 votes in the primary held on 21 May 2026.",
   location: "APC Secretariat, Ikeja",

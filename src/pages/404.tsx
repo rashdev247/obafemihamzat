@@ -1,5 +1,10 @@
 import leadershipEventImage from "@/images/i-represented-the-governor-of-lagos-state-mr-babajide-olusola-sanwo-olu-as-special-guest-at-the.jpg";
-import { SITE_NAME, SITE_URL } from "@/lib/seo";
+import {
+  SITE_IMAGE,
+  SITE_LOCALE,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/seo";
 import {
   ArrowUpRight,
   Home,
@@ -46,11 +51,19 @@ export default function Custom404() {
         <title>{pageTitle}</title>
         <meta name="description" content={pageDescription} />
         <meta name="robots" content="noindex, follow" />
+        <meta property="og:locale" content={SITE_LOCALE} />
         <meta property="og:site_name" content={SITE_NAME} />
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`${SITE_URL}/404`} />
+        <meta property="og:image" content={SITE_IMAGE} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={pageTitle} />
+        <meta name="twitter:description" content={pageDescription} />
+        <meta name="twitter:image" content={SITE_IMAGE} />
         <link rel="canonical" href={`${SITE_URL}/404`} />
       </Head>
 

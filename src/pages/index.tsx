@@ -13,7 +13,6 @@ import {
 } from "@/components/campaign/CampaignCarousels";
 import {
   campaignImages,
-  campaignSite,
   campaignUpdates,
   lagosAudience,
   lagosZones,
@@ -45,8 +44,16 @@ export default function Home() {
   return (
     <CampaignLayout>
       <CampaignHead
-        title="For A Greater Lagos"
-        description={campaignSite.description}
+        title="Kadri Obafemi Hamzat 2027 | APC Lagos Governorship Candidate"
+        description="Official campaign platform for Dr. Kadri Obafemi Hamzat, APC candidate for Lagos Governor 2027. Explore his Greater Lagos vision, achievements, news, and volunteer updates."
+        keywords={[
+          "Kadri Obafemi Hamzat 2027",
+          "Obafemi Hamzat Lagos Governor",
+          "APC Lagos governorship candidate",
+          "Lagos 2027 election",
+          "For A Greater Lagos",
+          "Greater Lagos vision",
+        ]}
       />
 
       <main>

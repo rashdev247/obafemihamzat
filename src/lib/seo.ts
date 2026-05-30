@@ -10,10 +10,164 @@ import { BlogPost } from "@/types";
 export const SITE_URL = "https://drobafemihamzat.vercel.app";
 export const SITE_NAME = "Dr. Kadri Obafemi Hamzat";
 export const SITE_TITLE =
-  "Dr. Kadri Obafemi Hamzat | Deputy Governor of Lagos State";
+  "Kadri Obafemi Hamzat 2027 | APC Lagos Governorship Candidate";
 export const SITE_DESCRIPTION =
-  "Learn about Dr. Kadri Obafemi Hamzat, Deputy Governor of Lagos State, his public service record, leadership journey, achievements, and vision for a Greater Lagos.";
-export const SITE_IMAGE = `${SITE_URL}/logo.webp`;
+  "Official campaign platform for Dr. Kadri Obafemi Hamzat, APC candidate for Lagos Governor 2027, with vision, achievements, news, and volunteer updates.";
+export const SITE_IMAGE = `${SITE_URL}/og-image.png`;
+export const SITE_LOGO = `${SITE_URL}/logo.webp`;
+export const SITE_LANGUAGE = "en-NG";
+export const SITE_LOCALE = "en_NG";
+export const SITE_THEME_COLOR = "#063b2e";
+export const SITE_KEYWORDS = [
+  "Kadri Obafemi Hamzat",
+  "Obafemi Hamzat",
+  "Hamzat 2027",
+  "Lagos 2027",
+  "Lagos governorship election",
+  "APC Lagos",
+  "Deputy Governor of Lagos State",
+  "For A Greater Lagos",
+  "Greater Lagos",
+  "Lagos governance",
+  "Lagos infrastructure",
+  "Digital Lagos",
+];
+
+type BreadcrumbItem = {
+  name: string;
+  url: string;
+};
+
+type CampaignPageSchemaInput = {
+  title: string;
+  description: string;
+  url: string;
+  image?: string;
+  breadcrumbs?: BreadcrumbItem[];
+};
+
+export function toAbsoluteUrl(pathOrUrl: string = "/"): string {
+  if (/^https?:\/\//i.test(pathOrUrl)) {
+    return pathOrUrl;
+  }
+
+  const normalizedPath = pathOrUrl.startsWith("/")
+    ? pathOrUrl
+    : `/${pathOrUrl}`;
+
+  return normalizedPath === "/" ? `${SITE_URL}/` : `${SITE_URL}${normalizedPath}`;
+}
+
+export function normalizeKeywords(keywords: string[] = SITE_KEYWORDS): string {
+  return Array.from(new Set(keywords.map((keyword) => keyword.trim()).filter(Boolean))).join(
+    ", "
+  );
+}
+
+export function generateCampaignPageSchema({
+  title,
+  description,
+  url,
+  image = SITE_IMAGE,
+  breadcrumbs,
+}: CampaignPageSchemaInput) {
+  const pageBreadcrumbs =
+    breadcrumbs && breadcrumbs.length > 0
+      ? breadcrumbs
+      : [
+          { name: "Home", url: toAbsoluteUrl("/") },
+          { name: title, url },
+        ];
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        url: toAbsoluteUrl("/"),
+        name: SITE_NAME,
+        description: SITE_DESCRIPTION,
+        inLanguage: SITE_LANGUAGE,
+        publisher: {
+          "@id": `${SITE_URL}/#person`,
+        },
+      },
+      {
+        "@type": "Person",
+        "@id": `${SITE_URL}/#person`,
+        name: SITE_NAME,
+        alternateName: ["Obafemi Hamzat", "KOH"],
+        url: toAbsoluteUrl("/"),
+        image: SITE_LOGO,
+        jobTitle: "Deputy Governor of Lagos State",
+        worksFor: {
+          "@type": "GovernmentOrganization",
+          name: "Lagos State Government",
+        },
+        memberOf: {
+          "@type": "PoliticalParty",
+          name: "All Progressives Congress",
+        },
+        sameAs: ["https://www.obafemihamzat.com/"],
+        knowsAbout: [
+          "Lagos State governance",
+          "public service reform",
+          "digital transformation",
+          "infrastructure delivery",
+          "education policy",
+          "healthcare access",
+        ],
+      },
+      {
+        "@type": "Organization",
+        "@id": `${SITE_URL}/#campaign`,
+        name: "Obafemi Hamzat 2027 Campaign Movement",
+        url: toAbsoluteUrl("/"),
+        logo: {
+          "@type": "ImageObject",
+          url: SITE_LOGO,
+        },
+        founder: {
+          "@id": `${SITE_URL}/#person`,
+        },
+      },
+      {
+        "@type": "WebPage",
+        "@id": `${url}#webpage`,
+        url,
+        name: title,
+        description,
+        isPartOf: {
+          "@id": `${SITE_URL}/#website`,
+        },
+        about: {
+          "@id": `${SITE_URL}/#person`,
+        },
+        primaryImageOfPage: {
+          "@type": "ImageObject",
+          url: image,
+          width: 1200,
+          height: 630,
+        },
+        breadcrumb: {
+          "@id": `${url}#breadcrumb`,
+        },
+        inLanguage: SITE_LANGUAGE,
+      },
+      {
+        "@type": "BreadcrumbList",
+        "@id": `${url}#breadcrumb`,
+        itemListElement: pageBreadcrumbs.map((item, index) => ({
+          "@type": "ListItem",
+          position: index + 1,
+          name: item.name,
+          item: item.url,
+        })),
+      },
+    ],
+  };
+}
 
 /**
  * Generate SEO-friendly slug from title
@@ -195,7 +349,7 @@ export function generateArticleSchema(
       name: SITE_NAME,
       image: {
         "@type": "ImageObject",
-        url: SITE_IMAGE,
+        url: SITE_LOGO,
         width: 1024,
         height: 1024
       }
@@ -208,7 +362,7 @@ export function generateArticleSchema(
     keywords: keywords,
     wordCount: wordCount,
     timeRequired: `PT${readingTime}M`,
-    inLanguage: "en-US",
+    inLanguage: SITE_LANGUAGE,
     ...(post.categories.length > 0 && {
       about: post.categories.map(cat => ({
         "@type": "Thing",
@@ -296,7 +450,7 @@ export function generateOGMeta(
     "og:image:width": "1200",
     "og:image:height": "630",
     "og:url": url,
-    "og:locale": "en_US"
+    "og:locale": SITE_LOCALE
   };
 }
 

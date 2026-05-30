@@ -48,8 +48,15 @@ export default function JoinPage() {
     <CampaignLayout>
       <CampaignHead
         title="Join The Movement"
-        description="Volunteer, organize, donate interest, join the media team, or register for Obafemi Hamzat's Lagos 2027 movement."
+        description="Join Dr. Kadri Obafemi Hamzat's Lagos 2027 campaign movement. Volunteer, organize in your ward, join media support, register interest, or get official updates."
         path="/join"
+        keywords={[
+          "join Obafemi Hamzat campaign",
+          "Hamzat 2027 volunteer",
+          "Lagos 2027 campaign movement",
+          "APC Lagos volunteer",
+          "For A Greater Lagos movement",
+        ]}
       />
 
       <main>

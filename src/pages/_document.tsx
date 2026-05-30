@@ -2,8 +2,12 @@ import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
-    <Html lang="en">
+    <Html lang="en-NG">
       <Head>
+        <meta name="application-name" content="Obafemi Hamzat 2027" />
+        <meta name="apple-mobile-web-app-title" content="Obafemi Hamzat 2027" />
+        <meta name="theme-color" content="#063b2e" />
+        <meta name="format-detection" content="telephone=no" />
         <link
           rel="preload"
           href="/fonts/sanchez/Sanchez-Regular.ttf"
@@ -25,6 +29,7 @@ export default function Document() {
         <link rel="icon" type="image/png" sizes="512x512" href="/dh-favicon-512x512.png" />
         <link rel="apple-touch-icon" sizes="512x512" href="/dh-favicon-512x512.png" />
         <link rel="shortcut icon" type="image/png" href="/dh-favicon-512x512.png" />
+        <link rel="manifest" href="/site.webmanifest" />
       </Head>
       <body className="antialiased">
         <Main />

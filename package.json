@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "postbuild": "echo 'Skipping sitemap generation'",
+    "postbuild": "next-sitemap",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

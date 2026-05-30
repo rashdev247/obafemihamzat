@@ -45,8 +45,15 @@ export default function AboutPage() {
     <CampaignLayout>
       <CampaignHead
         title="About Hamzat"
-        description="Learn about Dr. Kadri Obafemi Hamzat's biography, public service record, technology background, and Lagos leadership journey."
+        description="Read Dr. Kadri Obafemi Hamzat's biography, public service record, technology background, reform work, and leadership journey in Lagos State."
         path="/about"
+        keywords={[
+          "Dr Kadri Obafemi Hamzat biography",
+          "Obafemi Hamzat profile",
+          "Deputy Governor of Lagos State",
+          "Lagos public service",
+          "Lagos technology reform",
+        ]}
       />
 
       <main>

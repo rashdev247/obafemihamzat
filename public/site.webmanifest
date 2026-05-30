@@ -1,0 +1,22 @@
+{
+  "name": "Dr. Kadri Obafemi Hamzat 2027",
+  "short_name": "Hamzat 2027",
+  "description": "Official campaign platform for Dr. Kadri Obafemi Hamzat and the Greater Lagos 2027 movement.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#063b2e",
+  "icons": [
+    {
+      "src": "/dh-favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/dh-favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

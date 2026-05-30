@@ -69,8 +69,15 @@ export default function AchievementsPage() {
     <CampaignLayout>
       <CampaignHead
         title="Achievements and Impact"
-        description="Review Dr. Obafemi Hamzat's public service impact across digital transformation, infrastructure, reform, and youth innovation."
+        description="Review Dr. Kadri Obafemi Hamzat's Lagos public service impact across digital transformation, infrastructure, public sector reform, and youth innovation."
         path="/achievements"
+        keywords={[
+          "Obafemi Hamzat achievements",
+          "Lagos digital transformation",
+          "Lagos infrastructure achievements",
+          "public service reform Lagos",
+          "Hamzat impact record",
+        ]}
       />
 
       <main>

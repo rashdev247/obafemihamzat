@@ -1,4 +1,14 @@
 import { campaignSite } from "@/data/campaignContent";
+import {
+  SITE_IMAGE,
+  SITE_KEYWORDS,
+  SITE_LANGUAGE,
+  SITE_LOCALE,
+  SITE_NAME,
+  generateCampaignPageSchema,
+  normalizeKeywords,
+  toAbsoluteUrl,
+} from "@/lib/seo";
 import Head from "next/head";
 import Image, { type StaticImageData } from "next/image";
 import Link from "next/link";
@@ -8,30 +18,75 @@ type CampaignHeadProps = {
   title: string;
   description: string;
   path?: string;
+  image?: string;
+  keywords?: string[];
 };
 
-export function CampaignHead({ title, description, path = "" }: CampaignHeadProps) {
-  const pageTitle = `${title} | ${campaignSite.shortName}`;
-  const url = `${campaignSite.url}${path}`;
+export function CampaignHead({
+  title,
+  description,
+  path = "",
+  image = SITE_IMAGE,
+  keywords = SITE_KEYWORDS,
+}: CampaignHeadProps) {
+  const pageTitle = title.includes("|") ? title : `${title} | ${campaignSite.shortName}`;
+  const url = toAbsoluteUrl(path || "/");
+  const schema = generateCampaignPageSchema({
+    title: pageTitle,
+    description,
+    url,
+    image,
+    breadcrumbs:
+      path && path !== "/"
+        ? [
+            { name: "Home", url: toAbsoluteUrl("/") },
+            { name: title, url },
+          ]
+        : [{ name: "Home", url }],
+  });
 
   return (
     <Head>
       <title>{pageTitle}</title>
       <meta name="description" content={description} />
+      <meta name="keywords" content={normalizeKeywords(keywords)} />
+      <meta name="author" content={SITE_NAME} />
+      <meta name="publisher" content={SITE_NAME} />
       <meta
-        name="keywords"
-        content="Obafemi Hamzat 2027, Lagos governorship, Greater Lagos, APC Lagos, Kadri Obafemi Hamzat"
+        name="robots"
+        content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
       />
-      <meta property="og:site_name" content={campaignSite.name} />
+      <meta property="og:locale" content={SITE_LOCALE} />
+      <meta property="og:site_name" content={SITE_NAME} />
       <meta property="og:title" content={pageTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:type" content="website" />
       <meta property="og:url" content={url} />
-      <meta property="og:image" content={`${campaignSite.url}/logo.webp`} />
+      <meta property="og:image" content={image} />
+      <meta property="og:image:secure_url" content={image} />
+      <meta property="og:image:type" content="image/png" />
+      <meta property="og:image:width" content="1200" />
+      <meta property="og:image:height" content="630" />
+      <meta
+        property="og:image:alt"
+        content="Dr. Kadri Obafemi Hamzat campaign preview for Lagos 2027"
+      />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={pageTitle} />
       <meta name="twitter:description" content={description} />
+      <meta name="twitter:image" content={image} />
+      <meta
+        name="twitter:image:alt"
+        content="Dr. Kadri Obafemi Hamzat campaign preview for Lagos 2027"
+      />
       <link rel="canonical" href={url} />
+      <link rel="alternate" hrefLang={SITE_LANGUAGE} href={url} />
+      <link rel="alternate" hrefLang="x-default" href={url} />
+      <script
+        key="campaign-structured-data"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
     </Head>
   );
 }
