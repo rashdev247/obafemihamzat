@@ -1,598 +1,302 @@
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
+import { campaignNavItems, campaignSite } from "@/data/campaignContent";
+import { campaignNavTranslationKeys, useI18n } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
-import { useIsMobile } from "./hooks/useMobile";
-import { Sheet, SheetContent, SheetTrigger } from "./ui/Sheet";
-import IconSquare from "./IconComponents/IconSquare";
-import DynamicIcon from "./DynamicIcon";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  Home,
+  Lightbulb,
+  Newspaper,
+  Trophy,
+  UserRound,
+  UsersRound,
+  type LucideIcon,
+} from "lucide-react";
 import Image from "next/image";
-import IconMenu from "./IconComponents/IconMenu";
-import "react-datepicker/dist/react-datepicker.css";
-import IconArrowDown from "./IconComponents/IconArrowDown";
-import IconArrowForward from "./IconComponents/IconArrowForward";
+import Link from "next/link";
 import { useRouter } from "next/router";
-import { useClickOutside } from "./hooks/useClickOutside";
-import Collapse from "./ui/Collapse";
-import CustomMenu from "./ui/CustomMenu";
-import getMenuItemsWithActiveIcons, { menuItems } from "@/data/menuData";
+import { CiSettings } from "react-icons/ci";
+import { useEffect, useState } from "react";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/Sheet";
+import IconMenu from "./IconComponents/IconMenu";
 
-export type MenuSection = {
-  title: string;
-  items?: { name: string; path: string }[];
+const headerLayoutTransition = {
+  type: "spring",
+  stiffness: 420,
+  damping: 38,
+  mass: 0.7,
 };
+
+const navSwapTransition = {
+  duration: 0.32,
+  ease: [0.22, 1, 0.36, 1],
+};
+
+const navIcons: Record<string, LucideIcon> = {
+  "/": Home,
+  "/about": UserRound,
+  "/vision-2027": Lightbulb,
+  "/achievements": Trophy,
+  "/news": Newspaper,
+  "/join": UsersRound,
+};
+
+const isCurrentRoute = (pathname: string, href: string) =>
+  href === "/"
+    ? pathname === "/"
+    : pathname === href || pathname.startsWith(`${href}/`);
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [showDropDown, setShowDropDown] = useState(false);
-  const [displayUserGuide, setDisplayUserGuide] = useState(false);
-  const [selectedMenu, setSelectedMenu] = useState("");
-  const [expandMenu, setExpendMenu] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
-  const location = useRouter();
-  const isActive = (path: string) => location.pathname === path;
-  const ref = useClickOutside<HTMLDivElement>(() => setShowDropDown(false));
-  const isMobile = useIsMobile();
+  const [expandedMenu, setExpandedMenu] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useRouter();
+  const { t } = useI18n();
 
   useEffect(() => {
-    const handleScroll = () => {
-      const isScrolled = window.scrollY > 10;
-      if (isScrolled !== scrolled) {
-        setScrolled(isScrolled);
-      }
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 10);
 
-    window.addEventListener("scroll", handleScroll);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [scrolled]);
-
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      if (event.data?.type === "iframe-clicked") {
-        setShowMenu(false);
-      }
-    };
-
-    window.addEventListener("message", handleMessage);
-    return () => window.removeEventListener("message", handleMessage);
   }, []);
+
   useEffect(() => {
-    setShowDropDown(false);
-    setExpendMenu(false);
+    setExpandedMenu(false);
+    setMobileMenuOpen(false);
+  }, [router.asPath]);
+
+  useEffect(() => {
+    setExpandedMenu(false);
   }, [scrolled]);
-  const renderMobileMenu = () => {
-    if (isMobile) {
-      return (
-        <Sheet>
-          <SheetTrigger onClick={() => setMenuOpen(true)}>
-            <IconMenu />
-          </SheetTrigger>
-          <SheetContent
-            isOpen={menuOpen}
-            onClose={() => setMenuOpen(false)}
-            position="right"
-          >
-            <div className="flex text-white flex-col items-start mt-12">
-              {menuItems.map(
-                ({ label, delay, withMenu, icon, items, href }) => (
-                  <React.Fragment key={label}>
-                    <a
-                      key={label}
-                      className={`relative font-[500] mb-7 block nav-link animate-fade-in animation-delay-${delay} hover:after:w-full active:after:w-full`}
-                      onClick={() => {
-                        if (label === "Help Desk") {
-                          setShowMenu((prev) => !prev);
-                          setSelectedMenu("Help Desk");
-                        }
-                        if (label === "About Us") {
-                          router.push(`/${href}`);
-                        }
-                        if (label === "Pricing") {
-                          router.push(`/${href}`);
-                        }
-                        if (label === "Our Solutions") {
-                          setShowMenu((prev) => !prev);
-                          setSelectedMenu("Our Solutions");
-                        }
-                        if (label === "Blog") {
-                          router.push(`/${href}`);
-                        }
-                      }}
-                    >
-                      <div className="flex items-center py-0 gap-2">
-                        <DynamicIcon
-                          name={typeof icon === "string" ? icon : ""}
-                        />
-                        <span>{label}</span>
-                        {withMenu && <IconArrowDown />}
-                      </div>
-                    </a>
-                    {selectedMenu === label && (
-                      <Collapse opened={showMenu}>
-                        {items?.map((item) => (
-                          <React.Fragment key={item.name}>
-                            {item.path?.startsWith("http") ? (
-                              <a
-                                href={item.path}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-2 text-white font-semibold text-[16px] pb-4  cursor-pointer hover:text-[white]"
-                                onClick={() => {
-                                  setMenuOpen(false);
-                                  setDisplayUserGuide(false);
-                                }}
-                              >
-                                {item.name}
-                                <IconArrowForward />
-                              </a>
-                            ) : (
-                              <article
-                                className="flex items-center gap-2 text-white font-semibold text-[16px] pb-4  cursor-pointer hover:text-[white]"
-                                onClick={() => {
-                                  if (item.name === "User guides") {
-                                    setDisplayUserGuide(true);
-                                  } else {
-                                    router.push(`/${item.path}`);
-                                    setMenuOpen(false);
-                                    setDisplayUserGuide(false);
-                                  }
-                                }}
-                              >
-                                {item.name}
-                                <IconArrowForward />
-                              </article>
-                            )}
-                            {item.name === "User guides" &&
-                              displayUserGuide &&
-                              "subItems" in item && (
-                                <div className="flex flex-row gap-2.5 ml-2 mb-4">
-                                  {item?.subItems?.map((subItem) => {
-                                    return (
-                                      <a
-                                        className="flex items-center gap-2 text-white font-semibold text-[16px] cursor-pointer hover:text-[white]"
-                                        key={subItem?.name}
-                                        target="_blank"
-                                        href={`https://${subItem.path}`}
-                                      >
-                                        &#8594;&nbsp;{subItem?.name}
-                                      </a>
-                                    );
-                                  })}
-                                </div>
-                              )}
-                          </React.Fragment>
-                        ))}
-                      </Collapse>
-                    )}
-                  </React.Fragment>
-                ),
-              )}
 
-              <div className="flex flex-col w-full mt-5 space-y-[12px]">
-                <a
-                  href="#"
-                  className="w-full flex cursor-pointer text-center items-center justify-center py-2 px-4 text-sm rounded-card border border-white text-white sm:block animate-fade-in animation-delay-500 transition-all duration-300 hover:bg-white hover:text-primary-900 hover:shadow-lg hover:scale-105"
-                >
-                  Book a Demo
-                </a>
-                <a
-                  href="https://app.plural.health/signup"
-                  target="_blank"
-                  className="btn-secondary flex w-full cursor-pointer text-center items-center justify-center rounded-card text-[14px] py-2 px-4 text-sm animate-fade-in animation-delay-700 transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                >
-                  Try NeoEHR for free
-                </a>
-              </div>
-            </div>
-          </SheetContent>
-        </Sheet>
-      );
-    }
+  const showDesktopNav = !scrolled || expandedMenu;
+  const settingsActive = isCurrentRoute(router.pathname, "/settings");
 
-    return null;
-  };
   return (
-    <header
+    <motion.header
+      layout
+      transition={headerLayoutTransition}
       className={cn(
-        "fixed top-0 left-1/2 -translate-x-1/2 bg-white z-50 transition-all duration-300 ease-in-out backdrop-blur-[20px]",
+        "fixed left-1/2 top-0 z-50 -translate-x-1/2 bg-white transition-all duration-300 ease-in-out backdrop-blur-[20px]",
+        "w-full py-1",
         scrolled
-          ? isMobile
-            ? "w-full py-3 mt-0"
-            : `py-3 rounded-2xl ${
-                expandMenu
-                  ? "max-w-[1200px] w-full border border-[#F9F9FA]"
-                  : "max-w-fit w-full border border-[#F9F9FA]"
-              }`
-          : `py-3 w-full max-w-[1200px] xl:mt-3 ${
-              isMobile ? "rounded-none" : "rounded-2xl"
-            }`,
+          ? cn(
+              "lg:top-3 lg:rounded-2xl lg:border lg:border-[#F9F9FA]",
+              expandedMenu
+                ? "lg:w-[calc(100%-3rem)] lg:max-w-[1200px]"
+                : "lg:w-auto lg:max-w-fit",
+            )
+          : "lg:top-4 lg:w-[calc(100%-3rem)] lg:max-w-[1200px] lg:rounded-2xl",
       )}
       style={{
         boxShadow: "-4px 4px 24px 3px rgba(11, 12, 125, 0.04)",
       }}
     >
-      <div
-        className={cn(
-          "container text-textColor mx-auto px-6 flex items-center justify-between",
-          scrolled ? "gap-5 xl:gap-5" : "gap-5 xl:gap-5",
-        )}
+      <motion.div
+        layout
+        transition={headerLayoutTransition}
+        className="mx-auto flex items-center justify-between gap-4 px-5 text-textColor sm:px-6"
       >
-        <div className="flex items-center">
-          <Link href="/" className="flex items-center animate-fade-in">
-            <Image
-              src="/logo.webp"
-              alt="Logo"
-              width={60}
-              height={60}
-              priority
-            />
+        <Link href="/" className="flex items-center gap-3" aria-label="Home">
+          <Image
+            src="/logo.webp"
+            alt={`${campaignSite.name} logo`}
+            width={100}
+            height={100}
+            priority
+            className="h-16 w-16 object-contain"
+          />
+          <span className="hidden font-heading text-[15px] font-black leading-tight text-primary-900 sm:block">
+            Obafemi
+            <span className="block text-[var(--campaign-green-700)]">
+              Hamzat 2027
+            </span>
+          </span>
+        </Link>
+
+        <AnimatePresence mode="popLayout" initial={false}>
+          {scrolled && !expandedMenu ? (
+            <motion.nav
+              key="compact-menu"
+              layout
+              initial={{ opacity: 0, x: 28, scale: 0.94, filter: "blur(8px)" }}
+              animate={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }}
+              exit={{ opacity: 0, x: -24, scale: 0.96, filter: "blur(8px)" }}
+              transition={navSwapTransition}
+              className="hidden items-center px-6 lg:flex"
+            >
+              <motion.button
+                type="button"
+                onClick={() => setExpandedMenu(true)}
+                className="relative flex cursor-pointer items-center gap-2 font-[500] text-text-secondary transition-colors duration-300 after:absolute after:bottom-[-4px] after:left-0 after:h-[3px] after:w-0 after:rounded-2xl after:bg-[#063B2E] after:transition-all after:duration-300 hover:text-[#063B2E] hover:after:w-full"
+                aria-expanded={expandedMenu}
+                aria-label={t("nav.expand")}
+                whileHover={{ y: -1 }}
+                whileTap={{ scale: 0.97 }}
+              >
+                <IconMenu size={28} color="#475467" />
+                <span>{t("nav.menu")}</span>
+              </motion.button>
+            </motion.nav>
+          ) : (
+            showDesktopNav && (
+              <motion.nav
+                key="expanded-menu"
+                layout
+                initial={{
+                  opacity: 0,
+                  x: -22,
+                  scale: 0.98,
+                  filter: "blur(8px)",
+                }}
+                animate={{
+                  opacity: 1,
+                  x: 0,
+                  scale: 1,
+                  filter: "blur(0px)",
+                }}
+                exit={{ opacity: 0, x: 24, scale: 0.98, filter: "blur(8px)" }}
+                transition={navSwapTransition}
+                className="hidden items-center gap-1 lg:flex"
+                aria-label={t("nav.primary")}
+              >
+                {campaignNavItems.map((item, index) => {
+                  const Icon = navIcons[item.href] || Home;
+                  const active = isCurrentRoute(router.pathname, item.href);
+                  const labelKey = campaignNavTranslationKeys[item.href];
+                  const label = labelKey ? t(labelKey) : item.label;
+
+                  return (
+                    <motion.div
+                      key={item.href}
+                      initial={{ opacity: 0, y: 5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        ...navSwapTransition,
+                        delay: index * 0.025,
+                      }}
+                    >
+                      <Link
+                        href={item.href}
+                        aria-current={active ? "page" : undefined}
+                        className={cn(
+                          "relative flex items-center gap-2 whitespace-nowrap rounded-card px-2.5 py-2 text-sm font-[500] transition-all duration-300 xl:px-3",
+                          "after:absolute after:bottom-[-4px] after:left-0 after:h-[3px] after:rounded-2xl after:transition-all after:duration-300",
+                          active
+                            ? "font-bold text-[#063B2E] after:w-full after:bg-secondary-500"
+                            : "text-text-secondary after:w-0 after:bg-[#063B2E] hover:text-primary-900 hover:after:w-full",
+                        )}
+                      >
+                        <Icon aria-hidden="true" className="h-4 w-4" />
+                        <span>{label}</span>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </motion.nav>
+            )
+          )}
+        </AnimatePresence>
+
+        <div className="hidden items-center gap-3 lg:flex">
+          <Link
+            href="/settings"
+            aria-label={t("nav.openSettings")}
+            aria-current={settingsActive ? "page" : undefined}
+            className={cn(
+              "button-lift inline-flex h-10 w-10 items-center justify-center rounded-card border text-primary-900 transition-all duration-300",
+              settingsActive
+                ? "border-secondary-500 bg-[rgba(212,166,42,0.18)]"
+                : "border-[rgba(6,59,46,0.12)] bg-white hover:border-secondary-500",
+            )}
+          >
+            <CiSettings aria-hidden="true" className="h-5 w-5" />
+            <span className="sr-only">{t("nav.settings")}</span>
+          </Link>
+          <Link
+            href="/join"
+            className="button-lift inline-flex h-10 items-center justify-center whitespace-nowrap rounded-card bg-[var(--secondary-500)] px-5 text-sm font-black text-[var(--campaign-green-900)] transition-all duration-300 hover:text-white hover:bg-[var(--campaign-green-700)]"
+          >
+            {t("nav.joinMovement")}
           </Link>
         </div>
-        {scrolled && !expandMenu && (
-          <nav className="hidden items-center px-10 lg:flex">
-            {[{ label: "Menu", delay: "100" }].map(({ label, delay }) => (
-              <div
-                key={label}
-                onClick={() => {
-                  setExpendMenu(true);
-                }}
-                className={`relative font-[500] cursor-pointer nav-link animate-fade-in animation-delay-${delay} 
-        after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:rounded-2xl after:h-[3px] after:w-0 
-        after:bg-textColor after:transition-all after:duration-300 
-        hover:after:w-full active:after:w-full`}
-              >
-                <div className="flex items-center gap-2">
-                  <IconSquare />
-                  <span>{label}</span>
-                </div>
-              </div>
-            ))}
-          </nav>
-        )}
-        {scrolled && expandMenu && (
-          <nav className="hidden lg:flex items-center space-x-6">
-            {getMenuItemsWithActiveIcons(location.pathname).map(
-              ({
-                href,
-                label,
-                delay,
-                withMenu,
-                icon,
-                items,
-              }: {
-                href?: string;
-                label: string;
-                delay: string;
-                items?: {
-                  name: string;
-                  path: string;
-                  subItems?: { name: string; path: string }[];
-                }[];
-                withMenu: boolean;
-                icon?: string;
-              }) => {
-                const isDropdownActive = (
-                  items?: { path: string; subItems?: { path: string }[] }[],
-                ) => {
-                  if (!items) return false;
-                  // Check top-level items
-                  if (items.some((item) => location.pathname === item.path))
-                    return true;
-                  // Check subItems if present
-                  return items.some((item) =>
-                    item.subItems?.some(
-                      (sub) => location.pathname === sub.path,
-                    ),
-                  );
-                };
 
-                return (
-                  <CustomMenu key={label}>
-                    <CustomMenu.Target>
-                      <a
-                        onClick={
-                          label === "Help Desk"
-                            ? () => setShowDropDown(true)
-                            : () => {
-                                setShowDropDown(false);
-                                if (href) {
-                                  isActive(href);
-                                  router.push(href);
-                                }
-                              }
-                        }
-                        className={cn(
-                          "relative font-[500] nav-link animate-fade-in",
-                          `animation-delay-${delay}`,
-                          "after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:rounded-2xl after:h-[3px] after:transition-all after:duration-300 hover:after:w-full active:after:w-full",
-                          withMenu
-                            ? isDropdownActive(items)
-                              ? "text-primary-900 after:w-full after:bg-secondary-500"
-                              : "text-text-secondary after:w-0 after:bg-text-secondary"
-                            : location.pathname.includes(href as string)
-                              ? "text-primary-900 after:w-full after:bg-secondary-500"
-                              : "text-text-secondary after:w-0 after:bg-text-secondary",
-                        )}
-                      >
-                        <div className="flex items-center gap-2">
-                          <DynamicIcon
-                            name={typeof icon === "string" ? icon : ""}
-                          />
-                          <span>{label}</span>
-                          {withMenu && <IconArrowDown />}
-                        </div>
-                      </a>
-                    </CustomMenu.Target>
-
-                    {withMenu && (
-                      <CustomMenu.Dropdown>
-                        {items?.map((value, index) => {
-                          const hasSubItems =
-                            Number(value?.subItems?.length) > 0;
-
-                          return (
-                            <div key={value.name} className="relative group">
-                              {!hasSubItems &&
-                              value.path?.startsWith("http") ? (
-                                <a
-                                  href={value.path}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="px-4 py-3 block font-[600] text-[16px] text-text-secondary hover:bg-bg-secondary cursor-pointer"
-                                >
-                                  {value.name}
-                                </a>
-                              ) : (
-                                <CustomMenu.Item
-                                  index={index}
-                                  onClick={() => {
-                                    if (!hasSubItems) {
-                                      router.push(value.path);
-                                    }
-                                  }}
-                                >
-                                  <p className="font-[600] text-[16px] text-text-secondary flex items-center justify-between w-full">
-                                    {value.name}
-                                  </p>
-                                </CustomMenu.Item>
-                              )}
-
-                              {hasSubItems && (
-                                <>
-                                  <div
-                                    className="absolute top-0 left-full w-3 h-full z-40"
-                                    style={{ pointerEvents: "auto" }}
-                                  ></div>
-
-                                  <div className="absolute top-0 ml-2 left-full hidden group-hover:flex flex-col bg-white border border-[#D0D5DD] cursor-pointer rounded-card shadow-md z-50 min-w-[200px]">
-                                    {value?.subItems?.map((sub, index) => (
-                                      <a
-                                        key={sub.name}
-                                        className="px-4 py-2 text-[16px] text-text-secondary font-semibold hover:underline hover:bg-bg-secondary cursor-pointer whitespace-nowrap"
-                                        href={`https://${sub.path}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{
-                                          ...(index === 0 && {
-                                            borderBottomWidth: "1px",
-                                            borderBottomStyle: "dashed",
-                                            borderBottomColor: "#D0D5DD",
-                                          }),
-                                          borderTopLeftRadius: "12px",
-                                          borderTopRightRadius: "12px",
-                                          borderBottomLeftRadius: "12px",
-                                          borderBottomRightRadius: "12px",
-                                        }}
-                                      >
-                                        {sub.name}
-                                      </a>
-                                    ))}
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </CustomMenu.Dropdown>
-                    )}
-                  </CustomMenu>
-                );
-              },
-            )}
-          </nav>
-        )}
-        {!scrolled && (
-          <nav className="hidden lg:flex items-center space-x-6">
-            {getMenuItemsWithActiveIcons(location.pathname).map(
-              ({
-                href,
-                label,
-                delay,
-                withMenu,
-                icon,
-                items,
-              }: {
-                href?: string;
-                label: string;
-                delay: string;
-                items?: {
-                  name: string;
-                  path: string;
-                  subItems?: { name: string; path: string }[];
-                }[];
-                withMenu: boolean;
-                icon?: string;
-              }) => {
-                const isDropdownActive = (
-                  items?: { path: string; subItems?: { path: string }[] }[],
-                ) => {
-                  if (!items) return false;
-                  // Check top-level items
-                  if (items.some((item) => location.pathname === item.path))
-                    return true;
-                  // Check subItems if present
-                  return items.some((item) =>
-                    item.subItems?.some(
-                      (sub) => location.pathname === sub.path,
-                    ),
-                  );
-                };
-
-                return (
-                  <CustomMenu key={label}>
-                    <CustomMenu.Target>
-                      <a
-                        onClick={
-                          label === "Help Desk"
-                            ? () => setShowDropDown(true)
-                            : () => {
-                                setShowDropDown(false);
-                                if (href) {
-                                  isActive(href);
-                                  router.push(href);
-                                }
-                              }
-                        }
-                        className={cn(
-                          "relative font-[500] nav-link animate-fade-in",
-                          `animation-delay-${delay}`,
-                          "after:content-[''] after:absolute after:left-0 after:bottom-[-4px] after:rounded-2xl after:h-[3px] after:transition-all after:duration-300 hover:after:w-full active:after:w-full",
-                          withMenu
-                            ? isDropdownActive(items)
-                              ? "text-primary-900 after:w-full after:bg-secondary-500"
-                              : "text-text-secondary after:w-0 after:bg-text-secondary"
-                            : location.pathname.includes(href as string)
-                              ? "text-primary-900 after:w-full after:bg-secondary-500"
-                              : "text-text-secondary after:w-0 after:bg-text-secondary",
-                        )}
-                      >
-                        <div className="flex items-center gap-2">
-                          <DynamicIcon
-                            name={typeof icon === "string" ? icon : ""}
-                          />
-                          <span>{label}</span>
-                          {withMenu && <IconArrowDown />}
-                        </div>
-                      </a>
-                    </CustomMenu.Target>
-
-                    {withMenu && (
-                      <CustomMenu.Dropdown>
-                        {items?.map((value, index) => {
-                          const hasSubItems =
-                            Number(value?.subItems?.length) > 0;
-
-                          return (
-                            <div key={value.name} className="relative group">
-                              {!hasSubItems &&
-                              value.path?.startsWith("http") ? (
-                                <a
-                                  href={value.path}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="px-4 py-3 block font-[600] text-[16px] text-text-secondary hover:bg-bg-secondary cursor-pointer"
-                                >
-                                  {value.name}
-                                </a>
-                              ) : (
-                                <CustomMenu.Item
-                                  index={index}
-                                  onClick={() => {
-                                    if (!hasSubItems) router.push(value.path);
-                                  }}
-                                >
-                                  <p className="font-[600] text-[16px] text-text-secondary flex items-center justify-between w-full">
-                                    {value.name}
-                                  </p>
-                                </CustomMenu.Item>
-                              )}
-
-                              {hasSubItems && (
-                                <>
-                                  <div
-                                    className="absolute top-0 left-full w-3 h-full z-40"
-                                    style={{ pointerEvents: "auto" }}
-                                  ></div>
-
-                                  <div className="absolute top-0 ml-2 left-full hidden group-hover:flex flex-col bg-white border border-[#D0D5DD] cursor-pointer rounded-card shadow-md z-50 min-w-[200px]">
-                                    {value?.subItems?.map((sub, index) => (
-                                      <a
-                                        key={sub.name}
-                                        className="px-4 py-2 text-[16px] text-text-secondary font-semibold hover:underline hover:bg-bg-secondary cursor-pointer whitespace-nowrap"
-                                        href={`https://${sub.path}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        style={{
-                                          ...(index === 0 && {
-                                            borderBottomWidth: "1px",
-                                            borderBottomStyle: "dashed",
-                                            borderBottomColor: "#D0D5DD",
-                                          }),
-                                          borderTopLeftRadius: "12px",
-                                          borderTopRightRadius: "12px",
-                                          borderBottomLeftRadius: "12px",
-                                          borderBottomRightRadius: "12px",
-                                        }}
-                                      >
-                                        {sub.name}
-                                      </a>
-                                    ))}
-                                  </div>
-                                </>
-                              )}
-                            </div>
-                          );
-                        })}
-                      </CustomMenu.Dropdown>
-                    )}
-                  </CustomMenu>
-                );
-              },
-            )}
-          </nav>
-        )}
-
-        <div className="hidden lg:flex space-x-4">
-          <a
-            className="btn-ghost whitespace-nowrap cursor-pointer flex items-center justify-center px-4 text-sm h-[41px] rounded-card font-semibold animate-fade-in animation-delay-500 transition-all duration-300 hover:shadow-lg hover:scale-105"
-          >
-            Book a Demo
-          </a>
-          <a
-            href="https://app.plural.health/signup"
-            target="_blank"
-            className="btn-primary hidden whitespace-nowrap cursor-pointer xl:flex items-center justify-center font-semibold rounded-card h-[40px] px-4 text-sm animate-fade-in animation-delay-700 transition-all duration-300 hover:scale-105 hover:shadow-lg"
-          >
-            Try NeoEHR for free
-          </a>
-        </div>
-
-        {/* Mobile Menu Button and Sheet */}
-        <div className="lg:hidden">{renderMobileMenu()}</div>
-      </div>
-
-      {showDropDown && (
-        <div ref={ref}>
-          {!isMobile && (
-            <div
-              className={`absolute w-fit transition-all duration-300 ease-in-out ${
-                scrolled ? "top-[69px]" : "top-[78px]"
-              } bg-white shadow-2xl rounded-2xl h-[auto] z-50`}
-              style={{
-                animation: showDropDown
-                  ? "fadeIn 0.3s ease-in"
-                  : "fadeOut 0.3s ease-out",
-              }}
+        <div className="lg:hidden">
+          <Sheet>
+            <SheetTrigger onClick={() => setMobileMenuOpen(true)}>
+              <IconMenu />
+              <span className="sr-only">{t("nav.openMenu")}</span>
+            </SheetTrigger>
+            <SheetContent
+              isOpen={mobileMenuOpen}
+              onClose={() => setMobileMenuOpen(false)}
+              position="right"
             >
-              <div className="container mx-auto py-6 cursor-pointer">
-                <div className="w-fit"></div>
-              </div>
-            </div>
-          )}
+              <nav
+                className="mt-12 flex flex-col items-start text-white"
+                aria-label={t("nav.mobile")}
+              >
+                {campaignNavItems.map((item) => {
+                  const Icon = navIcons[item.href] || Home;
+                  const active = isCurrentRoute(router.pathname, item.href);
+                  const labelKey = campaignNavTranslationKeys[item.href];
+                  const label = labelKey ? t(labelKey) : item.label;
+
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      aria-current={active ? "page" : undefined}
+                      className={cn(
+                        "mb-6 flex w-full items-center gap-3 rounded-card px-3 py-2 text-[16px] font-semibold transition-all duration-300",
+                        active
+                          ? "bg-white text-primary-900"
+                          : "text-white hover:bg-white/10",
+                      )}
+                    >
+                      <Icon aria-hidden="true" className="h-5 w-5" />
+                      <span>{label}</span>
+                    </Link>
+                  );
+                })}
+                <Link
+                  href="/settings"
+                  aria-current={settingsActive ? "page" : undefined}
+                  className={cn(
+                    "mb-6 flex w-full items-center gap-3 rounded-card px-3 py-2 text-[16px] font-semibold transition-all duration-300",
+                    settingsActive
+                      ? "bg-white text-primary-900"
+                      : "text-white hover:bg-white/10",
+                  )}
+                >
+                  <CiSettings aria-hidden="true" className="h-5 w-5" />
+                  <span>{t("nav.settings")}</span>
+                </Link>
+                <Link
+                  href="/join"
+                  className="bg-[var(--secondary-500)] whitespace-nowrap cursor-pointer border border-[var(--secondary-500)] flex items-center w-full justify-center text-white font-semibold rounded-[10px] h-[40px] px-4 text-sm animate-fade-in animation-delay-700 transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                >
+                  {t("nav.joinMovement")}
+                </Link>
+              </nav>
+            </SheetContent>
+          </Sheet>
         </div>
-      )}
-    </header>
+      </motion.div>
+
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={showDesktopNav ? "expanded-rail" : "compact-rail"}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-6 bottom-0 hidden h-px bg-[linear-gradient(90deg,transparent,var(--secondary-500),transparent)] lg:block"
+          initial={{ opacity: 0, scaleX: 0.2 }}
+          animate={{ opacity: showDesktopNav ? 0.72 : 0.46, scaleX: 1 }}
+          exit={{ opacity: 0, scaleX: 0.35 }}
+          transition={navSwapTransition}
+        />
+      </AnimatePresence>
+    </motion.header>
   );
 };
 

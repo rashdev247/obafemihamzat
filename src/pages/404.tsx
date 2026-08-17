@@ -1,10 +1,12 @@
-import leadershipEventImage from "@/images/i-represented-the-governor-of-lagos-state-mr-babajide-olusola-sanwo-olu-as-special-guest-at-the.jpg";
+import { getBlobImageUrl } from "@/lib/blobImages";
 import {
   SITE_IMAGE,
   SITE_LOCALE,
   SITE_NAME,
   SITE_URL,
 } from "@/lib/seo";
+import { containerVariants, fadeInUp, itemVariants } from "@/lib/utils";
+import { motion } from "framer-motion";
 import {
   ArrowUpRight,
   Home,
@@ -19,6 +21,9 @@ import Link from "next/link";
 const pageTitle = `Page Not Found | ${SITE_NAME}`;
 const pageDescription =
   "The page you requested could not be found. Return to Dr. Kadri Obafemi Hamzat's official digital platform.";
+const leadershipEventImage = getBlobImageUrl(
+  "i-represented-the-governor-of-lagos-state-mr-babajide-olusola-sanwo-olu-as-special-guest-at-the_ocylpk.jpg",
+);
 
 const recoveryLinks = [
   {
@@ -119,20 +124,38 @@ export default function Custom404() {
         </header>
 
         <section className="container relative z-10 mx-auto grid min-h-[calc(100vh-97px)] items-center gap-12 px-6 py-12 lg:grid-cols-[minmax(0,0.94fr)_minmax(420px,1.06fr)] lg:py-16">
-          <div className="max-w-[690px] text-white">
-            <p className="font-heading text-[5.5rem] font-black leading-none text-secondary-500 md:text-[8rem] xl:text-[10rem]">
+          <motion.div
+            initial="hidden"
+            variants={containerVariants}
+            viewport={{ once: true, amount: 0.3 }}
+            whileInView="visible"
+            className="max-w-[690px] text-white"
+          >
+            <motion.p
+              variants={fadeInUp}
+              className="font-heading text-[5.5rem] font-black leading-none text-secondary-500 md:text-[8rem] xl:text-[10rem]"
+            >
               404
-            </p>
-            <h1 className="mt-5 max-w-[12ch] font-heading text-4xl font-bold leading-[1.05] text-white md:text-6xl">
+            </motion.p>
+            <motion.h1
+              variants={fadeInUp}
+              className="mt-5 max-w-[12ch] font-heading text-4xl font-bold leading-[1.05] text-white md:text-6xl"
+            >
               This page is no longer on the record.
-            </h1>
-            <p className="mt-6 max-w-[560px] text-base leading-8 text-white/78 md:text-lg">
+            </motion.h1>
+            <motion.p
+              variants={fadeInUp}
+              className="mt-6 max-w-[560px] text-base leading-8 text-white/78 md:text-lg"
+            >
               The address may have moved while the platform is being shaped
               into a clearer public leadership archive. Use the links below to
               return to verified Obafemi Hamzat content.
-            </p>
+            </motion.p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <motion.div
+              variants={containerVariants}
+              className="mt-8 flex flex-col gap-3 sm:flex-row"
+            >
               <Link
                 href="/"
                 className="btn-secondary inline-flex h-12 items-center justify-center rounded-card px-6 text-sm font-bold transition-transform duration-200 hover:-translate-y-0.5"
@@ -148,9 +171,12 @@ export default function Custom404() {
                 Visit official site
                 <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
               </a>
-            </div>
+            </motion.div>
 
-            <div className="mt-12 grid gap-3 text-text-primary sm:grid-cols-3">
+            <motion.div
+              variants={containerVariants}
+              className="mt-12 grid gap-3 text-text-primary sm:grid-cols-3"
+            >
               {recoveryLinks.map(({ href, label, description, Icon, external }) => {
                 const className =
                   "group flex min-h-[132px] flex-col justify-between rounded-card border border-primary-900/10 bg-surface p-4 shadow-[0_18px_45px_rgba(7,47,107,0.12)] transition duration-200 hover:-translate-y-1 hover:border-secondary-500/60";
@@ -171,25 +197,34 @@ export default function Custom404() {
                 );
 
                 return external ? (
-                  <a
+                  <motion.a
                     key={href}
                     href={href}
                     target="_blank"
                     rel="noreferrer"
+                    variants={itemVariants}
                     className={className}
                   >
                     {content}
-                  </a>
+                  </motion.a>
                 ) : (
-                  <Link key={href} href={href} className={className}>
-                    {content}
-                  </Link>
+                  <motion.div key={href} variants={itemVariants}>
+                    <Link href={href} className={className}>
+                      {content}
+                    </Link>
+                  </motion.div>
                 );
               })}
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          <div className="relative min-h-[440px] lg:min-h-[620px]">
+          <motion.div
+            initial={{ opacity: 0, y: 34, scale: 0.97 }}
+            viewport={{ once: true, amount: 0.25 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.7, ease: "easeOut", delay: 0.15 }}
+            className="relative min-h-[440px] lg:min-h-[620px]"
+          >
             <div
               aria-hidden="true"
               className="absolute -right-6 top-6 hidden h-40 w-40 border-[18px] border-secondary-500/35 lg:block"
@@ -227,7 +262,7 @@ export default function Custom404() {
                 platform is still available from the homepage.
               </p>
             </div>
-          </div>
+          </motion.div>
         </section>
       </main>
     </>

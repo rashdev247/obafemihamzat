@@ -1,26 +1,115 @@
-import { BlogPost, BlogCategory, BlogTag, CodaBlogRow } from "@/types"
+import type {
+  BlogCategory,
+  BlogPost,
+  BlogSeedPost,
+  BlogTag,
+  CodaBlogRow,
+} from "@/types"
 
-const CODA_API_BASE = "https://coda.io/apis/v1"
+const CODA_API_BASE = process.env.CODA_API_BASE || "https://coda.io/apis/v1"
 const CODA_API_TOKEN = process.env.CODA_API_TOKEN
 const CODA_DOC_ID = process.env.CODA_DOC_ID
 const CODA_TABLE_ID = process.env.CODA_TABLE_ID
+const CODA_TABLE_NAME = process.env.CODA_TABLE_NAME || "Blog Posts"
 
 interface CodaApiResponse {
   items: CodaBlogRow[]
   nextPageToken?: string
 }
 
+type CodaTableReference = {
+  id: string
+  name: string
+}
+
+type CodaTablesResponse = {
+  items: CodaTableReference[]
+}
+
+type CodaCellInput = {
+  column: string
+  value: string | number | boolean | string[] | null
+}
+
+type CodaRowInput = {
+  cells: CodaCellInput[]
+}
+
+type CodaMutationResponse = {
+  requestId?: string
+  addedRowIds?: string[]
+  updatedRowIds?: string[]
+  rowIds?: string[]
+  [key: string]: unknown
+}
+
+type BlogRepository = "table"
+
+export type SeedBlogPostsOptions = {
+  repository?: BlogRepository
+  docId?: string
+  tableId?: string
+  keyColumns?: string[]
+  dryRun?: boolean
+}
+
+export type SeedBlogPostsResult = {
+  rows: number
+  dryRun: boolean
+  repository: BlogRepository
+  payload: {
+    markdown?: string
+    rows: CodaRowInput[]
+    keyColumns: string[]
+  }
+  response?: CodaMutationResponse
+}
+
 /**
  * Fetch all rows from a Coda table with pagination support
  */
+async function resolveBlogPostsTableId(
+  docId: string = CODA_DOC_ID!,
+  tableId: string = CODA_TABLE_ID!
+): Promise<string> {
+  if (tableId) {
+    return tableId
+  }
+
+  if (!CODA_API_TOKEN || !docId) {
+    throw new Error("Coda API credentials are not configured")
+  }
+
+  const response = await fetch(`${CODA_API_BASE}/docs/${docId}/tables`, {
+    headers: {
+      Authorization: `Bearer ${CODA_API_TOKEN}`,
+      "Content-Type": "application/json",
+    },
+  })
+
+  if (!response.ok) {
+    throw new Error(`Coda tables lookup failed: ${response.status} ${response.statusText}`)
+  }
+
+  const data = (await response.json()) as CodaTablesResponse
+  const table = data.items.find((item) => item.name === CODA_TABLE_NAME)
+
+  if (!table) {
+    throw new Error(`Coda table "${CODA_TABLE_NAME}" was not found`)
+  }
+
+  return table.id
+}
+
 async function fetchCodaTable(
   tableId: string = CODA_TABLE_ID!,
   params: Record<string, string> = {}
 ): Promise<CodaBlogRow[]> {
-  if (!CODA_API_TOKEN || !CODA_DOC_ID || !tableId) {
+  if (!CODA_API_TOKEN || !CODA_DOC_ID) {
     throw new Error("Coda API credentials are not configured")
   }
 
+  const resolvedTableId = await resolveBlogPostsTableId(CODA_DOC_ID, tableId)
   let allRows: CodaBlogRow[] = []
   let nextPageToken: string | undefined
 
@@ -32,7 +121,7 @@ async function fetchCodaTable(
     })
 
     const response = await fetch(
-      `${CODA_API_BASE}/docs/${CODA_DOC_ID}/tables/${tableId}/rows?${queryParams}`,
+      `${CODA_API_BASE}/docs/${CODA_DOC_ID}/tables/${resolvedTableId}/rows?${queryParams}`,
       {
         headers: {
           Authorization: `Bearer ${CODA_API_TOKEN}`,
@@ -52,6 +141,66 @@ async function fetchCodaTable(
   } while (nextPageToken)
 
   return allRows
+}
+
+function assertCodaCredentials(
+  docId: string = CODA_DOC_ID!,
+  tableId: string = CODA_TABLE_ID!
+) {
+  if (!CODA_API_TOKEN || !docId || !tableId) {
+    throw new Error("Coda API credentials are not configured")
+  }
+}
+
+function normalizeStatus(status: BlogSeedPost["status"]): string {
+  if (!status) return "Published"
+
+  const normalized = status.toLowerCase()
+  if (normalized === "draft") return "Draft"
+  if (normalized === "archived") return "Archived"
+  return "Published"
+}
+
+function toCsv(values: string[] = []): string {
+  return values.map((value) => value.trim()).filter(Boolean).join(", ")
+}
+
+function toCodaRow(post: BlogSeedPost, index: number): CodaRowInput {
+  const title = post.title.trim()
+  const slug = post.slug?.trim() || generateSlug(title)
+  const content = post.content?.trim() || post.description.trim()
+  const imageUrl = post.imageUrl?.trim() || ""
+
+  return {
+    cells: [
+      { column: "ID", value: post.id || index + 1 },
+      { column: "Slug", value: slug },
+      { column: "Title", value: title },
+      { column: "Description", value: post.description.trim() },
+      { column: "Content", value: content },
+      { column: "Image URL", value: imageUrl },
+      { column: "Author", value: post.authorName?.trim() || "Campaign Team" },
+      { column: "Status", value: normalizeStatus(post.status) },
+      { column: "Published Date", value: post.publishedDate || new Date().toISOString() },
+      { column: "Featured", value: String(Boolean(post.featured)) },
+      { column: "Pinned", value: String(Boolean(post.pinned)) },
+      { column: "Categories", value: toCsv(post.categories) },
+      { column: "Tags", value: toCsv(post.tags) },
+      { column: "SEO Title", value: post.seoTitle?.trim() || title },
+      { column: "SEO Description", value: post.seoDescription?.trim() || post.description.trim() },
+      { column: "SEO Keywords", value: post.seoKeywords?.trim() || toCsv(post.tags) },
+      { column: "Read Time (min)", value: post.readTime || calculateReadTime(content) },
+      { column: "View Count", value: post.viewCount || 0 },
+    ],
+  }
+}
+
+function sortBlogPosts(posts: BlogPost[]): BlogPost[] {
+  return posts.sort((a, b) => {
+    if (a.pinned && !b.pinned) return -1
+    if (!a.pinned && b.pinned) return 1
+    return new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime()
+  })
 }
 
 /**
@@ -83,25 +232,49 @@ function transformCodaRowToBlogPost(row: CodaBlogRow): BlogPost | null {
         : []
       : []
 
+    const author: BlogPost["author"] = {
+      name: typeof values["Author Name"] === "string"
+        ? values["Author Name"]
+        : typeof values.Author === "string"
+        ? values.Author
+        : "Anonymous",
+    }
+
+    if (typeof values["Author Avatar URL"] === "string" && values["Author Avatar URL"]) {
+      author.avatar = values["Author Avatar URL"]
+    }
+
+    const seo: BlogPost["seo"] = {}
+    if (typeof values["SEO Title"] === "string" && values["SEO Title"]) {
+      seo.title = values["SEO Title"]
+    }
+    if (typeof values["SEO Description"] === "string" && values["SEO Description"]) {
+      seo.description = values["SEO Description"]
+    }
+    if (typeof values["SEO Keywords"] === "string" && values["SEO Keywords"]) {
+      seo.keywords = values["SEO Keywords"]
+    }
+    if (typeof values["OG Image URL"] === "string" && values["OG Image URL"]) {
+      seo.ogImage = values["OG Image URL"]
+    }
+    if (typeof values["Canonical URL"] === "string" && values["Canonical URL"]) {
+      seo.canonicalUrl = values["Canonical URL"]
+    }
+
     return {
       id: typeof values.ID === "number" ? values.ID : parseInt(typeof values.ID === "string" ? values.ID : row.id),
       slug: typeof values.Slug === "string" ? values.Slug : generateSlug(typeof values.Title === "string" ? values.Title : ""),
       title: typeof values.Title === "string" ? values.Title : "",
       description: typeof values.Description === "string" ? values.Description : "",
       content: typeof values.Content === "string" ? values.Content : "",
-      imageUrl: typeof values["Featured Image URL"] === "string"
+      imageUrl: typeof values["Image URL"] === "string"
+        ? values["Image URL"]
+        : typeof values["Featured Image URL"] === "string"
         ? values["Featured Image URL"]
         : typeof values.ImageURL === "string"
         ? values.ImageURL
         : "",
-      author: {
-        name: typeof values["Author Name"] === "string"
-          ? values["Author Name"]
-          : typeof values.Author === "string"
-          ? values.Author
-          : "Anonymous",
-        avatar: typeof values["Author Avatar URL"] === "string" ? values["Author Avatar URL"] : undefined,
-      },
+      author,
       status: "published",
       publishedDate: typeof values["Published Date"] === "string"
         ? values["Published Date"]
@@ -112,14 +285,10 @@ function transformCodaRowToBlogPost(row: CodaBlogRow): BlogPost | null {
       pinned: values.Pinned === true || values.Pinned === "true",
       categories,
       tags,
-      seo: {
-        title: typeof values["SEO Title"] === "string" ? values["SEO Title"] : undefined,
-        description: typeof values["SEO Description"] === "string" ? values["SEO Description"] : undefined,
-        keywords: typeof values["SEO Keywords"] === "string" ? values["SEO Keywords"] : undefined,
-        ogImage: typeof values["OG Image URL"] === "string" ? values["OG Image URL"] : undefined,
-        canonicalUrl: typeof values["Canonical URL"] === "string" ? values["Canonical URL"] : undefined,
-      },
-      readTime: typeof values["Read Time"] === "number"
+      seo,
+      readTime: typeof values["Read Time (min)"] === "number"
+        ? values["Read Time (min)"]
+        : typeof values["Read Time"] === "number"
         ? values["Read Time"]
         : calculateReadTime(typeof values.Content === "string" ? values.Content : ""),
       viewCount: typeof values["View Count"] === "number"
@@ -154,24 +323,101 @@ function calculateReadTime(content: string): number {
 }
 
 /**
- * Get all published blog posts from Coda
+ * Read all published blog posts from a Coda table.
+ */
+async function readAllBlogPostsFromTable(): Promise<BlogPost[]> {
+  const rows = await fetchCodaTable()
+  return rows
+    .map(transformCodaRowToBlogPost)
+    .filter((post): post is BlogPost => post !== null)
+}
+
+/**
+ * Read all published blog posts from the configured repository.
+ */
+async function readAllBlogPosts(): Promise<BlogPost[]> {
+  return sortBlogPosts(await readAllBlogPostsFromTable())
+}
+
+/**
+ * Get all published blog posts from Coda.
  */
 export async function getAllBlogPosts(): Promise<BlogPost[]> {
   try {
-    const rows = await fetchCodaTable()
-    const posts = rows
-      .map(transformCodaRowToBlogPost)
-      .filter((post): post is BlogPost => post !== null)
-
-    // Sort by pinned first, then by date
-    return posts.sort((a, b) => {
-      if (a.pinned && !b.pinned) return -1
-      if (!a.pinned && b.pinned) return 1
-      return new Date(b.publishedDate).getTime() - new Date(a.publishedDate).getTime()
-    })
+    return await readAllBlogPosts()
   } catch (error) {
     console.error("Error fetching blog posts from Coda:", error)
     return []
+  }
+}
+
+/**
+ * Get all published blog posts from Coda and surface API errors to callers
+ * that need to trigger a local fallback.
+ */
+export async function getAllBlogPostsStrict(): Promise<BlogPost[]> {
+  return readAllBlogPosts()
+}
+
+/**
+ * Insert or upsert blog posts into the configured Superhuman Docs/Coda table.
+ * The API endpoint is still compatible with the Coda v1 rows API.
+ */
+export async function seedBlogPosts(
+  posts: BlogSeedPost[],
+  options: SeedBlogPostsOptions = {}
+): Promise<SeedBlogPostsResult> {
+  const docId = options.docId || CODA_DOC_ID!
+  let tableId = options.tableId || CODA_TABLE_ID!
+  const keyColumns = options.keyColumns?.length ? options.keyColumns : ["Slug"]
+  const repository: BlogRepository = options.repository || "table"
+
+  if (!posts.length) {
+    throw new Error("At least one post is required")
+  }
+
+  const payload = {
+    rows: posts.map(toCodaRow),
+    keyColumns,
+  }
+
+  if (options.dryRun) {
+    return {
+      rows: payload.rows.length,
+      dryRun: true,
+      repository,
+      payload,
+    }
+  }
+
+  tableId = await resolveBlogPostsTableId(docId, tableId)
+  assertCodaCredentials(docId, tableId)
+
+  const response = await fetch(
+    `${CODA_API_BASE}/docs/${docId}/tables/${tableId}/rows?useColumnNames=true`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${CODA_API_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    }
+  )
+
+  if (!response.ok) {
+    const errorBody = await response.text()
+    throw new Error(
+      `Coda row insert failed: ${response.status} ${response.statusText}. ${errorBody}`
+    )
+  }
+
+  return {
+    rows: payload.rows.length,
+    dryRun: false,
+    repository,
+    payload,
+    response: await response.json(),
   }
 }
 

@@ -11,8 +11,14 @@ import {
   campaignImages,
   campaignSite,
 } from "@/data/campaignContent";
+import { getBlobImageUrl } from "@/lib/blobImages";
+import { containerVariants, fadeInUp, itemVariants } from "@/lib/utils";
+import { motion } from "framer-motion";
 import { Award, Building2, Cpu, GraduationCap } from "lucide-react";
-
+import Image from "next/image";
+const BLOB_URL = process.env.NEXT_PUBLIC_BLOB_API_URL;
+const ZigZag = `${BLOB_URL}/zigzag_sofhpm.png`;
+const rectglow = getBlobImageUrl("rectglow_jlxfok.png");
 const credentials = [
   {
     title: "Engineer",
@@ -60,33 +66,52 @@ export default function AboutPage() {
         <PageHero
           title="Service. Innovation. Results."
           description="Dr. Kadri Obafemi Hamzat has built a career around solving problems, improving systems, and creating opportunities for Lagosians."
-          image={campaignImages.leadership}
+          image={getBlobImageUrl("al-ḥamdu-l-illāhi-rabbi-l-ʿālamīn.-for-the-grace-and-favour-bestowed-upon-me-by-almighty-allah-_zlbdsb.jpg")}
         />
 
         <section className="bg-white px-6 py-20">
-          <div className="container mx-auto grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <div className="container mx-auto grid relative gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+            <div className="absolute  w-[100%] inset-0">
+              <Image
+                src={rectglow}
+                alt="Background pattern"
+                fill
+                sizes="100vw"
+                className="w-full"
+                priority
+              />
+            </div>
             <div>
               <SectionIntro
                 label="The biography"
                 title="A modern statesman shaped by engineering, reform, and Lagos service."
                 description="Born into a family rooted in public service, Dr. Kadri Obafemi Hamzat has dedicated his life to improving systems and building opportunity. His professional journey spans technology, finance, public administration, and executive governance."
               />
-              <div className="mt-8 space-y-5 text-base leading-8 text-text-secondary">
-                <p>
+              <motion.div
+                initial="hidden"
+                variants={containerVariants}
+                viewport={{ once: true, amount: 0.3 }}
+                whileInView="visible"
+                className="mt-8 space-y-5 text-base leading-8 text-text-secondary"
+              >
+                <motion.p variants={fadeInUp}>
                   He earned degrees from the University of Ibadan and Cranfield
                   University in the United Kingdom before building a respected
                   career across global institutions and Nigerian enterprise.
-                </p>
-                <p>
+                </motion.p>
+                <motion.p variants={fadeInUp}>
                   His transition into public service marked the beginning of one
                   of Lagos State&apos;s most consequential governance journeys:
                   technology reform, public works, transport modernization, and
                   steady executive leadership.
-                </p>
-                <p className="font-heading text-2xl font-black leading-tight text-[var(--campaign-green-900)]">
+                </motion.p>
+                <motion.p
+                  variants={fadeInUp}
+                  className="font-heading text-2xl font-black leading-tight text-[var(--campaign-green-900)]"
+                >
                   A bridge between experience and innovation.
-                </p>
-              </div>
+                </motion.p>
+              </motion.div>
             </div>
             <ImagePanel
               image={campaignImages.publicService}
@@ -105,10 +130,17 @@ export default function AboutPage() {
               title="The profile Lagos needs for the next decade."
               description="The campaign positioning is competence plus stability plus innovation plus inclusiveness."
             />
-            <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <motion.div
+              initial="hidden"
+              variants={containerVariants}
+              viewport={{ once: true, amount: 0.2 }}
+              whileInView="visible"
+              className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+            >
               {credentials.map(({ title, description, Icon }) => (
-                <article
+                <motion.article
                   key={title}
+                  variants={itemVariants}
                   className="rounded-card border border-[rgba(6,59,46,0.12)] bg-white p-6 shadow-brand-card"
                 >
                   <div className="flex h-12 w-12 items-center justify-center rounded-card bg-[var(--lagos-sky)] text-[var(--campaign-green-700)]">
@@ -120,9 +152,9 @@ export default function AboutPage() {
                   <p className="mt-3 text-sm leading-7 text-text-secondary">
                     {description}
                   </p>
-                </article>
+                </motion.article>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -134,14 +166,30 @@ export default function AboutPage() {
               description="Not an overnight campaign. A long arc of responsibility, reform, and Lagos-focused delivery."
             />
             <div className="relative">
+              <div>
+                <Image
+                  src={ZigZag}
+                  alt="Background pattern"
+                  fill
+                  priority
+                  className="z-0 relative"
+                />
+              </div>
               <div
                 aria-hidden="true"
                 className="absolute bottom-0 left-[19px] top-0 w-px bg-[rgba(6,59,46,0.16)]"
               />
-              <div className="grid gap-6">
+              <motion.div
+                initial="hidden"
+                variants={containerVariants}
+                viewport={{ once: true, amount: 0.15 }}
+                whileInView="visible"
+                className="grid gap-6"
+              >
                 {biographyTimeline.map((item) => (
-                  <article
+                  <motion.article
                     key={item.title}
+                    variants={itemVariants}
                     className="relative grid gap-4 pl-14 md:grid-cols-[160px_1fr] md:gap-8"
                   >
                     <span className="absolute left-0 top-1 flex h-10 w-10 items-center justify-center rounded-card bg-secondary-500 font-heading text-sm font-black text-primary-900">
@@ -158,9 +206,9 @@ export default function AboutPage() {
                         {item.description}
                       </p>
                     </div>
-                  </article>
+                  </motion.article>
                 ))}
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
@@ -179,12 +227,18 @@ export default function AboutPage() {
                 title="Accessible, steady, and deeply Lagos-focused."
                 description={`${campaignSite.shortName}'s strongest campaign asset is not noise. It is a record of showing up, understanding systems, respecting communities, and keeping Lagos moving.`}
               />
-              <div className="mt-8 rounded-card bg-white p-6 shadow-brand-card">
+              <motion.div
+                initial="hidden"
+                variants={fadeInUp}
+                viewport={{ once: true, amount: 0.4 }}
+                whileInView="visible"
+                className="mt-8 rounded-card bg-white p-6 shadow-brand-card"
+              >
                 <p className="font-heading text-3xl font-black leading-tight text-[var(--campaign-green-900)]">
-                  Experience is not nostalgia. It is preparation for what
-                  Lagos must become next.
+                  Experience is not nostalgia. It is preparation for what Lagos
+                  must become next.
                 </p>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>

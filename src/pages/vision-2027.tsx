@@ -6,11 +6,8 @@ import {
   PageHero,
   SectionIntro,
 } from "@/components/campaign/CampaignPrimitives";
-import {
-  campaignImages,
-  roadmap,
-  visionPillars,
-} from "@/data/campaignContent";
+import { campaignImages, roadmap, visionPillars } from "@/data/campaignContent";
+import { containerVariants, fadeInUp, itemVariants } from "@/lib/utils";
 import {
   BriefcaseBusiness,
   GraduationCap,
@@ -19,7 +16,9 @@ import {
   Route,
   Smartphone,
 } from "lucide-react";
+import { motion } from "framer-motion";
 import { useState } from "react";
+import { getBlobImageUrl } from "@/lib/blobImages";
 
 const pillarDetails = [
   {
@@ -101,7 +100,9 @@ export default function VisionPage() {
         <PageHero
           title="The Next Chapter of Lagos."
           description="A smarter government. A connected economy. A more inclusive Lagos. The 2027 vision is built for people, infrastructure, opportunity, and technology."
-          image={campaignImages.infrastructure}
+          image={getBlobImageUrl(
+            "i-represented-the-governor-of-lagos-state-mr-babajide-olusola-sanwo-olu-as-special-guest-at-the-_1_fptuu4.jpg",
+          )}
         />
 
         <section className="bg-white px-6 py-20">
@@ -112,10 +113,17 @@ export default function VisionPage() {
               title="A governing agenda, not campaign slogans."
               description="The vision is organized around the everyday systems that determine whether Lagos works for students, traders, founders, workers, families, and communities."
             />
-            <div className="mt-12 grid gap-5">
+            <motion.div
+              initial="hidden"
+              variants={containerVariants}
+              viewport={{ once: true, amount: 0.16 }}
+              whileInView="visible"
+              className="mt-12 grid gap-5"
+            >
               {pillarDetails.map(({ title, summary, points, Icon }, index) => (
-                <article
+                <motion.article
                   key={title}
+                  variants={itemVariants}
                   className={`grid gap-8 rounded-card border border-[rgba(6,59,46,0.12)] p-6 md:grid-cols-[0.82fr_1.18fr] md:p-8 ${
                     index % 2 === 0 ? "bg-bg-primary" : "bg-white"
                   }`}
@@ -131,19 +139,23 @@ export default function VisionPage() {
                       {summary}
                     </p>
                   </div>
-                  <div className="grid gap-3 sm:grid-cols-2">
+                  <motion.div
+                    variants={containerVariants}
+                    className="grid gap-3 sm:grid-cols-2"
+                  >
                     {points.map((point) => (
-                      <div
+                      <motion.div
                         key={point}
+                        variants={itemVariants}
                         className="flex min-h-[78px] items-center rounded-card border border-[rgba(6,59,46,0.1)] bg-white px-5 font-bold text-primary-900 shadow-[0_12px_30px_rgba(7,47,107,0.05)]"
                       >
                         {point}
-                      </div>
+                      </motion.div>
                     ))}
-                  </div>
-                </article>
+                  </motion.div>
+                </motion.article>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -156,12 +168,19 @@ export default function VisionPage() {
                 title="A Lagos roadmap people can track."
                 description="A campaign should make promises visible. The roadmap model turns priorities into phases, dashboards, and measurable public delivery."
               />
-              <div className="mt-8 grid gap-3">
+              <motion.div
+                initial="hidden"
+                variants={containerVariants}
+                viewport={{ once: true, amount: 0.25 }}
+                whileInView="visible"
+                className="mt-8 grid gap-3"
+              >
                 {roadmap.map((phase) => (
-                  <button
+                  <motion.button
                     key={phase.phase}
                     type="button"
                     onClick={() => setActivePhase(phase)}
+                    variants={itemVariants}
                     className={`rounded-card border px-5 py-4 text-left transition-colors duration-200 ${
                       activePhase.phase === phase.phase
                         ? "border-secondary-500 bg-secondary-500 text-primary-900"
@@ -174,11 +193,17 @@ export default function VisionPage() {
                     <span className="mt-2 block font-heading text-xl font-black">
                       {phase.title}
                     </span>
-                  </button>
+                  </motion.button>
                 ))}
-              </div>
+              </motion.div>
             </div>
-            <div className="rounded-card bg-white p-8 text-text-primary shadow-[0_30px_90px_rgba(0,0,0,0.18)]">
+            <motion.div
+              initial="hidden"
+              variants={fadeInUp}
+              viewport={{ once: true, amount: 0.3 }}
+              whileInView="visible"
+              className="rounded-card bg-white p-8 text-text-primary shadow-[0_30px_90px_rgba(0,0,0,0.18)]"
+            >
               <Lightbulb
                 aria-hidden="true"
                 className="h-10 w-10 text-secondary-500"
@@ -196,10 +221,10 @@ export default function VisionPage() {
                 <div className="h-full w-2/3 bg-secondary-500" />
               </div>
               <p className="mt-4 text-sm font-bold text-text-muted">
-                Public dashboard concept: priorities, milestones, and
-                community feedback.
+                Public dashboard concept: priorities, milestones, and community
+                feedback.
               </p>
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -217,12 +242,18 @@ export default function VisionPage() {
                 title="A smarter Lagos for everyone."
                 description="The purpose of technology is not decoration. It should shorten queues, improve transit, simplify business, strengthen health systems, and help young Lagosians compete globally."
               />
-              <div className="mt-8 rounded-card bg-white p-6 shadow-brand-card">
+              <motion.div
+                initial="hidden"
+                variants={fadeInUp}
+                viewport={{ once: true, amount: 0.4 }}
+                whileInView="visible"
+                className="mt-8 rounded-card bg-white p-6 shadow-brand-card"
+              >
                 <p className="font-heading text-2xl font-black leading-tight text-[var(--campaign-green-900)]">
                   Move people faster, safer, and smarter. Prepare minds. Grow
                   enterprise. Modernize services.
                 </p>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>

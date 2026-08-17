@@ -1,11 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import IconCurlSplashbg from "../IconComponents/IconCurlSplashbg";
-import AppIconPlural from "../IconComponents/AppIconPlural";
-import PlateaumedAppIcon from "../IconComponents/PlateaumedAppIcon";
-import SplashArrow from "../IconComponents/SplashArrow";
 
 const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
   const [isVisible, setIsVisible] = useState(true);
@@ -13,21 +10,21 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
 
   useEffect(() => {
     const completeSplash = () => {
-      setIsVisible(false)
-      onComplete()
-    }
+      setIsVisible(false);
+      onComplete();
+    };
 
     // Fallback: hide splash after 6s
-    const timer = setTimeout(completeSplash, 4000)
+    const timer = setTimeout(completeSplash, 4000);
 
     // Also complete when route starts changing
-    router.events.on("routeChangeStart", completeSplash)
+    router.events.on("routeChangeStart", completeSplash);
 
     return () => {
-      clearTimeout(timer)
-      router.events.off("routeChangeStart", completeSplash)
-    }
-  }, [router, onComplete])
+      clearTimeout(timer);
+      router.events.off("routeChangeStart", completeSplash);
+    };
+  }, [router, onComplete]);
 
   if (!isVisible) return null;
   return (
@@ -47,11 +44,11 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
         <IconCurlSplashbg />
       </motion.div>
       <div>
-        <div className="z-100 flex flex-row items-center gap-4 justify-center">
+        <div className="z-100 flex flex-row items-center justify-center">
           <motion.div
             animate={{
-              opacity: [1, 0, 1],
-              x: [0, -40, 0],
+              opacity: [0.82, 1, 0.82],
+              scale: [0.96, 1.06, 0.96],
             }}
             transition={{
               duration: 3,
@@ -59,33 +56,23 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
               repeatType: "loop",
               ease: "easeInOut",
             }}
-            className="bg-white rounded-[15.89px]"
+            className="rounded-[15.89px] bg-white p-3 shadow-[0_18px_55px_rgba(7,47,107,0.14)]"
           >
-            <PlateaumedAppIcon />
-          </motion.div>
-          <SplashArrow />
-          <motion.div
-            animate={{
-              opacity: [0, 1, 0],
-              x: [40, 0, 40],
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              repeatType: "loop",
-              ease: "easeInOut",
-            }}
-            className="bg-white rounded-[15.89px]"
-          >
-            <AppIconPlural />
+            <Image
+              src="/logo.webp"
+              alt="Obafemi Hamzat campaign logo"
+              width={96}
+              height={96}
+              priority
+              className="h-20 w-20 object-contain"
+            />
           </motion.div>
         </div>
-        <p className="mt-4 hidden md:block text-center text-[20px] font-bold text-[#6658F4] bg-[#CCF4FF] rounded-[15.89px] px-6 py-[12px]">
-          Plateaumed is now Plural! A new name for the future of connected
-          healthcare
+        <p className="mt-4 hidden rounded-[15.89px] bg-[#CCF4FF] px-6 py-[12px] text-center text-[20px] font-bold text-[#063B2E] md:block">
+          Obafemi Hamzat 2027 | For A Greater Lagos
         </p>
-         <p className="mt-4 md:hidden text-center text-[18px] font-semibold text-[#6658F4] bg-[#CCF4FF] rounded-[15.89px] px-6 py-[12px]">
-          Plateaumed is now Plural!
+        <p className="mt-4 rounded-[15.89px] bg-[#CCF4FF] px-6 py-[12px] text-center text-[18px] font-semibold text-[#063B2E] md:hidden">
+          For A Greater Lagos
         </p>
       </div>
     </div>

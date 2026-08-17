@@ -1,11 +1,4 @@
-import communityImage from "@/images/i-attended-the-lagos-state-cooperative-federation-(lascofed)-cooperative-festival.the-lagos-stat.jpg";
-import impactImage from "@/images/i-represented-the-governor-of-lagos-state-mr-babajide-olusola-sanwo-olu-as-special-guest-at-the.jpg";
-import infrastructureImage from "@/images/today-i-joined-the-governor-of-lagos-state-mr-babajide-olusola-sanwo-olu-as-we-inaugurated-the-(4).jpg";
-import leadershipImage from "@/images/today-i-met-with-former-governor-and-minister-mr-babatunde-raji-fashola-and-hon.-olajumoke-oko-(11).jpg";
-import publicServiceImage from "@/images/i-want-to-congratulate-mr.-governor-babajide-sanwo-olu-on-the-successful-presentation-of-the-ye.jpg";
-import ramadanImage from "@/images/today-i-attended-the-annual-ramadan-lecture-hosted-by-the-ansar-ud-deen-society-of-nigeria-lag.jpg";
-import youthImage from "@/images/today-i-represented-the-governor-at-the-opening-of-the-duke-of-edinburgh-international-award-ig.jpg";
-import type { StaticImageData } from "next/image";
+import { getBlobImageUrl } from "@/lib/blobImages";
 
 export const campaignSite = {
   name: "Dr. Kadri Obafemi Hamzat",
@@ -23,17 +16,30 @@ export const campaignNavItems = [
   { href: "/about", label: "About Hamzat" },
   { href: "/vision-2027", label: "Vision 2027" },
   { href: "/achievements", label: "Impact" },
+  { href: "/news", label: "News" },
   { href: "/join", label: "Join" },
 ];
 
 export const campaignImages = {
-  community: communityImage,
-  impact: impactImage,
-  infrastructure: infrastructureImage,
-  leadership: leadershipImage,
-  publicService: publicServiceImage,
-  ramadan: ramadanImage,
-  youth: youthImage,
+  community: getBlobImageUrl(
+    "i-attended-the-lagos-state-cooperative-federation-_lascofed_-cooperative-festival.the-lagos-stat_hefsrg.jpg",
+  ),
+  impact: getBlobImageUrl("i-represented-the-governor-of-lagos-state-mr-babajide-olusola-sanwo-olu-as-special-guest-at-the_ocylpk.jpg"),
+  infrastructure: getBlobImageUrl(
+    "today-i-joined-the-governor-of-lagos-state-mr-babajide-olusola-sanwo-olu-as-we-inaugurated-the-_4_afunb1.jpg",
+  ),
+  leadership: getBlobImageUrl(
+    "today-i-met-with-former-governor-and-minister-mr-babatunde-raji-fashola-and-hon.-olajumoke-oko-_11_eyp1pb.jpg",
+  ),
+  publicService: getBlobImageUrl(
+    "i-want-to-congratulate-mr.-governor-babajide-sanwo-olu-on-the-successful-presentation-of-the-ye_qfkimw.jpg",
+  ),
+  ramadan: getBlobImageUrl(
+    "today-i-attended-the-annual-ramadan-lecture-hosted-by-the-ansar-ud-deen-society-of-nigeria-lag_t8z0fl.jpg",
+  ),
+  youth: getBlobImageUrl(
+    "today-i-represented-the-governor-at-the-opening-of-the-duke-of-edinburgh-international-award-ig_w7lt7l.jpg",
+  ),
 };
 
 export const movementStats = [
@@ -71,25 +77,25 @@ export const primaryResult = {
     },
     {
       type: "image",
-      src: "https://res.cloudinary.com/duafntunw/image/upload/v1779460463/primary-election-images-1_mu24qh.jpg",
+      src: getBlobImageUrl("primary-election-images-1_mu24qh.jpg"),
       title: "Primary election moment 01",
       caption: "The result declaration begins at the APC secretariat in Ikeja.",
     },
     {
       type: "image",
-      src: "https://res.cloudinary.com/duafntunw/image/upload/v1779460454/primary-election-images-2_io60ho.jpg",
+      src: getBlobImageUrl("primary-election-images-2_io60ho.jpg"),
       title: "Primary election moment 02",
       caption: "Party leaders and supporters gather for the official outcome.",
     },
     {
       type: "image",
-      src: "https://res.cloudinary.com/duafntunw/image/upload/v1779460448/primary-election-images-3_hgwchi.jpg",
+      src: getBlobImageUrl("primary-election-images-3_hgwchi.jpg"),
       title: "Primary election moment 03",
       caption: "A chronological look at the May 21 primary proceedings.",
     },
     {
       type: "image",
-      src: "https://res.cloudinary.com/duafntunw/image/upload/v1779460437/primary-election-images-4_hjezlb.jpg",
+      src: getBlobImageUrl("primary-election-images-4_hjezlb.jpg"),
       title: "Primary election moment 04",
       caption: "The APC Lagos 2027 campaign enters its next phase.",
     },
@@ -308,7 +314,7 @@ export const campaignUpdates = [
 ];
 
 export type CampaignGalleryItem = {
-  image: StaticImageData;
+  image: string;
   title: string;
   caption: string;
 };

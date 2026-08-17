@@ -1,5 +1,37 @@
 import type { NextConfig } from "next";
 
+type RemotePattern = NonNullable<
+  NonNullable<NextConfig["images"]>["remotePatterns"]
+>[number];
+
+function getBlobRemotePattern(): RemotePattern | null {
+  const blobApiUrl = process.env.NEXT_PUBLIC_BLOB_API_URL;
+
+  if (!blobApiUrl) {
+    return null;
+  }
+
+  try {
+    const parsedUrl = new URL(blobApiUrl);
+    const protocol = parsedUrl.protocol.replace(":", "");
+
+    if (protocol !== "http" && protocol !== "https") {
+      return null;
+    }
+
+    return {
+      protocol,
+      hostname: parsedUrl.hostname,
+      port: parsedUrl.port || undefined,
+      pathname: `${parsedUrl.pathname.replace(/\/+$/, "")}/**`,
+    };
+  } catch {
+    return null;
+  }
+}
+
+const blobRemotePattern = getBlobRemotePattern();
+
 const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
@@ -12,6 +44,7 @@ const nextConfig: NextConfig = {
   // Image optimization
   images: {
     remotePatterns: [
+      ...(blobRemotePattern ? [blobRemotePattern] : []),
       {
         protocol: 'https',
         hostname: 'pluralpublic.blob.core.windows.net',

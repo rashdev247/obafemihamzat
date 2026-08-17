@@ -11,6 +11,7 @@ import {
   campaignImages,
   galleryItems,
 } from "@/data/campaignContent";
+import { containerVariants, fadeInUp, itemVariants } from "@/lib/utils";
 import {
   ArrowUpRight,
   Building,
@@ -19,6 +20,7 @@ import {
   UsersRound,
   Wrench,
 } from "lucide-react";
+import { motion } from "framer-motion";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 
@@ -95,10 +97,17 @@ export default function AchievementsPage() {
               title="The proof points behind the campaign."
               description="The strongest political message is delivery that people can recognize in their daily lives."
             />
-            <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <motion.div
+              initial="hidden"
+              variants={containerVariants}
+              viewport={{ once: true, amount: 0.2 }}
+              whileInView="visible"
+              className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4"
+            >
               {achievements.map((item) => (
-                <article
+                <motion.article
                   key={item.title}
+                  variants={itemVariants}
                   className="rounded-card border border-[rgba(6,59,46,0.12)] bg-bg-primary p-6"
                 >
                   <p className="text-xs font-black uppercase tracking-[0.2em] text-secondary-500">
@@ -110,9 +119,9 @@ export default function AchievementsPage() {
                   <p className="mt-4 text-sm leading-7 text-text-secondary">
                     {item.description}
                   </p>
-                </article>
+                </motion.article>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -124,12 +133,19 @@ export default function AchievementsPage() {
                 title="Track the work by theme."
                 description="A campaign-grade impact archive should help voters explore what has been done, where it connects to their lives, and what comes next."
               />
-              <div className="mt-8 flex flex-wrap gap-3">
+              <motion.div
+                initial="hidden"
+                variants={containerVariants}
+                viewport={{ once: true, amount: 0.3 }}
+                whileInView="visible"
+                className="mt-8 flex flex-wrap gap-3"
+              >
                 {impactFilters.map((item) => (
-                  <button
+                  <motion.button
                     key={item}
                     type="button"
                     onClick={() => setFilter(item)}
+                    variants={itemVariants}
                     className={`inline-flex h-11 items-center gap-2 rounded-card border px-4 text-sm font-black transition-colors duration-200 ${
                       filter === item
                         ? "border-[var(--campaign-green-900)] bg-[var(--campaign-green-900)] text-white"
@@ -138,14 +154,21 @@ export default function AchievementsPage() {
                   >
                     <Filter aria-hidden="true" className="h-4 w-4" />
                     {item}
-                  </button>
+                  </motion.button>
                 ))}
-              </div>
+              </motion.div>
             </div>
-            <div className="grid gap-4">
+            <motion.div
+              initial="hidden"
+              variants={containerVariants}
+              viewport={{ once: true, amount: 0.2 }}
+              whileInView="visible"
+              className="grid gap-4"
+            >
               {filteredItems.map(({ title, description, Icon, category }) => (
-                <article
+                <motion.article
                   key={title}
+                  variants={itemVariants}
                   className="grid gap-5 rounded-card border border-[rgba(6,59,46,0.12)] bg-white p-6 shadow-brand-card md:grid-cols-[auto_1fr]"
                 >
                   <div className="flex h-14 w-14 items-center justify-center rounded-card bg-[var(--lagos-sky)] text-[var(--campaign-green-700)]">
@@ -162,9 +185,9 @@ export default function AchievementsPage() {
                       {description}
                     </p>
                   </div>
-                </article>
+                </motion.article>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -183,7 +206,11 @@ export default function AchievementsPage() {
                 title="A record connected to Lagos' urban future."
                 description="The achievements message should always connect past delivery to future ambition: roads, bridges, transport systems, public modernization, and a city that keeps moving."
               />
-              <a
+              <motion.a
+                initial="hidden"
+                variants={fadeInUp}
+                viewport={{ once: true, amount: 0.5 }}
+                whileInView="visible"
                 href="https://www.obafemihamzat.com/"
                 target="_blank"
                 rel="noreferrer"
@@ -191,7 +218,7 @@ export default function AchievementsPage() {
               >
                 Visit official archive
                 <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
-              </a>
+              </motion.a>
             </div>
           </div>
         </section>
@@ -204,10 +231,17 @@ export default function AchievementsPage() {
               title="Public service in pictures."
               description="The visual archive should feel emotional, human, and Lagos-specific."
             />
-            <div className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <motion.div
+              initial="hidden"
+              variants={containerVariants}
+              viewport={{ once: true, amount: 0.2 }}
+              whileInView="visible"
+              className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+            >
               {galleryItems.map((item) => (
-                <figure
+                <motion.figure
                   key={item.title}
+                  variants={itemVariants}
                   className="group overflow-hidden rounded-card border border-[rgba(6,59,46,0.12)] bg-bg-primary"
                 >
                   <div className="relative h-[280px] overflow-hidden">
@@ -227,9 +261,9 @@ export default function AchievementsPage() {
                       {item.caption}
                     </p>
                   </figcaption>
-                </figure>
+                </motion.figure>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
 

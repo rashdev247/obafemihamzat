@@ -10,6 +10,7 @@ import {
   campaignSite,
   movementRoles,
 } from "@/data/campaignContent";
+import { containerVariants, fadeInUp, itemVariants } from "@/lib/utils";
 import {
   CheckCircle2,
   Mail,
@@ -18,6 +19,7 @@ import {
   MessageCircle,
   UsersRound,
 } from "lucide-react";
+import { motion } from "framer-motion";
 import { FormEvent, useState } from "react";
 
 const whyJoin = [
@@ -74,10 +76,17 @@ export default function JoinPage() {
                 title="Forward together, ward by ward."
                 description="Winning Lagos requires more than a message. It requires people: students, women, market leaders, professionals, creatives, faith communities, tech builders, artisans, and local organizers."
               />
-              <div className="mt-8 grid gap-3 sm:grid-cols-2">
+              <motion.div
+                initial="hidden"
+                variants={containerVariants}
+                viewport={{ once: true, amount: 0.25 }}
+                whileInView="visible"
+                className="mt-8 grid gap-3 sm:grid-cols-2"
+              >
                 {whyJoin.map((item) => (
-                  <div
+                  <motion.div
                     key={item}
+                    variants={itemVariants}
                     className="flex items-center gap-3 rounded-card border border-[rgba(6,59,46,0.12)] bg-bg-primary p-4"
                   >
                     <CheckCircle2
@@ -85,9 +94,9 @@ export default function JoinPage() {
                       className="h-5 w-5 text-[var(--campaign-green-700)]"
                     />
                     <span className="font-bold text-text-primary">{item}</span>
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             </div>
             <ImagePanel
               image={campaignImages.impact}
@@ -106,16 +115,26 @@ export default function JoinPage() {
                 title="Choose how you want to serve."
                 description="This form is ready for backend connection later. For now, it captures the full campaign participation model and confirms the volunteer flow."
               />
-              <div className="campaign-dark-section mt-8 rounded-card bg-[var(--campaign-green-900)] p-6 text-white">
+              <motion.div
+                initial="hidden"
+                variants={fadeInUp}
+                viewport={{ once: true, amount: 0.45 }}
+                whileInView="visible"
+                className="campaign-dark-section mt-8 rounded-card bg-[var(--campaign-green-900)] p-6 text-white"
+              >
                 <UsersRound aria-hidden="true" className="h-8 w-8 text-secondary-400" />
                 <p className="mt-5 font-heading text-2xl font-black leading-tight text-white">
                   Become a ward voice, campus organizer, media partner, donor
                   contact, or community mobilizer.
                 </p>
-              </div>
+              </motion.div>
             </div>
 
-            <form
+            <motion.form
+              initial="hidden"
+              variants={fadeInUp}
+              viewport={{ once: true, amount: 0.2 }}
+              whileInView="visible"
               onSubmit={handleSubmit}
               className="rounded-card border border-[rgba(6,59,46,0.12)] bg-white p-6 shadow-brand-card md:p-8"
             >
@@ -173,12 +192,19 @@ export default function JoinPage() {
                 <legend className="text-sm font-black text-text-primary">
                   Participation type
                 </legend>
-                <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <motion.div
+                  initial="hidden"
+                  variants={containerVariants}
+                  viewport={{ once: true, amount: 0.2 }}
+                  whileInView="visible"
+                  className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
+                >
                   {movementRoles.map((role) => (
-                    <button
+                    <motion.button
                       key={role}
                       type="button"
                       onClick={() => setSelectedRole(role)}
+                      variants={itemVariants}
                       className={`min-h-[70px] rounded-card border px-4 py-3 text-left text-sm font-black transition-colors duration-200 ${
                         selectedRole === role
                           ? "border-[var(--campaign-green-900)] bg-[var(--campaign-green-900)] text-white"
@@ -186,9 +212,9 @@ export default function JoinPage() {
                       }`}
                     >
                       {role}
-                    </button>
+                    </motion.button>
                   ))}
-                </div>
+                </motion.div>
               </fieldset>
 
               <div className="mt-6">
@@ -217,12 +243,18 @@ export default function JoinPage() {
                   when the backend is ready.
                 </p>
               )}
-            </form>
+            </motion.form>
           </div>
         </section>
 
         <section className="bg-white px-6 py-20">
-          <div className="container mx-auto grid gap-4 md:grid-cols-3">
+          <motion.div
+            initial="hidden"
+            variants={containerVariants}
+            viewport={{ once: true, amount: 0.2 }}
+            whileInView="visible"
+            className="container mx-auto grid gap-4 md:grid-cols-3"
+          >
             {[
               {
                 title: "WhatsApp Community",
@@ -243,8 +275,9 @@ export default function JoinPage() {
                 Icon: MapPin,
               },
             ].map(({ title, description, Icon }) => (
-              <article
+              <motion.article
                 key={title}
+                variants={itemVariants}
                 className="rounded-card border border-[rgba(6,59,46,0.12)] bg-bg-primary p-6"
               >
                 <div className="flex h-12 w-12 items-center justify-center rounded-card bg-[var(--campaign-green-900)] text-white">
@@ -256,25 +289,40 @@ export default function JoinPage() {
                 <p className="mt-3 text-sm leading-7 text-text-secondary">
                   {description}
                 </p>
-              </article>
+              </motion.article>
             ))}
-          </div>
+          </motion.div>
         </section>
 
         <section id="newsletter" className="campaign-dark-section bg-[var(--campaign-green-950)] px-6 py-20 text-white">
           <div className="container mx-auto grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-            <div>
+            <motion.div
+              initial="hidden"
+              variants={containerVariants}
+              viewport={{ once: true, amount: 0.3 }}
+              whileInView="visible"
+            >
               <Mail aria-hidden="true" className="h-10 w-10 text-secondary-400" />
-              <h2 className="mt-5 max-w-2xl font-heading text-4xl font-black leading-tight text-white md:text-5xl">
+              <motion.h2
+                variants={fadeInUp}
+                className="mt-5 max-w-2xl font-heading text-4xl font-black leading-tight text-white md:text-5xl"
+              >
                 Get official campaign updates.
-              </h2>
-              <p className="mt-5 max-w-xl text-base leading-8 text-white/72">
+              </motion.h2>
+              <motion.p
+                variants={fadeInUp}
+                className="mt-5 max-w-xl text-base leading-8 text-white/72"
+              >
                 News, field updates, speeches, media kit alerts, volunteer
                 assignments, and event announcements from the {campaignSite.tagline}
                 movement.
-              </p>
-            </div>
-            <form
+              </motion.p>
+            </motion.div>
+            <motion.form
+              initial="hidden"
+              variants={fadeInUp}
+              viewport={{ once: true, amount: 0.3 }}
+              whileInView="visible"
               onSubmit={handleNewsletter}
               className="rounded-card bg-white p-6 text-text-primary md:p-8"
             >
@@ -301,7 +349,7 @@ export default function JoinPage() {
                   Newsletter interest saved locally for this prototype.
                 </p>
               )}
-            </form>
+            </motion.form>
           </div>
         </section>
       </main>

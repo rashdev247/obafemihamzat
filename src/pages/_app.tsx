@@ -11,8 +11,10 @@ import { useEffect } from "react";
 import NProgress from "nprogress";
 import * as gtag from "../lib/gtag";
 import { ConsentProvider } from "../context/ConsentContext";
+import { PreferencesProvider, usePreferences } from "../context/PreferencesContext";
 import Script from "next/script";
 import { initPerformanceMonitoring, preloadCriticalResources } from "../lib/performance";
+import TawkToWidget from "../scripts/TawkTo";
 
 function unregisterDevelopmentServiceWorkers() {
   if (
@@ -108,23 +110,23 @@ function Main({ Component, pageProps }: Pick<AppPropsWithLayout, 'Component' | '
   return <div>{renderComponent}</div>;
 }
 
-export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
-  const gaId = process.env.NEXT_PUBLIC_GA_ID;
-  const shouldLoadAnalytics =
-    process.env.NODE_ENV === "production" && Boolean(gaId);
-  
-  // Initialize performance monitoring and preload critical resources
-  useEffect(() => {
-    unregisterDevelopmentServiceWorkers();
-    initPerformanceMonitoring();
-    preloadCriticalResources();
-  }, []);
-  
+function AppRuntime({
+  Component,
+  pageProps,
+  gaId,
+  shouldLoadAnalytics,
+}: Pick<AppPropsWithLayout, "Component" | "pageProps"> & {
+  gaId?: string;
+  shouldLoadAnalytics: boolean;
+}) {
+  const { preferences } = usePreferences();
+  const analyticsEnabled = shouldLoadAnalytics && preferences.privacy.allowAnalytics;
+
   return (
-    <ConsentProvider>
+    <>
       {/* <CookieConsentBanner /> */}
       {/* Google Analytics (gtag.js) - Deferred for better performance */}
-      {shouldLoadAnalytics && (
+      {analyticsEnabled && gaId && (
         <>
           <Script
             src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
@@ -144,9 +146,36 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           />
         </>
       )}
-      {shouldLoadAnalytics && <AnalyticsScripts />}
+      {analyticsEnabled && <AnalyticsScripts />}
       <ProgressBar />
+      <TawkToWidget />
       <Main Component={Component} pageProps={pageProps} />
-    </ConsentProvider>
+    </>
+  );
+}
+
+export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
+  const gaId = process.env.NEXT_PUBLIC_GA_ID;
+  const shouldLoadAnalytics =
+    process.env.NODE_ENV === "production" && Boolean(gaId);
+  
+  // Initialize performance monitoring and preload critical resources
+  useEffect(() => {
+    unregisterDevelopmentServiceWorkers();
+    initPerformanceMonitoring();
+    preloadCriticalResources();
+  }, []);
+  
+  return (
+    <PreferencesProvider>
+      <ConsentProvider>
+        <AppRuntime
+          Component={Component}
+          pageProps={pageProps}
+          gaId={gaId}
+          shouldLoadAnalytics={shouldLoadAnalytics}
+        />
+      </ConsentProvider>
+    </PreferencesProvider>
   );
 }

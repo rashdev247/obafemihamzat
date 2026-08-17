@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { getAllBlogPosts, searchBlogPosts, getPostsByCategory, getPostsByTag } from "@/lib/codaService"
-import { BlogPost } from "@/types"
+import type { BlogPost } from "@/types"
 
 type ResponseData = {
   posts?: BlogPost[]

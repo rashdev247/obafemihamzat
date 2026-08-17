@@ -148,7 +148,7 @@ export function CampaignHeroCarousel() {
     <div className="koh-hero-carousel relative min-w-0 overflow-hidden rounded-card border border-white/12 bg-white/8 shadow-[0_35px_100px_rgba(0,0,0,0.36)] backdrop-blur">
       <Slider {...heroCarouselSettings}>
         {heroSlides.map((slide, index) => (
-          <article key={slide.title} className="relative h-[520px] md:h-[640px]">
+          <article key={slide.title} className="relative h-[520px] md:h-[540px]">
             <Image
               src={slide.image}
               alt={slide.title}

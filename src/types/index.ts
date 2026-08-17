@@ -1,4 +1,4 @@
-import { StaticImageData } from "next/image"
+import type { StaticImageData } from "next/image"
 
 // types.ts
 export interface BlogPost {
@@ -59,4 +59,28 @@ export interface CodaBlogRow {
   values: {
     [key: string]: unknown
   }
+}
+
+export type BlogSeedPost = {
+  id?: number
+  slug?: string
+  title: string
+  description: string
+  content?: string
+  imageUrl?: string
+  authorName?: string
+  authorAvatar?: string
+  status?: "Draft" | "Published" | "Archived" | "draft" | "published" | "archived"
+  publishedDate?: string
+  featured?: boolean
+  pinned?: boolean
+  categories?: string[]
+  tags?: string[]
+  seoTitle?: string
+  seoDescription?: string
+  seoKeywords?: string
+  ogImage?: string
+  canonicalUrl?: string
+  readTime?: number
+  viewCount?: number
 }

@@ -55,7 +55,7 @@ export function SheetContent({
             animate={{opacity: 0.2}}
             exit={{opacity: 0}}
             transition={{duration: 0.3}}
-            className="fixed inset-0 bg-[#0037FF] h-[100vh]"
+            className="fixed inset-0 bg-[var(--campaign-green-950)] h-[100vh]"
             onClick={onClose}
           />
           <motion.div
@@ -90,7 +90,7 @@ export function SheetContent({
             }}
             transition={{duration: 0.3}}
             className={cn(
-              "fixed bg-[#051438] z-60 shadow-lg p-4 rounded-lg",
+              "fixed bg-[var(--campaign-green-950)] z-60 shadow-lg p-4 rounded-lg",
               positionClasses[position]
             )}
             style={{height: "100vh"}}
