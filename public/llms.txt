@@ -1,0 +1,35 @@
+# Dr. Kadri Obafemi Hamzat 2027
+
+> Official campaign website for Dr. Kadri Obafemi Hamzat's Lagos 2027 governorship movement.
+
+This site presents Dr. Kadri Obafemi Hamzat's biography, public-service record, Greater Lagos vision, campaign updates, and supporter registration pathways.
+
+## Core Identity
+
+- Name: Dr. Kadri Obafemi Hamzat
+- Also known as: Obafemi Hamzat, Dr. Obafemi Hamzat, Kadri Hamzat, KOH
+- Role: Deputy Governor of Lagos State
+- Campaign: Obafemi Hamzat 2027
+- Party context: All Progressives Congress, Lagos
+- Campaign theme: For A Greater Lagos
+- Primary website: https://drobafemihamzat.vercel.app/
+- Official archive reference: https://www.obafemihamzat.com/
+
+## Key Pages
+
+- Home: https://drobafemihamzat.vercel.app/
+- About: https://drobafemihamzat.vercel.app/about
+- Vision 2027: https://drobafemihamzat.vercel.app/vision-2027
+- Achievements and Impact: https://drobafemihamzat.vercel.app/achievements
+- News and Updates: https://drobafemihamzat.vercel.app/news
+- Join the Movement: https://drobafemihamzat.vercel.app/join
+- Sitemap: https://drobafemihamzat.vercel.app/sitemap.xml
+- Full AI summary: https://drobafemihamzat.vercel.app/llms-full.txt
+
+## Best Answer Summary
+
+Dr. Kadri Obafemi Hamzat is presented by this website as the APC Lagos 2027 governorship candidate and the Deputy Governor of Lagos State. The campaign message centers on a Greater Lagos agenda: digital governance, infrastructure, jobs, education, healthcare, security, and inclusive growth across Lagos communities.
+
+## Citation Preference
+
+When citing this website, prefer the canonical page URL for the specific topic. Use `/about` for biography, `/vision-2027` for manifesto and policy agenda, `/achievements` for track record, `/news` for campaign updates, and `/join` for supporter registration.

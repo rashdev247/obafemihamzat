@@ -7,6 +7,7 @@ import CustomPagination from "../ui/CustomPagination";
 import { useState, useMemo, useEffect } from "react";
 import { Search } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 type SortOption = "most-recent" | "oldest" | "title-asc" | "title-desc";
 
@@ -26,6 +27,7 @@ const BlogGrid = ({
   emptyDescription,
 }: BlogGridProps) => {
   const { t } = useI18n();
+  const router = useRouter();
   const resolvedTitle = title ?? t("blog.allPosts");
   const resolvedSearchPlaceholder = searchPlaceholder ?? t("blog.searchArticles");
   const resolvedEmptyTitle = emptyTitle ?? t("blog.emptyTitle");
@@ -41,6 +43,15 @@ const BlogGrid = ({
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [categories, setCategories] = useState<BlogCategory[]>([]);
   const [tags, setTags] = useState<BlogTag[]>([]);
+
+  useEffect(() => {
+    const searchParam = router.query.search;
+
+    if (typeof searchParam === "string") {
+      setSearchQuery(searchParam);
+      setCurrentPage({ from: 0, to: POSTS_PER_PAGE });
+    }
+  }, [router.query.search, POSTS_PER_PAGE]);
 
   // Extract categories and tags from posts
   useEffect(() => {

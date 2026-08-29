@@ -5,6 +5,12 @@
  * structured data, and meta tags for the blog.
  */
 
+import type { AnswerEngineContent } from "@/lib/aeo";
+import {
+  buildArticleAnswerSummary,
+  generateFAQPageSchemaNode,
+  generateSpeakableSpecification,
+} from "@/lib/aeo";
 import type { BlogPost } from "@/types";
 
 export const SITE_URL = "https://drobafemihamzat.vercel.app";
@@ -333,6 +339,7 @@ type CampaignPageSchemaInput = {
   image?: string;
   keywords?: string[];
   breadcrumbs?: BreadcrumbItem[];
+  answerEngine?: AnswerEngineContent;
 };
 
 export function toAbsoluteUrl(pathOrUrl: string = "/"): string {
@@ -404,6 +411,7 @@ export function generateCampaignPageSchema({
   image = SITE_IMAGE,
   keywords = SITE_KEYWORDS,
   breadcrumbs,
+  answerEngine,
 }: CampaignPageSchemaInput) {
   const mergedKeywords = getCampaignKeywords(keywords);
   const pageBreadcrumbs =
@@ -413,6 +421,17 @@ export function generateCampaignPageSchema({
           { name: "Home", url: toAbsoluteUrl("/") },
           { name: title, url },
         ];
+  const faqSchema = answerEngine?.questions.length
+    ? generateFAQPageSchemaNode(answerEngine.questions, {
+        id: `${url}#faq`,
+        url,
+        name: `${title} questions and answers`,
+        inLanguage: SITE_LANGUAGE,
+      })
+    : null;
+  const speakable = generateSpeakableSpecification(
+    answerEngine?.speakableSelectors || ["#quick-answers", ".aeo-summary"],
+  );
 
   return {
     "@context": "https://schema.org",
@@ -427,6 +446,11 @@ export function generateCampaignPageSchema({
         inLanguage: SITE_LANGUAGE,
         publisher: {
           "@id": `${SITE_URL}/#person`,
+        },
+        potentialAction: {
+          "@type": "SearchAction",
+          target: `${SITE_URL}/news?search={search_term_string}`,
+          "query-input": "required name=search_term_string",
         },
       },
       {
@@ -475,6 +499,9 @@ export function generateCampaignPageSchema({
         url,
         name: title,
         description,
+        ...(answerEngine?.summary && {
+          abstract: answerEngine.summary,
+        }),
         keywords: normalizeKeywords(mergedKeywords),
         isPartOf: {
           "@id": `${SITE_URL}/#website`,
@@ -495,6 +522,14 @@ export function generateCampaignPageSchema({
         breadcrumb: {
           "@id": `${url}#breadcrumb`,
         },
+        ...(faqSchema && {
+          mainEntity: {
+            "@id": `${url}#faq`,
+          },
+        }),
+        ...(speakable && {
+          speakable,
+        }),
         inLanguage: SITE_LANGUAGE,
       },
       {
@@ -507,6 +542,7 @@ export function generateCampaignPageSchema({
           item: item.url,
         })),
       },
+      ...(faqSchema ? [faqSchema] : []),
     ],
   };
 }
@@ -648,11 +684,17 @@ export function generateArticleSchema(
   const readingTime = post.readTime || calculateReadingTime(post.content);
   const keywordList = buildBlogPostKeywordList(post);
   const keywords = normalizeKeywords(keywordList);
+  const answerSummary = buildArticleAnswerSummary(post);
+  const speakable = generateSpeakableSpecification([
+    ".aeo-summary",
+    ".news-article-body",
+  ]);
 
   return {
     "@context": "https://schema.org",
     "@type": "NewsArticle",
     headline: post.title,
+    abstract: answerSummary,
     description: post.description,
     image: {
       "@type": "ImageObject",
@@ -692,6 +734,9 @@ export function generateArticleSchema(
     keywords: keywords,
     wordCount: wordCount,
     timeRequired: `PT${readingTime}M`,
+    ...(speakable && {
+      speakable,
+    }),
     inLanguage: SITE_LANGUAGE,
     about: [
       {

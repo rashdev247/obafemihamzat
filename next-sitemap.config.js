@@ -35,54 +35,60 @@ async function resolveBlogTableId() {
 }
 
 async function fetchNewsSitemapEntries() {
-  if (!process.env.CODA_API_TOKEN || !process.env.CODA_DOC_ID) {
-    return [];
-  }
-
-  const tableId = await resolveBlogTableId();
-  if (!tableId) {
-    return [];
-  }
-
-  const rows = [];
-  let nextPageToken;
-
-  do {
-    const params = new URLSearchParams({
-      useColumnNames: 'true',
-      limit: '500',
-      ...(nextPageToken && { pageToken: nextPageToken }),
-    });
-
-    const response = await fetch(
-      `${CODA_API_BASE}/docs/${process.env.CODA_DOC_ID}/tables/${tableId}/rows?${params}`,
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.CODA_API_TOKEN}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-
-    if (!response.ok) {
+  try {
+    if (!process.env.CODA_API_TOKEN || !process.env.CODA_DOC_ID) {
       return [];
     }
 
-    const data = await response.json();
-    rows.push(...(data.items || []));
-    nextPageToken = data.nextPageToken;
-  } while (nextPageToken);
+    const tableId = await resolveBlogTableId();
+    if (!tableId) {
+      return [];
+    }
 
-  return rows
-    .map((row) => row.values || {})
-    .filter((values) => values.Status === 'Published' || values.Status === 'published')
-    .filter((values) => typeof values.Slug === 'string' && values.Slug.trim())
-    .map((values) => ({
-      loc: `/news/${values.Slug.trim()}`,
-      changefreq: 'daily',
-      priority: values.Featured === true || values.Featured === 'true' ? 0.9 : 0.82,
-      lastmod: values['Published Date'] || new Date().toISOString(),
-    }));
+    const rows = [];
+    let nextPageToken;
+
+    do {
+      const params = new URLSearchParams({
+        useColumnNames: 'true',
+        limit: '500',
+        ...(nextPageToken && { pageToken: nextPageToken }),
+      });
+
+      const response = await fetch(
+        `${CODA_API_BASE}/docs/${process.env.CODA_DOC_ID}/tables/${tableId}/rows?${params}`,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.CODA_API_TOKEN}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!response.ok) {
+        return [];
+      }
+
+      const data = await response.json();
+      rows.push(...(data.items || []));
+      nextPageToken = data.nextPageToken;
+    } while (nextPageToken);
+
+    return rows
+      .map((row) => row.values || {})
+      .filter((values) => values.Status === 'Published' || values.Status === 'published')
+      .filter((values) => typeof values.Slug === 'string' && values.Slug.trim())
+      .map((values) => ({
+        loc: `/news/${values.Slug.trim()}`,
+        changefreq: 'daily',
+        priority: values.Featured === true || values.Featured === 'true' ? 0.9 : 0.82,
+        lastmod: values['Published Date'] || new Date().toISOString(),
+      }));
+  } catch (error) {
+    const reason = error instanceof Error ? error.message : 'unknown error';
+    console.warn(`[next-sitemap] Skipping dynamic news sitemap entries: ${reason}`);
+    return [];
+  }
 }
 
 /** @type {import('next-sitemap').IConfig} */
@@ -123,7 +129,7 @@ module.exports = {
     policies: [
       {
         userAgent: '*',
-        allow: '/',
+        allow: ['/', '/llms.txt', '/llms-full.txt'],
         disallow: '/api/',
       },
     ],

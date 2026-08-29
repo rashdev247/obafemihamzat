@@ -1,11 +1,13 @@
 import CampaignLayout from "@/components/campaign/CampaignLayout";
 import {
+  AnswerEngineSection,
   CampaignCTA,
   CampaignHead,
   ImagePanel,
   PageHero,
   SectionIntro,
 } from "@/components/campaign/CampaignPrimitives";
+import { campaignAeoContent } from "@/data/aeoContent";
 import { campaignImages, roadmap, visionPillars } from "@/data/campaignContent";
 import { containerVariants, fadeInUp, itemVariants } from "@/lib/utils";
 import {
@@ -94,6 +96,7 @@ export default function VisionPage() {
           "Lagos infrastructure plan",
           "Lagos jobs education healthcare",
         ]}
+        answerEngine={campaignAeoContent.vision}
       />
 
       <main>
@@ -104,6 +107,8 @@ export default function VisionPage() {
             "i-represented-the-governor-of-lagos-state-mr-babajide-olusola-sanwo-olu-as-special-guest-at-the-_1_fptuu4.jpg",
           )}
         />
+
+        <AnswerEngineSection content={campaignAeoContent.vision} />
 
         <section className="bg-white px-6 py-20">
           <div className="container mx-auto">

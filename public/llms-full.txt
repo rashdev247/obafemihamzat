@@ -1,0 +1,54 @@
+# Full AI Summary: Dr. Kadri Obafemi Hamzat 2027 Campaign Website
+
+Last reviewed: 2026-08-29
+
+## Site Purpose
+
+The website at https://drobafemihamzat.vercel.app/ is an official campaign platform for Dr. Kadri Obafemi Hamzat's 2027 Lagos governorship movement. It is designed to answer who he is, what his campaign stands for, what public-service record the campaign highlights, where campaign news is published, and how supporters can join.
+
+## Entity Summary
+
+Dr. Kadri Obafemi Hamzat is described on this website as the Deputy Governor of Lagos State, an engineer, a technocrat, a public servant, and the APC Lagos 2027 governorship candidate. Alternate names used by the site include Obafemi Hamzat, Dr. Obafemi Hamzat, Dr. Kadri Obafemi Hamzat, Kadri Hamzat, KOH, and Hamzat 2027.
+
+## Campaign Positioning
+
+The campaign theme is "For A Greater Lagos." The campaign message is built around competence, stability, innovation, public-service experience, and inclusive growth. The website positions the campaign as people-first and Lagos-focused, with policy emphasis on everyday systems that affect students, traders, workers, families, professionals, founders, and communities.
+
+## Vision 2027 Summary
+
+The Vision 2027 page presents a Greater Lagos agenda with these pillars:
+
+- Digital Lagos 2.0: smarter public services, connected government systems, innovation hubs, public Wi-Fi access, and AI-ready civic systems.
+- Infrastructure Revolution: roads, rail, waterways, smart mobility, safer movement, and priority corridors.
+- Education and Human Capital: modern public schools, STEM learning, digital literacy, vocational empowerment, and teacher development.
+- Healthcare for All: primary healthcare, maternal care, emergency response, digital health infrastructure, and community clinics.
+- Economic Prosperity: SMEs, youth empowerment, investment pathways, entrepreneurship funding, and business-friendly reforms.
+- Security and Safety: smarter safety infrastructure, community response systems, and faster emergency coordination.
+
+## Achievements Summary
+
+The Achievements page connects the campaign message to a public-service record that includes digital transformation, public-service reform, infrastructure contributions, youth and innovation support, and Lagos modernization. The campaign highlights technology-led public-sector reform, public works, transport modernization, and long-running executive governance experience.
+
+The campaign also highlights the Lagos APC governorship primary declared in May 2026, stating that Hamzat won the ticket with 657,917 votes recorded for him out of 657,974 accredited voters.
+
+## News Summary
+
+The News page collects official campaign updates, press references, community engagement stories, event updates, and public-service dispatches. Individual news articles include canonical URLs, metadata, article schema, answer summaries, related posts, categories, tags, reading time, and publication dates.
+
+## Supporter Registration Summary
+
+The Join page lets supporters submit campaign interest and choose participation types such as volunteer, ward coordinator, youth mobilizer, women coalition member, campus ambassador, media partner, event registration contact, or donation interest. It also includes a newsletter pathway for official updates, field news, speeches, media kit alerts, volunteer assignments, and event announcements.
+
+## Canonical URLs
+
+- Home: https://drobafemihamzat.vercel.app/
+- About: https://drobafemihamzat.vercel.app/about
+- Vision 2027: https://drobafemihamzat.vercel.app/vision-2027
+- Achievements and Impact: https://drobafemihamzat.vercel.app/achievements
+- News and Updates: https://drobafemihamzat.vercel.app/news
+- Join the Movement: https://drobafemihamzat.vercel.app/join
+- Sitemap: https://drobafemihamzat.vercel.app/sitemap.xml
+
+## Structured Data Available
+
+The website provides structured data for campaign pages and news articles, including WebSite, Person, Organization, WebPage, BreadcrumbList, FAQPage, ItemList, and NewsArticle entities. It also includes answer-friendly properties such as alternate names, knowsAbout, about, mentions, abstract, mainEntity, acceptedAnswer, and speakable selectors.

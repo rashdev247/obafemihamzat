@@ -1,9 +1,18 @@
 import BlogCard from "@/components/blog/BlogCard";
 import DisqusComments from "@/components/blog/DisqusComments";
 import CampaignLayout from "@/components/campaign/CampaignLayout";
-import { CampaignCTA } from "@/components/campaign/CampaignPrimitives";
+import {
+  AnswerEngineSection,
+  CampaignCTA,
+} from "@/components/campaign/CampaignPrimitives";
 import Title from "@/components/shared/Title";
 import { campaignSite } from "@/data/campaignContent";
+import {
+  buildArticleAnswerQuestions,
+  buildArticleAnswerSummary,
+  generateFAQPageSchemaNode,
+  generateSpeakableSpecification,
+} from "@/lib/aeo";
 import { getBlogPostBySlug, getRelatedPosts } from "@/lib/codaService";
 import { mixedToSafeHtml } from "@/lib/mixedToHtml";
 import {
@@ -122,6 +131,28 @@ const BlogDetailPage: React.FC<Props> = ({
   const structuredTopics = getStructuredDataTopics(keywordList, 48);
   const wordCount = post.content.split(/\s+/).length;
   const readingTime = post.readTime || Math.ceil(wordCount / 200);
+  const articleAnswerSummary = buildArticleAnswerSummary(post);
+  const articleAnswerQuestions = buildArticleAnswerQuestions(
+    post,
+    authorName,
+    canonicalUrl,
+  );
+  const articleSpeakable = generateSpeakableSpecification([
+    "#article-answers",
+    ".aeo-summary",
+    ".news-article-body",
+  ]);
+  const articleFAQSchema = generateFAQPageSchemaNode(articleAnswerQuestions, {
+    id: `${canonicalUrl}#faq`,
+    url: canonicalUrl,
+    name: `${post.title} questions and answers`,
+    inLanguage: SITE_LANGUAGE,
+  });
+  const articleAnswerEngine = {
+    summary: articleAnswerSummary,
+    questions: articleAnswerQuestions,
+    speakableSelectors: ["#article-answers", ".aeo-summary"],
+  };
 
   const handleShare = (platform: string) => {
     let url = "";
@@ -198,6 +229,7 @@ const BlogDetailPage: React.FC<Props> = ({
               "@context": "https://schema.org",
               "@type": "NewsArticle",
               headline: post.title,
+              abstract: articleAnswerSummary,
               description: post.description,
               image: seoImage,
               datePublished: post.publishedDate,
@@ -235,10 +267,25 @@ const BlogDetailPage: React.FC<Props> = ({
               mentions: structuredTopics,
               wordCount,
               timeRequired: `PT${readingTime}M`,
+              ...(articleSpeakable && {
+                speakable: articleSpeakable,
+              }),
               inLanguage: SITE_LANGUAGE,
             }),
           }}
         />
+        {articleFAQSchema && (
+          <script
+            key="news-faq-schema"
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify({
+                "@context": "https://schema.org",
+                ...articleFAQSchema,
+              }),
+            }}
+          />
+        )}
       </Head>
 
       <main className="min-h-screen overflow-hidden bg-bg-primary">
@@ -342,9 +389,16 @@ const BlogDetailPage: React.FC<Props> = ({
           </div>
         </article>
 
+        <AnswerEngineSection
+          id="article-answers"
+          label="Fast facts"
+          title="Quick answers"
+          content={articleAnswerEngine}
+        />
+
         <section className="bg-white px-6 py-12">
           <div className="container mx-auto grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px]">
-            <article className="prose prose-lg prose-slate max-w-none rounded-card border border-[rgba(6,59,46,0.12)] bg-bg-primary p-6 shadow-brand-card">
+            <article className="news-article-body prose prose-lg prose-slate max-w-none rounded-card border border-[rgba(6,59,46,0.12)] bg-bg-primary p-6 shadow-brand-card">
               <div dangerouslySetInnerHTML={{ __html: processedContent }} />
             </article>
 

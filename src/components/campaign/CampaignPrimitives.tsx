@@ -1,4 +1,5 @@
 import { campaignSite } from "@/data/campaignContent";
+import type { AnswerEngineContent } from "@/lib/aeo";
 import { useI18n } from "@/lib/i18n";
 import { containerVariants, fadeInUp, itemVariants } from "@/lib/utils";
 import {
@@ -25,6 +26,7 @@ type CampaignHeadProps = {
   image?: string;
   keywords?: string[];
   robots?: string;
+  answerEngine?: AnswerEngineContent;
 };
 
 export function CampaignHead({
@@ -34,6 +36,7 @@ export function CampaignHead({
   image = SITE_IMAGE,
   keywords = SITE_KEYWORDS,
   robots = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+  answerEngine,
 }: CampaignHeadProps) {
   const pageTitle = title.includes("|") ? title : `${title} | ${campaignSite.shortName}`;
   const url = toAbsoluteUrl(path || "/");
@@ -44,6 +47,7 @@ export function CampaignHead({
     url,
     image,
     keywords: mergedKeywords,
+    answerEngine,
     breadcrumbs:
       path && path !== "/"
         ? [
@@ -93,6 +97,76 @@ export function CampaignHead({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
       />
     </Head>
+  );
+}
+
+type AnswerEngineSectionProps = {
+  content: AnswerEngineContent;
+  id?: string;
+  label?: string;
+  title?: string;
+  inverse?: boolean;
+};
+
+export function AnswerEngineSection({
+  content,
+  id = "quick-answers",
+  label = "Quick answers",
+  title = "What people ask",
+  inverse = false,
+}: AnswerEngineSectionProps) {
+  return (
+    <section
+      id={id}
+      className={`px-6 py-20 ${
+        inverse
+          ? "campaign-dark-section bg-[var(--campaign-green-950)] text-white"
+          : "bg-white"
+      }`}
+    >
+      <div className="container mx-auto grid gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:items-start">
+        <SectionIntro
+          label={label}
+          title={title}
+          description={content.summary}
+          inverse={inverse}
+        />
+        <motion.dl
+          initial="hidden"
+          variants={containerVariants}
+          viewport={{ once: true, amount: 0.2 }}
+          whileInView="visible"
+          className="grid gap-4"
+        >
+          {content.questions.map((item) => (
+            <motion.div
+              key={item.question}
+              variants={itemVariants}
+              className={`rounded-card border p-6 ${
+                inverse
+                  ? "border-white/14 bg-white/8"
+                  : "border-[rgba(6,59,46,0.12)] bg-bg-primary"
+              }`}
+            >
+              <dt
+                className={`font-heading text-xl font-black leading-tight ${
+                  inverse ? "text-white" : "text-text-primary"
+                }`}
+              >
+                {item.question}
+              </dt>
+              <dd
+                className={`aeo-summary mt-3 text-sm leading-7 ${
+                  inverse ? "text-white/74" : "text-text-secondary"
+                }`}
+              >
+                {item.answer}
+              </dd>
+            </motion.div>
+          ))}
+        </motion.dl>
+      </div>
+    </section>
   );
 }
 

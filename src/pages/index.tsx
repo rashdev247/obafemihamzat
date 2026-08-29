@@ -1,12 +1,14 @@
 import BlogItemsSection from "@/components/blog/BlogItemsSection";
 import CampaignLayout from "@/components/campaign/CampaignLayout";
 import {
+  AnswerEngineSection,
   CampaignCTA,
   CampaignHead,
   CTAGroup,
   ImagePanel,
   SectionIntro,
 } from "@/components/campaign/CampaignPrimitives";
+import { campaignAeoContent } from "@/data/aeoContent";
 import {
   CampaignGalleryCarousel,
   CampaignHeroCarousel,
@@ -64,6 +66,7 @@ export default function Home({ recentPosts }: HomeProps) {
           "For A Greater Lagos",
           "Greater Lagos vision",
         ]}
+        answerEngine={campaignAeoContent.home}
       />
 
       <main>
@@ -130,6 +133,8 @@ export default function Home({ recentPosts }: HomeProps) {
             </motion.div>
           </div>
         </section>
+
+        <AnswerEngineSection content={campaignAeoContent.home} />
 
         <section className="bg-white px-6 py-20">
           <div className="container mx-auto grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">

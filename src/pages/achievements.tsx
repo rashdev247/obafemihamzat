@@ -1,11 +1,13 @@
 import CampaignLayout from "@/components/campaign/CampaignLayout";
 import {
+  AnswerEngineSection,
   CampaignCTA,
   CampaignHead,
   ImagePanel,
   PageHero,
   SectionIntro,
 } from "@/components/campaign/CampaignPrimitives";
+import { campaignAeoContent } from "@/data/aeoContent";
 import {
   achievements,
   campaignImages,
@@ -80,6 +82,7 @@ export default function AchievementsPage() {
           "public service reform Lagos",
           "Hamzat impact record",
         ]}
+        answerEngine={campaignAeoContent.achievements}
       />
 
       <main>
@@ -88,6 +91,8 @@ export default function AchievementsPage() {
           description="The campaign is anchored in a public service record: digital transformation, infrastructure delivery, reform discipline, and future-focused opportunity."
           image={campaignImages.impact}
         />
+
+        <AnswerEngineSection content={campaignAeoContent.achievements} />
 
         <section className="bg-white px-6 py-20">
           <div className="container mx-auto">
