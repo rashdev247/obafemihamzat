@@ -24,6 +24,319 @@ import rehypeStringify from "rehype-stringify";
 // Type for sanitization schema
 type Schema = typeof defaultSchema;
 
+type MixedToSafeHtmlOptions = {
+  /**
+   * Detail pages already render the article title outside the body. When the
+   * CMS content starts with the same title, remove it before rendering.
+   */
+  title?: string;
+  /**
+   * Standalone source URLs copied into CMS fields are usually visual noise.
+   * Image URLs are still rendered as images.
+   */
+  hideStandaloneNonImageUrls?: boolean;
+};
+
+const urlOnlyLinePattern = /^(?:https?:\/\/\S+\s*)+$/i;
+const bareUrlPattern = /https?:\/\/[^\s<>"']+/gi;
+const standaloneMarkdownLinkPattern = /^\[([^\]]+)\]\((https?:\/\/[^)]+)\)$/i;
+const imageExtensions = new Set([
+  ".apng",
+  ".avif",
+  ".gif",
+  ".jpeg",
+  ".jpg",
+  ".png",
+  ".svg",
+  ".webp",
+]);
+
+const abbreviationPlaceholders = [
+  "Dr.",
+  "Mr.",
+  "Mrs.",
+  "Ms.",
+  "Prof.",
+  "Hon.",
+  "Sen.",
+  "Gov.",
+  "Dep.",
+  "Rep.",
+  "St.",
+  "Jr.",
+  "Sr.",
+  "e.g.",
+  "i.e.",
+];
+
+function normalizeEscapedWhitespace(input: string): string {
+  return input
+    .replace(/\\r\\n/g, "\n")
+    .replace(/\\n/g, "\n")
+    .replace(/\\r/g, "\n")
+    .replace(/\r\n/g, "\n")
+    .replace(/\r/g, "\n")
+    .replace(/\\t/g, "\t");
+}
+
+function normalizeComparableText(input: string): string {
+  return input
+    .replace(/<[^>]*>/g, " ")
+    .replace(/^#{1,6}\s+/, "")
+    .replace(/\s+/g, " ")
+    .replace(/[^\p{L}\p{N}\s]/gu, "")
+    .trim()
+    .toLowerCase();
+}
+
+function escapeRegExp(input: string): string {
+  return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+function stripLeadingDuplicateTitle(input: string, title?: string): string {
+  if (!title?.trim()) {
+    return input;
+  }
+
+  const normalizedTitle = normalizeComparableText(title);
+  if (!normalizedTitle) {
+    return input;
+  }
+
+  const lines = input.split("\n");
+  const firstContentIndex = lines.findIndex((line) => line.trim() !== "");
+
+  if (firstContentIndex >= 0) {
+    const firstLine = lines[firstContentIndex].trim();
+    if (normalizeComparableText(firstLine) === normalizedTitle) {
+      lines.splice(firstContentIndex, 1);
+      return lines.join("\n").trimStart();
+    }
+  }
+
+  const titlePattern = escapeRegExp(title.trim()).replace(/\s+/g, "\\s+");
+  return input.replace(
+    new RegExp(`^\\s*(?:#{1,6}\\s*)?${titlePattern}(?=\\s|$)`, "i"),
+    "",
+  );
+}
+
+function isImageUrl(rawUrl: string): boolean {
+  try {
+    const url = new URL(rawUrl);
+    const extension = url.pathname
+      .slice(url.pathname.lastIndexOf("."))
+      .toLowerCase();
+
+    return (
+      imageExtensions.has(extension) ||
+      (url.hostname === "pbs.twimg.com" && url.pathname.includes("/media/")) ||
+      url.hostname === "images.openai.com" ||
+      url.hostname === "images.ctfassets.net" ||
+      url.hostname === "res.cloudinary.com" ||
+      url.hostname.endsWith(".blob.core.windows.net")
+    );
+  } catch {
+    return false;
+  }
+}
+
+function formatStandaloneUrl(
+  rawUrl: string,
+  hideStandaloneNonImageUrls: boolean,
+): string | null {
+  const url = rawUrl.trim().replace(/[),.;]+$/, "");
+
+  if (isImageUrl(url)) {
+    return `![Article image](<${url}>)`;
+  }
+
+  if (hideStandaloneNonImageUrls) {
+    return null;
+  }
+
+  try {
+    const hostname = new URL(url).hostname.replace(/^www\./, "");
+    return `[Source: ${hostname}](<${url}>)`;
+  } catch {
+    return null;
+  }
+}
+
+function isolateBareUrls(input: string): string {
+  return input.replace(bareUrlPattern, (url, offset, value) => {
+    const before = value[offset - 1] || "";
+    const after = value[offset + url.length] || "";
+
+    if (before === "(" || before === "\"" || before === "'" || before === "<") {
+      return url;
+    }
+
+    const prefix = before && !/\s/.test(before) ? " " : "";
+    const suffix = after && !/\s/.test(after) ? " " : "";
+
+    return `${prefix}\n${url}\n${suffix}`;
+  });
+}
+
+function protectSentenceAbbreviations(input: string): string {
+  return abbreviationPlaceholders.reduce((result, abbreviation, index) => {
+    const placeholder = `__ABBR_${index}__`;
+    return result.replace(
+      new RegExp(escapeRegExp(abbreviation), "g"),
+      abbreviation.replace(/\./g, placeholder),
+    );
+  }, input);
+}
+
+function restoreSentenceAbbreviations(input: string): string {
+  return abbreviationPlaceholders.reduce((result, abbreviation, index) => {
+    const placeholder = `__ABBR_${index}__`;
+    return result.replace(
+      new RegExp(placeholder, "g"),
+      ".",
+    );
+  }, input);
+}
+
+function splitLongArticleText(line: string): string[] {
+  const normalizedLine = line.replace(/\s+/g, " ").trim();
+
+  if (normalizedLine.length <= 420) {
+    return [normalizedLine];
+  }
+
+  const protectedLine = protectSentenceAbbreviations(normalizedLine);
+  const sentences = protectedLine
+    .replace(/([.!?])\s+(?=(?:["'(\[])?[A-Z0-9])/g, "$1\n")
+    .split("\n")
+    .map(restoreSentenceAbbreviations)
+    .map((sentence) => sentence.trim())
+    .filter(Boolean);
+
+  if (sentences.length <= 1) {
+    return [normalizedLine];
+  }
+
+  const paragraphs: string[] = [];
+  let current = "";
+  let sentenceCount = 0;
+
+  for (const sentence of sentences) {
+    const next = current ? `${current} ${sentence}` : sentence;
+
+    if (current && (next.length > 640 || sentenceCount >= 3)) {
+      paragraphs.push(current);
+      current = sentence;
+      sentenceCount = 1;
+    } else {
+      current = next;
+      sentenceCount += 1;
+    }
+  }
+
+  if (current) {
+    paragraphs.push(current);
+  }
+
+  return paragraphs;
+}
+
+function hasBlockFormatting(input: string): boolean {
+  return /(^\s{0,3}#{1,6}\s|^\s{0,3}(?:[-*+]|\d+\.)\s|^\s{0,3}>|```|<\w[\s\S]*>|\|.*\|)/m.test(
+    input,
+  );
+}
+
+function prepareArticleContent(
+  input: string,
+  options: MixedToSafeHtmlOptions,
+): string {
+  const hideStandaloneNonImageUrls = options.hideStandaloneNonImageUrls ?? true;
+  let processedInput = stripLeadingDuplicateTitle(
+    normalizeEscapedWhitespace(input),
+    options.title,
+  ).trim();
+
+  if (!hasBlockFormatting(processedInput)) {
+    processedInput = isolateBareUrls(processedInput);
+  }
+
+  const lines = processedInput.split("\n");
+  const processedLines: string[] = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmedLine = line.trim();
+    const prevLine = i > 0 ? lines[i - 1].trim() : "";
+
+    if (!trimmedLine) {
+      processedLines.push("");
+      continue;
+    }
+
+    const markdownLink = trimmedLine.match(standaloneMarkdownLinkPattern);
+    if (
+      markdownLink &&
+      markdownLink[1].trim().toLowerCase() === "image" &&
+      isImageUrl(markdownLink[2])
+    ) {
+      if (processedLines.at(-1) !== "") {
+        processedLines.push("");
+      }
+      processedLines.push(`![Image](<${markdownLink[2]}>)`, "");
+      continue;
+    }
+
+    if (urlOnlyLinePattern.test(trimmedLine)) {
+      const formattedUrls = trimmedLine
+        .split(/\s+/)
+        .map((url) => formatStandaloneUrl(url, hideStandaloneNonImageUrls))
+        .filter((value): value is string => Boolean(value));
+
+      if (formattedUrls.length > 0) {
+        if (processedLines.at(-1) !== "") {
+          processedLines.push("");
+        }
+        processedLines.push(...formattedUrls.flatMap((url) => [url, ""]));
+      }
+
+      continue;
+    }
+
+    const isOrderedListItem = /^\d+\.\s/.test(trimmedLine);
+    const isUnorderedListItem = /^[-*+]\s/.test(trimmedLine);
+    const isListItem = isOrderedListItem || isUnorderedListItem;
+
+    const prevIsOrderedListItem = /^\d+\.\s/.test(prevLine);
+    const prevIsUnorderedListItem = /^[-*+]\s/.test(prevLine);
+    const prevIsListItem = prevIsOrderedListItem || prevIsUnorderedListItem;
+
+    if (isListItem && prevLine !== "" && !prevIsListItem) {
+      processedLines.push("");
+    }
+
+    if (isListItem) {
+      processedLines.push(
+        trimmedLine
+          .replace(/^(\d+)\.(\S)/, "$1. $2")
+          .replace(/^([-*+])(\S)/, "$1 $2"),
+      );
+      continue;
+    }
+
+    if (hasBlockFormatting(trimmedLine)) {
+      processedLines.push(line);
+      continue;
+    }
+
+    const paragraphs = splitLongArticleText(trimmedLine);
+    processedLines.push(...paragraphs.flatMap((paragraph) => [paragraph, ""]));
+  }
+
+  return processedLines.join("\n").replace(/\n{3,}/g, "\n\n").trim();
+}
+
 /**
  * Custom sanitization schema extending the default schema
  * to allow specific HTML elements and attributes while blocking dangerous ones.
@@ -144,63 +457,12 @@ const customSchema: Schema = {
  * `;
  * const html = await mixedToSafeHtml(content);
  */
-export async function mixedToSafeHtml(input: string): Promise<string> {
+export async function mixedToSafeHtml(
+  input: string,
+  options: MixedToSafeHtmlOptions = {},
+): Promise<string> {
   try {
-    // Pre-process: Convert escaped newlines to actual newlines
-    // This handles content from APIs/CMS that may have literal \n strings
-    let processedInput = input
-      .replace(/\\n/g, '\n')      // Convert \n to actual newlines
-      .replace(/\\r\\n/g, '\n')   // Convert \r\n to newlines
-      .replace(/\\r/g, '\n')      // Convert \r to newlines
-      .replace(/\\t/g, '\t');     // Convert \t to actual tabs
-
-    // Split into lines for better processing
-    const lines = processedInput.split('\n');
-    const processedLines: string[] = [];
-    
-    for (let i = 0; i < lines.length; i++) {
-      const line = lines[i];
-      const trimmedLine = line.trim();
-      const prevLine = i > 0 ? lines[i - 1].trim() : '';
-      
-      // Detect list items (both ordered and unordered) - must start at beginning after trim
-      const isOrderedListItem = /^\d+\.\s/.test(trimmedLine);
-      const isUnorderedListItem = /^[-*+]\s/.test(trimmedLine);
-      const isListItem = isOrderedListItem || isUnorderedListItem;
-      
-      // Detect if previous line was a list item
-      const prevIsOrderedListItem = /^\d+\.\s/.test(prevLine);
-      const prevIsUnorderedListItem = /^[-*+]\s/.test(prevLine);
-      const prevIsListItem = prevIsOrderedListItem || prevIsUnorderedListItem;
-      
-      // If current line is a list item and previous line is not empty and not a list item
-      // add a blank line before it
-      if (isListItem && prevLine !== '' && !prevIsListItem) {
-        processedLines.push('');
-      }
-      
-      // Process list items - ensure they start at column 0 with proper spacing
-      if (isOrderedListItem || isUnorderedListItem) {
-        // Keep the markdown list format - remark will handle the conversion
-        const normalizedLine = trimmedLine.replace(/^(\d+)\.(\S)/, '$1. $2').replace(/^([-*+])(\S)/, '$1 $2');
-        processedLines.push(normalizedLine);
-      } else if (trimmedLine === '') {
-        // Preserve blank lines
-        processedLines.push('');
-      } else {
-        // Regular lines - preserve as is
-        processedLines.push(line);
-      }
-    }
-    
-    processedInput = processedLines.join('\n').replace(/\n{3,}/g, '\n\n');
-
-    // Debug: Log the processed input to see what's being sent to the markdown parser
-    if (process.env.NODE_ENV === 'development') {
-      console.log('=== PROCESSED INPUT ===');
-      console.log(processedInput);
-      console.log('=== END PROCESSED INPUT ===');
-    }
+    const processedInput = prepareArticleContent(input, options);
 
     const result = await unified()
       // 1. Parse markdown
@@ -258,14 +520,6 @@ export async function mixedToSafeHtml(input: string): Promise<string> {
       return match;
     });
     
-    // Debug logging
-    if (process.env.NODE_ENV === 'development') {
-      console.log('\n===== CLEANING DEBUG =====');
-      console.log('Sample before:', htmlOutput.substring(htmlOutput.indexOf('<ol>'), htmlOutput.indexOf('<ol>') + 200));
-      console.log('Sample after:', cleanedOutput.substring(cleanedOutput.indexOf('<ol>'), cleanedOutput.indexOf('<ol>') + 200));
-      console.log('==========================\n');
-    }
-
     return cleanedOutput;
   } catch (error) {
     console.error("Error converting mixed content to HTML:", error);

@@ -244,7 +244,7 @@ export function PageHero({ title, description, image, children }: PageHeroProps)
           backgroundSize: "60px 60px",
         }}
       />
-      <div className="container relative z-10 mx-auto grid min-h-[640px] items-center gap-12 px-6 pb-20 pt-32 lg:min-h-[760px] lg:grid-cols-[0.92fr_1.08fr] lg:pb-24 lg:pt-36">
+      <div className="container relative z-10 mx-auto grid min-h-[640px] items-center gap-12 px-6 pb-20 pt-25 md:pt-32 lg:min-h-[760px] lg:grid-cols-[0.92fr_1.08fr] lg:pb-24 lg:pt-36">
         <motion.div
           initial="hidden"
           variants={containerVariants}

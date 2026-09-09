@@ -1,10 +1,8 @@
 import BlogCard from "@/components/blog/BlogCard";
 import DisqusComments from "@/components/blog/DisqusComments";
+import RichContentRenderer from "@/components/blog/RichContentRenderer";
 import CampaignLayout from "@/components/campaign/CampaignLayout";
-import {
-  AnswerEngineSection,
-  CampaignCTA,
-} from "@/components/campaign/CampaignPrimitives";
+import { CampaignCTA } from "@/components/campaign/CampaignPrimitives";
 import Title from "@/components/shared/Title";
 import { campaignSite } from "@/data/campaignContent";
 import {
@@ -88,7 +86,7 @@ const BlogDetailPage: React.FC<Props> = ({
             content="No news post matches this campaign update URL."
           />
         </Head>
-        <main className="min-h-screen bg-bg-primary px-6 pb-20 pt-32">
+        <main className="min-h-screen bg-bg-primary px-6 pb-20 pt-25 lg:pt-32">
           <Title text="News post not found" />
           <div className="container mx-auto rounded-card border border-[rgba(6,59,46,0.12)] bg-white p-8 text-center shadow-brand-card">
             <h1 className="font-heading text-4xl font-black text-text-primary">
@@ -148,12 +146,6 @@ const BlogDetailPage: React.FC<Props> = ({
     name: `${post.title} questions and answers`,
     inLanguage: SITE_LANGUAGE,
   });
-  const articleAnswerEngine = {
-    summary: articleAnswerSummary,
-    questions: articleAnswerQuestions,
-    speakableSelectors: ["#article-answers", ".aeo-summary"],
-  };
-
   const handleShare = (platform: string) => {
     let url = "";
     switch (platform) {
@@ -291,7 +283,7 @@ const BlogDetailPage: React.FC<Props> = ({
       <main className="min-h-screen overflow-hidden bg-bg-primary">
         <Title text={`Obafemi Hamzat - ${post.title}`} />
 
-        <article className="px-6 pb-20 pt-32">
+        <article className="px-6 pb-20 pt-25 lg:pt-32">
           <div className="container mx-auto">
             <nav className="mb-6 flex flex-wrap items-center gap-2 text-sm text-text-muted">
               <Link href="/" className="font-semibold hover:text-primary-900">
@@ -389,17 +381,14 @@ const BlogDetailPage: React.FC<Props> = ({
           </div>
         </article>
 
-        {/* <AnswerEngineSection
-          id="article-answers"
-          label="Fast facts"
-          title="Quick answers"
-          content={articleAnswerEngine}
-        /> */}
-
         <section className="bg-white px-6 py-12">
           <div className="container mx-auto grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px]">
-            <article className="news-article-body prose prose-lg prose-slate max-w-none rounded-card border border-[rgba(6,59,46,0.12)] bg-bg-primary p-6 shadow-brand-card">
-              <div dangerouslySetInnerHTML={{ __html: processedContent }} />
+            <article className="news-article-body rounded-card border border-[rgba(6,59,46,0.12)] bg-bg-primary p-6 shadow-brand-card">
+              <RichContentRenderer
+                content={processedContent}
+                contentIsSafeHtml
+                className="prose-slate"
+              />
             </article>
 
             <aside className="space-y-4">
@@ -530,7 +519,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     if (post) {
       relatedPosts = await getRelatedPosts(post.id, 3);
-      processedContent = await mixedToSafeHtml(post.content);
+      processedContent = await mixedToSafeHtml(post.content, {
+        title: post.title,
+      });
     }
   } catch (error) {
     console.error("Error fetching news post:", error);

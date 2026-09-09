@@ -44,6 +44,20 @@ type CodaMutationResponse = {
 }
 
 type BlogRepository = "table"
+type CodaValueFormat = "simple" | "rich"
+
+type CodaRichObject = {
+  "@type"?: string
+  display?: string
+  label?: string
+  name?: string
+  text?: string
+  title?: string
+  url?: string
+  value?: string | number | boolean
+  amount?: number
+  [key: string]: unknown
+}
 
 export type SeedBlogPostsOptions = {
   repository?: BlogRepository
@@ -103,7 +117,8 @@ async function resolveBlogPostsTableId(
 
 async function fetchCodaTable(
   tableId: string = CODA_TABLE_ID!,
-  params: Record<string, string> = {}
+  params: Record<string, string> = {},
+  valueFormat: CodaValueFormat = "simple"
 ): Promise<CodaBlogRow[]> {
   if (!CODA_API_TOKEN || !CODA_DOC_ID) {
     throw new Error("Coda API credentials are not configured")
@@ -116,6 +131,7 @@ async function fetchCodaTable(
   do {
     const queryParams = new URLSearchParams({
       useColumnNames: "true",
+      valueFormat,
       ...params,
       ...(nextPageToken && { pageToken: nextPageToken }),
     })
@@ -203,99 +219,204 @@ function sortBlogPosts(posts: BlogPost[]): BlogPost[] {
   })
 }
 
+function unwrapRichTextCodeFence(value: string): string {
+  const trimmed = value.trim()
+  const fenced = trimmed.match(/^```(?:[A-Za-z0-9_-]+\n)?([\s\S]*?)\n?```$/)
+
+  return fenced ? fenced[1] : value
+}
+
+function codaRichValueToString(
+  value: unknown,
+  options: { preferUrl?: boolean } = {}
+): string {
+  if (typeof value === "string") {
+    return unwrapRichTextCodeFence(value)
+  }
+
+  if (typeof value === "number" || typeof value === "boolean") {
+    return String(value)
+  }
+
+  if (Array.isArray(value)) {
+    return value
+      .map((item) => codaRichValueToString(item, options))
+      .filter(Boolean)
+      .join(", ")
+  }
+
+  if (value && typeof value === "object") {
+    const richValue = value as CodaRichObject
+
+    if (options.preferUrl && typeof richValue.url === "string" && richValue.url) {
+      return richValue.url
+    }
+
+    for (const key of ["name", "display", "text", "label", "title"] as const) {
+      if (typeof richValue[key] === "string" && richValue[key]) {
+        return richValue[key]
+      }
+    }
+
+    if (
+      typeof richValue.value === "string" ||
+      typeof richValue.value === "number" ||
+      typeof richValue.value === "boolean"
+    ) {
+      return String(richValue.value)
+    }
+
+    if (typeof richValue.url === "string" && richValue.url) {
+      return richValue.url
+    }
+
+    if (typeof richValue.amount === "number") {
+      return String(richValue.amount)
+    }
+  }
+
+  return ""
+}
+
+function richMarkdownToPlainText(value: unknown): string {
+  return codaRichValueToString(value)
+    .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/^#{1,6}\s+/gm, "")
+    .replace(/^\s{0,3}>\s?/gm, "")
+    .replace(/^\s*(?:[-*+]|\d+\.)\s+/gm, "")
+    .replace(/[*_~`]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+function richMarkdownToList(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value
+      .flatMap((item) => richMarkdownToList(item))
+      .map((item) => item.trim())
+      .filter(Boolean)
+  }
+
+  return richMarkdownToPlainText(value)
+    .split(",")
+    .map((item) => item.trim())
+    .filter(Boolean)
+}
+
+function richMarkdownToNumber(value: unknown): number | undefined {
+  const numericValue =
+    typeof value === "number" ? value : Number(richMarkdownToPlainText(value))
+
+  return Number.isFinite(numericValue) ? numericValue : undefined
+}
+
+function richMarkdownToBoolean(value: unknown): boolean {
+  if (typeof value === "boolean") {
+    return value
+  }
+
+  return richMarkdownToPlainText(value).toLowerCase() === "true"
+}
+
+function isPublishedStatus(value: unknown): boolean {
+  const status = richMarkdownToPlainText(value).toLowerCase()
+
+  if (!status || status.includes("draft") || status.includes("archived")) {
+    return false
+  }
+
+  return status.includes("published")
+}
+
 /**
  * Transform Coda row data to BlogPost format
  */
 function transformCodaRowToBlogPost(row: CodaBlogRow): BlogPost | null {
   try {
     const values = row.values
-
     // Skip if status is not 'Published'
-    if (values.Status !== "Published" && values.Status !== "published") {
+    if (!isPublishedStatus(values.Status)) {
       return null
     }
 
     // Parse categories and tags
-    const categories = values.Categories
-      ? typeof values.Categories === "string"
-        ? values.Categories.split(",").map((c: string) => c.trim())
-        : Array.isArray(values.Categories)
-        ? values.Categories
-        : []
-      : []
+    const categories = richMarkdownToList(values.Categories)
 
-    const tags = values.Tags
-      ? typeof values.Tags === "string"
-        ? values.Tags.split(",").map((t: string) => t.trim())
-        : Array.isArray(values.Tags)
-        ? values.Tags
-        : []
-      : []
+    const tags = richMarkdownToList(values.Tags)
 
+    const authorName =
+      richMarkdownToPlainText(values["Author Name"]) ||
+      richMarkdownToPlainText(values.Author) ||
+      "Anonymous"
     const author: BlogPost["author"] = {
-      name: typeof values["Author Name"] === "string"
-        ? values["Author Name"]
-        : typeof values.Author === "string"
-        ? values.Author
-        : "Anonymous",
+      name: authorName,
     }
 
-    if (typeof values["Author Avatar URL"] === "string" && values["Author Avatar URL"]) {
-      author.avatar = values["Author Avatar URL"]
+    const authorAvatar = codaRichValueToString(values["Author Avatar URL"], {
+      preferUrl: true,
+    })
+    if (authorAvatar) {
+      author.avatar = authorAvatar
     }
 
     const seo: BlogPost["seo"] = {}
-    if (typeof values["SEO Title"] === "string" && values["SEO Title"]) {
-      seo.title = values["SEO Title"]
+    const seoTitle = richMarkdownToPlainText(values["SEO Title"])
+    const seoDescription = richMarkdownToPlainText(values["SEO Description"])
+    const seoKeywords = richMarkdownToPlainText(values["SEO Keywords"])
+    const ogImage = codaRichValueToString(values["OG Image URL"], {
+      preferUrl: true,
+    })
+    const canonicalUrl = codaRichValueToString(values["Canonical URL"], {
+      preferUrl: true,
+    })
+
+    if (seoTitle) {
+      seo.title = seoTitle
     }
-    if (typeof values["SEO Description"] === "string" && values["SEO Description"]) {
-      seo.description = values["SEO Description"]
+    if (seoDescription) {
+      seo.description = seoDescription
     }
-    if (typeof values["SEO Keywords"] === "string" && values["SEO Keywords"]) {
-      seo.keywords = values["SEO Keywords"]
+    if (seoKeywords) {
+      seo.keywords = seoKeywords
     }
-    if (typeof values["OG Image URL"] === "string" && values["OG Image URL"]) {
-      seo.ogImage = values["OG Image URL"]
+    if (ogImage) {
+      seo.ogImage = ogImage
     }
-    if (typeof values["Canonical URL"] === "string" && values["Canonical URL"]) {
-      seo.canonicalUrl = values["Canonical URL"]
+    if (canonicalUrl) {
+      seo.canonicalUrl = canonicalUrl
     }
 
+    const idValue = richMarkdownToNumber(values.ID)
+    const rowIdValue = Number(row.id.replace(/\D/g, ""))
+    const title = richMarkdownToPlainText(values.Title)
+    const content = codaRichValueToString(values.Content)
+    const readTime = richMarkdownToNumber(values["Read Time (min)"]) ??
+      richMarkdownToNumber(values["Read Time"])
+    const viewCount = richMarkdownToNumber(values["View Count"])
+
     return {
-      id: typeof values.ID === "number" ? values.ID : parseInt(typeof values.ID === "string" ? values.ID : row.id),
-      slug: typeof values.Slug === "string" ? values.Slug : generateSlug(typeof values.Title === "string" ? values.Title : ""),
-      title: typeof values.Title === "string" ? values.Title : "",
-      description: typeof values.Description === "string" ? values.Description : "",
-      content: typeof values.Content === "string" ? values.Content : "",
-      imageUrl: typeof values["Image URL"] === "string"
-        ? values["Image URL"]
-        : typeof values["Featured Image URL"] === "string"
-        ? values["Featured Image URL"]
-        : typeof values.ImageURL === "string"
-        ? values.ImageURL
-        : "",
+      id: idValue ?? (Number.isFinite(rowIdValue) ? rowIdValue : 0),
+      slug: richMarkdownToPlainText(values.Slug) || generateSlug(title),
+      title,
+      description: richMarkdownToPlainText(values.Description),
+      content,
+      imageUrl: codaRichValueToString(values["Image URL"], { preferUrl: true }) ||
+        codaRichValueToString(values["Featured Image URL"], { preferUrl: true }) ||
+        codaRichValueToString(values.ImageURL, { preferUrl: true }),
       author,
       status: "published",
-      publishedDate: typeof values["Published Date"] === "string"
-        ? values["Published Date"]
-        : typeof values.Date === "string"
-        ? values.Date
-        : new Date().toISOString(),
-      featured: values.Featured === true || values.Featured === "true",
-      pinned: values.Pinned === true || values.Pinned === "true",
+      publishedDate: richMarkdownToPlainText(values["Published Date"]) ||
+        richMarkdownToPlainText(values.Date) ||
+        new Date().toISOString(),
+      featured: richMarkdownToBoolean(values.Featured),
+      pinned: richMarkdownToBoolean(values.Pinned),
       categories,
       tags,
       seo,
-      readTime: typeof values["Read Time (min)"] === "number"
-        ? values["Read Time (min)"]
-        : typeof values["Read Time"] === "number"
-        ? values["Read Time"]
-        : calculateReadTime(typeof values.Content === "string" ? values.Content : ""),
-      viewCount: typeof values["View Count"] === "number"
-        ? values["View Count"]
-        : typeof values["View Count"] === "string"
-        ? parseInt(values["View Count"])
-        : 0,
+      readTime: readTime ?? calculateReadTime(content),
+      viewCount: viewCount ?? 0,
     }
   } catch (error) {
     console.error("Error transforming Coda row:", error)
@@ -326,7 +447,20 @@ function calculateReadTime(content: string): number {
  * Read all published blog posts from a Coda table.
  */
 async function readAllBlogPostsFromTable(): Promise<BlogPost[]> {
-  const rows = await fetchCodaTable()
+  try {
+    const richRows = await fetchCodaTable(CODA_TABLE_ID!, {}, "rich")
+    const richPosts = richRows
+      .map(transformCodaRowToBlogPost)
+      .filter((post): post is BlogPost => post !== null)
+
+    if (richPosts.length > 0) {
+      return richPosts
+    }
+  } catch (error) {
+    console.error("Error fetching rich blog posts from Coda:", error)
+  }
+
+  const rows = await fetchCodaTable(CODA_TABLE_ID!, {}, "simple")
   return rows
     .map(transformCodaRowToBlogPost)
     .filter((post): post is BlogPost => post !== null)
