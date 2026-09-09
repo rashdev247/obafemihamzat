@@ -1,6 +1,5 @@
 import CampaignLayout from "@/components/campaign/CampaignLayout";
 import {
-  AnswerEngineSection,
   CampaignCTA,
   CampaignHead,
   ImagePanel,
@@ -91,9 +90,6 @@ export default function AchievementsPage() {
           description="The campaign is anchored in a public service record: digital transformation, infrastructure delivery, reform discipline, and future-focused opportunity."
           image={campaignImages.impact}
         />
-
-        <AnswerEngineSection content={campaignAeoContent.achievements} />
-
         <section className="bg-white px-6 py-20">
           <div className="container mx-auto">
             <SectionIntro

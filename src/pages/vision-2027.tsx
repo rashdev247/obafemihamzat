@@ -1,6 +1,5 @@
 import CampaignLayout from "@/components/campaign/CampaignLayout";
 import {
-  AnswerEngineSection,
   CampaignCTA,
   CampaignHead,
   ImagePanel,
@@ -107,9 +106,6 @@ export default function VisionPage() {
             "i-represented-the-governor-of-lagos-state-mr-babajide-olusola-sanwo-olu-as-special-guest-at-the-_1_fptuu4.jpg",
           )}
         />
-
-        <AnswerEngineSection content={campaignAeoContent.vision} />
-
         <section className="bg-white px-6 py-20">
           <div className="container mx-auto">
             <SectionIntro

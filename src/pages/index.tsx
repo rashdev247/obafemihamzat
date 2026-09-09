@@ -1,7 +1,6 @@
 import BlogItemsSection from "@/components/blog/BlogItemsSection";
 import CampaignLayout from "@/components/campaign/CampaignLayout";
 import {
-  AnswerEngineSection,
   CampaignCTA,
   CampaignHead,
   CTAGroup,
@@ -133,9 +132,6 @@ export default function Home({ recentPosts }: HomeProps) {
             </motion.div>
           </div>
         </section>
-
-        <AnswerEngineSection content={campaignAeoContent.home} />
-
         <section className="bg-white px-6 py-20">
           <div className="container mx-auto grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
             <ImagePanel

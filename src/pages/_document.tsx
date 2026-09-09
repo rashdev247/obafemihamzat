@@ -1,5 +1,60 @@
 import { Html, Head, Main, NextScript } from "next/document";
 
+const suppressKnownExtensionDevErrors =
+  process.env.NODE_ENV === "development"
+    ? `
+      (function () {
+        function isMetaMaskConnectionError(value) {
+          var text = "";
+          if (typeof value === "string") {
+            text = value;
+          } else if (value && typeof value === "object") {
+            text = [value.message, value.stack, value.filename]
+              .filter(Boolean)
+              .join(" ");
+          }
+
+          return (
+            text.indexOf("Failed to connect to MetaMask") !== -1 ||
+            (text.indexOf("chrome-extension://nkbihfbeogaeaoehlefnkodbefgpgknn") !== -1 &&
+              text.indexOf("inpage.js") !== -1)
+          );
+        }
+
+        function stopEvent(event) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+        }
+
+        window.addEventListener(
+          "error",
+          function (event) {
+            if (
+              isMetaMaskConnectionError(event.error) ||
+              isMetaMaskConnectionError({
+                message: event.message,
+                filename: event.filename,
+              })
+            ) {
+              stopEvent(event);
+            }
+          },
+          true
+        );
+
+        window.addEventListener(
+          "unhandledrejection",
+          function (event) {
+            if (isMetaMaskConnectionError(event.reason)) {
+              stopEvent(event);
+            }
+          },
+          true
+        );
+      })();
+    `
+    : "";
+
 export default function Document() {
   return (
     <Html lang="en-NG">
@@ -32,6 +87,12 @@ export default function Document() {
         <link rel="manifest" href="/site.webmanifest" />
       </Head>
       <body className="antialiased">
+        {suppressKnownExtensionDevErrors && (
+          <script
+            id="suppress-metamask-dev-overlay-error"
+            dangerouslySetInnerHTML={{ __html: suppressKnownExtensionDevErrors }}
+          />
+        )}
         <Main />
         <NextScript />
       </body>

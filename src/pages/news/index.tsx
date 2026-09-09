@@ -4,7 +4,6 @@ import BlogGrid from "@/components/blog/BlogGrid";
 import BlogItemsSection from "@/components/blog/BlogItemsSection";
 import CampaignLayout from "@/components/campaign/CampaignLayout";
 import {
-  AnswerEngineSection,
   CampaignCTA,
   CampaignHead,
   PageHero,
@@ -103,8 +102,6 @@ const NewsPage: React.FC<BlogPageProps> = ({ posts }) => {
             </a>
           </div>
         </PageHero>
-
-        <AnswerEngineSection content={campaignAeoContent.news} />
 
         <section id="latest-news" className="bg-white px-6 py-20">
           <div className="container mx-auto grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">

@@ -389,12 +389,12 @@ const BlogDetailPage: React.FC<Props> = ({
           </div>
         </article>
 
-        <AnswerEngineSection
+        {/* <AnswerEngineSection
           id="article-answers"
           label="Fast facts"
           title="Quick answers"
           content={articleAnswerEngine}
-        />
+        /> */}
 
         <section className="bg-white px-6 py-12">
           <div className="container mx-auto grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px]">

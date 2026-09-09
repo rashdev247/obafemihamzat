@@ -1,6 +1,5 @@
 import CampaignLayout from "@/components/campaign/CampaignLayout";
 import {
-  AnswerEngineSection,
   CampaignHead,
   ImagePanel,
   PageHero,
@@ -70,8 +69,6 @@ export default function JoinPage() {
           description="This campaign is bigger than politics. It is about safer communities, stronger businesses, empowered youth, better education, modern infrastructure, and a Lagos where everyone has the opportunity to thrive."
           image={campaignImages.community}
         />
-
-        <AnswerEngineSection content={campaignAeoContent.join} />
 
         <section className="bg-white px-6 py-20">
           <div className="container mx-auto grid gap-12 lg:grid-cols-[0.86fr_1.14fr] lg:items-center">

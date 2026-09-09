@@ -1,6 +1,5 @@
 import CampaignLayout from "@/components/campaign/CampaignLayout";
 import {
-  AnswerEngineSection,
   CampaignCTA,
   CampaignHead,
   ImagePanel,
@@ -71,9 +70,6 @@ export default function AboutPage() {
           description="Dr. Kadri Obafemi Hamzat has built a career around solving problems, improving systems, and creating opportunities for Lagosians."
           image={getBlobImageUrl("al-ḥamdu-l-illāhi-rabbi-l-ʿālamīn.-for-the-grace-and-favour-bestowed-upon-me-by-almighty-allah-_zlbdsb.jpg")}
         />
-
-        <AnswerEngineSection content={campaignAeoContent.about} />
-
         <section className="bg-white px-6 py-20">
           <div className="container mx-auto grid relative gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
             <div className="absolute  w-[100%] inset-0">
