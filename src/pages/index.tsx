@@ -1,4 +1,3 @@
-import BlogItemsSection from "@/components/blog/BlogItemsSection";
 import CampaignLayout from "@/components/campaign/CampaignLayout";
 import {
   CampaignCTA,
@@ -9,11 +8,6 @@ import {
 } from "@/components/campaign/CampaignPrimitives";
 import { campaignAeoContent } from "@/data/aeoContent";
 import {
-  CampaignGalleryCarousel,
-  CampaignHeroCarousel,
-  PrimaryResultMediaCarousel,
-} from "@/components/campaign/CampaignCarousels";
-import {
   campaignImages,
   campaignUpdates,
   primaryResult as primaryResultData,
@@ -22,6 +16,7 @@ import { getAllBlogPosts } from "@/lib/codaService";
 import { useCampaignPageCopy } from "@/lib/pageCopy";
 import { containerVariants, fadeInUp, itemVariants } from "@/lib/utils";
 import type { BlogPost } from "@/types";
+import PulsePageLoader from "@/components/ui/PulsePageLoader";
 import {
   ArrowUpRight,
   BadgeCheck,
@@ -31,15 +26,29 @@ import {
   Vote,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import dynamic from "next/dynamic";
 import type { GetServerSideProps } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 
-const AnimatedStatCard = dynamic(
+const AnimatedStatCard = lazy(
   () => import("@/components/campaign/AnimatedStatCard"),
-  { ssr: false },
+);
+const BlogItemsSection = lazy(() => import("@/components/blog/BlogItemsSection"));
+const CampaignHeroCarousel = lazy(() =>
+  import("@/components/campaign/CampaignCarousels").then((module) => ({
+    default: module.CampaignHeroCarousel,
+  })),
+);
+const PrimaryResultMediaCarousel = lazy(() =>
+  import("@/components/campaign/CampaignCarousels").then((module) => ({
+    default: module.PrimaryResultMediaCarousel,
+  })),
+);
+const CampaignGalleryCarousel = lazy(() =>
+  import("@/components/campaign/CampaignCarousels").then((module) => ({
+    default: module.CampaignGalleryCarousel,
+  })),
 );
 
 type HomeProps = {
@@ -134,7 +143,17 @@ export default function Home({ recentPosts }: HomeProps) {
             >
               <div className="hero-orbit absolute -right-8 top-10 h-40 w-40 border-[18px] border-secondary-500/45" />
               <div className="hero-orbit absolute -left-6 bottom-20 h-32 w-32 border-[14px] border-white/18 [animation-delay:-3s]" />
-              <CampaignHeroCarousel />
+              <Suspense
+                fallback={
+                  <PulsePageLoader
+                    label="Loading hero media"
+                    tone="dark"
+                    className="h-[520px] rounded-card border border-white/12 bg-white/8 md:h-[540px]"
+                  />
+                }
+              >
+                <CampaignHeroCarousel />
+              </Suspense>
             </motion.div>
           </div>
         </section>
@@ -191,9 +210,19 @@ export default function Home({ recentPosts }: HomeProps) {
           className="stats-gradient-section relative overflow-hidden px-6 py-20"
         >
           <div className="container relative z-10 mx-auto grid gap-4 md:grid-cols-4">
-            {home.stats.map((stat, index) => (
-              <AnimatedStatCard key={stat.label} stat={stat} index={index} />
-            ))}
+            <Suspense
+              fallback={
+                <PulsePageLoader
+                  label="Loading impact metrics"
+                  tone="dark"
+                  className="col-span-full min-h-[232px]"
+                />
+              }
+            >
+              {home.stats.map((stat, index) => (
+                <AnimatedStatCard key={stat.label} stat={stat} index={index} />
+              ))}
+            </Suspense>
           </div>
         </section>
 
@@ -425,7 +454,16 @@ export default function Home({ recentPosts }: HomeProps) {
           </div>
         </section>
 
-        <BlogItemsSection posts={recentPosts} />
+        <Suspense
+          fallback={
+            <PulsePageLoader
+              label="Loading recent news"
+              className="bg-bg-primary py-20"
+            />
+          }
+        >
+          <BlogItemsSection posts={recentPosts} />
+        </Suspense>
 
         <section
           id="primary-result"
@@ -506,7 +544,17 @@ export default function Home({ recentPosts }: HomeProps) {
               </motion.div>
             </motion.div>
 
-            <PrimaryResultMediaCarousel />
+            <Suspense
+              fallback={
+                <PulsePageLoader
+                  label="Loading primary result media"
+                  tone="dark"
+                  className="min-h-[460px] rounded-card border border-white/18 bg-white/10"
+                />
+              }
+            >
+              <PrimaryResultMediaCarousel />
+            </Suspense>
           </div>
         </section>
 
@@ -518,7 +566,16 @@ export default function Home({ recentPosts }: HomeProps) {
               title={home.gallery.title}
               description={home.gallery.description}
             />
-            <CampaignGalleryCarousel items={home.gallery.items} />
+            <Suspense
+              fallback={
+                <PulsePageLoader
+                  label="Loading campaign gallery"
+                  className="mt-10 min-h-[360px] rounded-card bg-white"
+                />
+              }
+            >
+              <CampaignGalleryCarousel items={home.gallery.items} />
+            </Suspense>
           </div>
         </section>
 
