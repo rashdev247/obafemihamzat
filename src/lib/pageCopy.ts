@@ -897,8 +897,762 @@ const pageCopy: Record<LanguageCode, CampaignPageCopy> = {
       newsletter: { title: "Gba imudojuiwon ipolongo osise.", description: "Iroyin, imudojuiwon aaye, ọrọ, media kit alert, iṣẹ iyọọda, ati ikede iṣẹlẹ lati egbe Fun Eko Tobi Ju.", email: "Adiresi imeeli", placeholder: "you@example.com", subscribe: "Forukosile", submitted: "Ife newsletter ti fipamọ sile fun prototype yi." },
     },
   },
-  ha: en,
-  ig: en,
+  ha: {
+    ...en,
+    home: {
+      ...en.home,
+      head: {
+        title: "Kadri Obafemi Hamzat 2027 | Dan takarar Gwamnan APC na Lagos",
+        description:
+          "Dandalin kamfen na hukuma na Dr. Kadri Obafemi Hamzat, dan takarar APC na Gwamnan Lagos 2027. Duba hangen Greater Lagos, nasarori, labarai, da sabbin bayanan masu sa kai.",
+      },
+      hero: {
+        label: "Dan takarar Gwamnan APC 2027",
+        title: "Kwarewa Ta Hadu Da Hangen Nesa Don Lagos Mai Girma.",
+        description:
+          "KOH 2027 yunkuri ne da ke sanya mutane gaba, wanda ya ginu kan aikin jama'a, sauyin dijital, gina kayan more rayuwa, da Lagos mai bude dama ga kowane yanki.",
+        secondaryCta: "Duba Manifesto",
+      },
+      heroSlides: [
+        { title: "Kwarewa Ta Hadu Da Hangen Nesa", caption: "Gogaggen mai hidimar jama'a da ya shirya kai Lagos mataki na gaba." },
+        { title: "Jagoranci Cikin Aiki", caption: "Kamfen da ya ginu kan sauraro, tuntuba, da aiki mai natsuwa." },
+        { title: "Kayan More Rayuwa Masu Hada Mutane", caption: "Hanyoyi, jirgin kasa, ruwa, da ayyukan jama'a don saukaka zirga-zirgar yau da kullum." },
+        { title: "Makoma Tare Da Matasa", caption: "Kwarewar dijital, kasuwanci, ilimi, da dama ga tsara mai zuwa." },
+        { title: "Karfin Al'umma", caption: "Kamfen na jama'a da ke sauraron unguwanni, kasuwanni, makarantu, da ward-ward." },
+      ],
+      leader: {
+        imageTitle: "Jagoran Da Lagos Ta Amince Da Shi",
+        imageCaption: "Yunkuri da ya ginu kan hidimar jama'a, ba hayaniya ba.",
+        label: "Jagoran da Lagos ta amince da shi",
+        title: "Ba sabon shiga aikin hidima ba. Ya shirya babi na gaba.",
+        description:
+          "Daga sauya tsarin dijital na Lagos zuwa zama Mataimakin Gwamna tun 2019, jagorancin Dr. Obafemi Hamzat ya mayar da hankali kan Lagos mai hankali, aminci, da wadata ga kowa.",
+        qualities: ["Injiniya", "Masanin fasaha", "Mai kawo gyara", "Mai hada jama'a"],
+        quote: "Lagos da ke aiki ga kowa.",
+      },
+      stats: [
+        { value: "25+", label: "Shekaru Na Hidima", description: "Hidimar jama'a, fasaha, da shugabanci ba tare da katsewa ba" },
+        { value: "2x", label: "Mataimakin Gwamna", description: "An zabe shi a 2019 kuma aka sake zabarsa a 2023" },
+        { value: "1st", label: "Oracle ERP", description: "Ya jagoranci fara amfani da Oracle ERP a bangaren gwamnati a Afirka" },
+        { value: "2013", label: "Mutumin Lagos", description: "An yaba masa kan hidima, gyara, da kirkire-kirkire" },
+      ],
+      audience: {
+        label: "Ga kowane dan Lagos",
+        title: "Makomar Lagos dole ta kunshi kowa.",
+        description:
+          "Ko kana gina kasuwanci, koyon sana'a, wucewa cikin cunkoso, renon iyali, ko hidimar al'umma, wannan yunkuri an tsara shi ne da makomarka a zuciya.",
+        items: [
+          "Dalibai a Ikorodu",
+          "Yan kasuwa a Balogun",
+          "Masu kirkirar fasaha a Yaba",
+          "Masunta a Epe",
+          "Kwararru a Victoria Island",
+          "Iyali a fadin Alimosho",
+        ],
+      },
+      vision: {
+        label: "Hangen 2027",
+        title: "Babi na gaba na Lagos.",
+        description:
+          "Da tsari mai tsauri, ruhin Lagos, da aiwatarwa mai amfani da fasaha.",
+        cta: "Karanta cikakken manifesto",
+        pillars: [
+          { title: "Digital Lagos 2.0", summary: "Gwamnati mai hankali, tattalin arziki mai hade, hidimomin jama'a na dijital, cibiyoyin kirkire-kirkire, da tsarin birni mai shirin AI." },
+          { title: "Juyin Kayan More Rayuwa", summary: "Hanyoyi, jirgin kasa, ruwa, zirga-zirga mai hankali, da muhimman hanyoyi da ke motsa mutanen Lagos cikin sauri da aminci." },
+          { title: "Ilimi Da Karfin Dan Adam", summary: "Makarantun gwamnati na zamani, STEM, ilimin dijital, koyon sana'a, da bunkasa malamai." },
+          { title: "Lafiya Ga Kowa", summary: "Ingantaccen kiwon lafiya na farko, kula da mata, agajin gaggawa, lafiyar dijital, da asibitocin al'umma." },
+          { title: "Ci Gaban Tattalin Arziki", summary: "Karin SME, karfafa matasa, hanyoyin zuba jari, tallafin kasuwanci, da sauye-sauye masu saukaka kasuwanci." },
+          { title: "Tsaro Da Aminci", summary: "Tsarin tsaro mai hankali, hanyoyin mayar da martani na al'umma, da saurin daidaita agajin gaggawa." },
+        ],
+      },
+      map: {
+        title: "Taswirar Kamfen Kai Tsaye",
+        activeFocus: "Abin da ake mayar da hankali",
+        listeningTours: "Ziyarar sauraron al'umma",
+        eventCalendar: "Kalanda na abubuwa zai bude nan ba da jimawa ba",
+        zones: [
+          { name: "Lagos West", focus: "Ayyuka, saukin sufuri, SME, da hidimomi masu kula da iyali.", wards: "Alimosho, Badagry, Ojo, Ikeja axis" },
+          { name: "Lagos Central", focus: "Kasuwanni, tsaron jama'a, kasuwanci, da sabunta bakin ruwa.", wards: "Lagos Island, Surulere, Apapa, Eti-Osa axis" },
+          { name: "Lagos East", focus: "Ilimi, samun fasaha, noma, da bunkasar blue economy.", wards: "Ikorodu, Epe, Ibeju-Lekki, Kosofe axis" },
+        ],
+      },
+      press: {
+        label: "Labarai da press",
+        title: "Sabbin bayanan kamfen kai tsaye.",
+        description:
+          "Sabbin bayanai tabbatattu, rahotannin jama'a, da sanarwar kamfen a wuri daya.",
+        updates: [
+          { source: "Press", title: "GAC ta amince da Hamzat a matsayin dan takarar gwamnan APC na hadin kai", date: "28 April 2026" },
+          { source: "Press", title: "Tinubu ya goyi bayan Hamzat a matsayin dan takarar APC na Lagos", date: "29 April 2026" },
+          { source: "Kamfen", title: "Dandalin kamfen na hukuma na Obafemi Hamzat 2027", date: "Live" },
+        ],
+      },
+      primaryResult: {
+        label: "Sakamakon primary na APC",
+        title: "Hamzat ya zama dan takarar gwamnan APC na Lagos 2027.",
+        description:
+          "Mataimakin Gwamnan Lagos ya samu tikitin gwamnan APC bayan ya samu kuri'u 657,974 a primary da aka gudanar ranar 21 May 2026.",
+        resultSummary:
+          "Hamzat ya doke abokin hamayyarsa daya, wanda ya samu kuri'a daya, yayin da aka sanar da sakamakon a sakatariyar APC a Ikeja.",
+        declared: "An sanar a APC Secretariat, Ikeja ranar 21 May 2026.",
+        highlights: ["Kuri'u da aka samu", "Kuri'a ga abokin hamayya", "Mataimakin Gwamna tun"],
+        mediaTypeVideo: "Fim din kamfen",
+        mediaTypePhoto: "Rumbun hotunan primary",
+        mediaSlides: [
+          { title: "Bidiyon sanarwar primary", caption: "Fim din kamfen daga sanarwar sakamakon primary na APC." },
+          { title: "Lokacin primary 01", caption: "Sanarwar sakamako ta fara a sakatariyar APC a Ikeja." },
+          { title: "Lokacin primary 02", caption: "Shugabannin jam'iyya da magoya baya sun taru don sakamakon hukuma." },
+          { title: "Lokacin primary 03", caption: "Kallo bisa tsarin lokaci na abubuwan primary na ranar 21 May." },
+          { title: "Lokacin primary 04", caption: "Kamfen din APC Lagos 2027 ya shiga sabon mataki." },
+        ],
+        featureCards: [
+          { title: "Media kit", copy: "Bidiyon sakamako na hukuma, hotuna, da kayan press." },
+          { title: "Jawabai", copy: "Jawabai, bayanan karba, da sanarwar jama'a." },
+          { title: "Fina-finan kamfen", copy: "Gajerun fina-finai da lokutan bidiyo daga yunkurin." },
+        ],
+      },
+      gallery: {
+        label: "Hotunan kamfen",
+        title: "Lagos cikin motsi.",
+        description:
+          "Hotunan suna mayar da hankali ga mutane: hidimar jama'a, kayan more rayuwa, matasa, al'umma, da kasancewar jagoranci.",
+        items: [
+          { title: "Kwarewa", caption: "Tattaunawar jagoranci da masu ruwa da tsaki na Lagos." },
+          { title: "Kayan more rayuwa", caption: "Lokutan dubawa da kaddamarwa a fadin Lagos." },
+          { title: "Yunkuri", caption: "Hadakar jama'a a fadin al'ummomi." },
+          { title: "Al'umma", caption: "Hulda da kungiyoyin hadin gwiwa da grassroots." },
+          { title: "Matasa", caption: "Bude hanyoyi ga matasa da hidimar jama'a." },
+          { title: "Imani & Hidima", caption: "Jagorancin jama'a da ya ginu kan girmamawa da al'umma." },
+        ],
+      },
+    },
+    about: {
+      ...en.about,
+      head: {
+        title: "Game da Hamzat",
+        description:
+          "Karanta tarihin Dr. Kadri Obafemi Hamzat, aikin jama'a, tushen fasaha, aikin gyara, da tafiyar jagorancinsa a Jihar Lagos.",
+      },
+      hero: {
+        title: "Hidima. Kirkire-kirkire. Sakamako.",
+        description:
+          "Dr. Kadri Obafemi Hamzat ya gina aikinsa kan warware matsaloli, inganta tsare-tsare, da samar da dama ga mutanen Lagos.",
+      },
+      biography: {
+        label: "Tarihi",
+        title: "Dan siyasar zamani da injiniya, gyara, da hidimar Lagos suka siffanta.",
+        description:
+          "An haife shi a cikin iyali mai tushen hidimar jama'a, Dr. Kadri Obafemi Hamzat ya sadaukar da rayuwarsa wajen inganta tsare-tsare da gina dama. Tafiyarsa ta shafi fasaha, kudi, gudanarwar jama'a, da shugabancin zartarwa.",
+        paragraphs: [
+          "Ya samu digiri daga University of Ibadan da Cranfield University a United Kingdom kafin ya gina aiki mai martaba a cibiyoyi na duniya da kasuwancin Najeriya.",
+          "Shigarsa hidimar jama'a ta bude daya daga cikin manyan tafiyoyin gwamnati a Lagos: gyaran fasaha, ayyukan jama'a, sabunta sufuri, da jagoranci mai natsuwa.",
+          "Gada tsakanin kwarewa da kirkire-kirkire.",
+        ],
+        imageTitle: "Kwarewar da aka gwada.",
+        imageCaption: "Jagoranci da ya ginu kan aiki, ba nunawa ba.",
+      },
+      credentials: {
+        label: "Asalin Jagoranci",
+        title: "Bayanan martabar da Lagos ke bukata a shekaru goma masu zuwa.",
+        description:
+          "Matsayin kamfen shi ne kwarewa tare da kwanciyar hankali, kirkire-kirkire, da hadin kai.",
+        items: [
+          { title: "Injiniya", description: "Mai tunanin tsarin da aka horar don magance manyan matsalolin jama'a da kayan more rayuwa." },
+          { title: "Masanin fasaha", description: "Kwarewa a fasaha, kudi, gudanarwar jama'a, da shugabanci." },
+          { title: "Mai hidimar jama'a", description: "Fiye da shekaru ashirin yana taimakawa gina Lagos ta hanyar gyara, ayyuka, da kirkire-kirkire." },
+          { title: "Mai goyon bayan ilimi", description: "Mai mayar da hankali kan shirye-shiryen tunani, ilimin dijital, STEM, da hanyoyin dama." },
+        ],
+      },
+      timeline: {
+        label: "Lokutan hidimar jama'a",
+        title: "Tarihi da aka gina a hankali.",
+        description:
+          "Ba kamfen na dare daya ba ne. Doguwar tafiya ce ta alhaki, gyara, da aiki mai amfani ga Lagos.",
+        items: [
+          { year: "Farkon Aiki", title: "Injiniya da Masanin Fasaha na Duniya", description: "Ya gina kwarewa a fasaha, kudi, da gudanarwar jama'a kafin shiga hidimar jama'a." },
+          { year: "Science & Tech", title: "Kwamishina na Science and Technology", description: "Ya jagoranci sabunta bangaren jama'a ta fasaha kuma ya taimaka wajen gina tushen dijital na Lagos." },
+          { year: "Works", title: "Special Adviser on Works", description: "Ya ba da gudummawa ga tsara kayan more rayuwa, aikin aiwatarwa, da ayyukan jama'a masu mayar da hankali kan sufuri." },
+          { year: "2019 - Yanzu", title: "Mataimakin Gwamnan Jihar Lagos", description: "Yana aiki tare da Gwamna Babajide Sanwo-Olu a daya daga cikin manyan tattalin arzikin birane a Afirka." },
+          { year: "2027", title: "Zabin Hadin Kai na APC", description: "Manyan kafofin watsa labarai na Najeriya sun ruwaito shi a matsayin zabin APC/GAC na takarar gwamnan Lagos 2027." },
+        ],
+      },
+      character: {
+        imageTitle: "Mai tushe a cikin al'umma.",
+        imageCaption: "Kamfen da ke sauraro kafin ya yi magana.",
+        label: "Halin jagoranci",
+        title: "Mai saukin kai, mai natsuwa, kuma mai zurfin sanin Lagos.",
+        description:
+          "Babban karfin kamfen na Obafemi Hamzat ba hayaniya ba ne. Tarihi ne na kasancewa a wurin aiki, fahimtar tsare-tsare, girmama al'umma, da ci gaba da motsa Lagos.",
+        quote:
+          "Kwarewa ba wai komawa baya ba ce. Shiri ce ga abin da Lagos za ta zama a gaba.",
+      },
+    },
+    visionPage: {
+      ...en.visionPage,
+      head: {
+        title: "Hangen 2027",
+        description:
+          "Binciki hangen Lagos 2027 na Dr. Kadri Obafemi Hamzat kan gwamnatin dijital, ayyuka, ilimi, sufuri, kayan more rayuwa, lafiya, da tsaro.",
+      },
+      hero: {
+        title: "Babi Na Gaba Na Lagos.",
+        description:
+          "Gwamnati mai hankali. Tattalin arziki mai hade. Lagos mai kunsar kowa. Hangen 2027 an gina shi ne don mutane, kayan more rayuwa, dama, da fasaha.",
+      },
+      pillarsIntro: {
+        label: "Ginshikan manifesto",
+        title: "Ajandar mulki, ba kalaman kamfen kawai ba.",
+        description:
+          "Hangen yana kewaye da tsarin yau da kullum da ke nuna ko Lagos tana aiki ga dalibai, yan kasuwa, masu kirkira, ma'aikata, iyalai, da al'ummomi.",
+      },
+      pillars: [
+        { title: "Digital Lagos 2.0", summary: "Gwamnati mai hankali, tattalin arziki mai hade, hidimomin jama'a na dijital, cibiyoyin kirkire-kirkire, da tsarin gari mai shirin AI.", points: ["Gwamnatin dijital", "Tsarin sufuri mai hankali", "Wi-Fi na jama'a", "Cibiyoyin kirkire-kirkire", "Hidimomin jama'a masu AI"] },
+        { title: "Ci Gaban Tattalin Arziki", summary: "Karin SME, karfafa matasa, hanyoyin zuba jari, tallafin kasuwanci, da sauye-sauye masu saukaka kasuwanci.", points: ["Karin ayyuka", "Karin SME", "Karfafa matasa", "Jawo zuba jari", "Gyare-gyaren kasuwanci"] },
+        { title: "Ilimi Da Karfin Dan Adam", summary: "Makarantun gwamnati na zamani, STEM, ilimin dijital, koyon sana'a, da bunkasa malamai.", points: ["Makarantun gwamnati na zamani", "Ilimin STEM", "Koyon sana'a", "Ilimin dijital", "Bunkasa malamai"] },
+        { title: "Juyin Kayan More Rayuwa", summary: "Hanyoyi, jirgin kasa, ruwa, zirga-zirga mai hankali, da muhimman hanyoyi da ke motsa mutanen Lagos cikin sauri da aminci.", points: ["Hanyoyi da jirgin kasa", "Hanyoyin ruwa", "Zirga-zirga mafi aminci", "Lokacin tafiya mai tabbas", "Kayan more rayuwa masu hankali"] },
+        { title: "Lafiya Ga Kowa", summary: "Ingantaccen kiwon lafiya na farko, kula da mata, agajin gaggawa, lafiyar dijital, da asibitocin al'umma.", points: ["Kiwon lafiya na farko", "Kula da mata", "Agajin gaggawa", "Tsarin lafiya na dijital", "Asibitocin al'umma"] },
+      ],
+      roadmapIntro: {
+        label: "Taswirar ci gaba",
+        title: "Taswirar Lagos da mutane za su iya bi.",
+        description:
+          "Kamfen ya kamata ya sa alkawura su zama bayyane. Tsarin taswira yana juya fifiko zuwa matakai, dashboard, da aikin jama'a mai aunawa.",
+      },
+      roadmap: [
+        { phase: "Kwanaki 100 Na Farko", title: "Gudun Budaddiyar Gwamnati", description: "Buga dashboard na aiki mai gaskiya, tabbatar da muhimman hanyoyi, da kunna hanyoyin jin ra'ayin jama'a." },
+        { phase: "Shekara Ta Farko", title: "Isar Da Hidima Mai Hankali", description: "Mayar da manyan hidimomin gwamnati zuwa dijital kuma fadada samun dama a matakin al'umma ta hanyar mobile-first." },
+        { phase: "2027 - 2031", title: "Ci Gaban Lagos Mai Kunsar Kowa", description: "Fadada ayyuka, ilimi, sufuri, lafiya, da shirye-shiryen kirkire-kirkire a dukkan yankuna biyar na Lagos." },
+      ],
+      dashboardNote:
+        "Ra'ayin dashboard na jama'a: fifiko, matakai, da ra'ayin al'umma.",
+      tech: {
+        imageTitle: "Fasaha ya kamata ta inganta rayuwar yau da kullum.",
+        imageCaption: "Makomar Lagos dijital ce, mai kwarewa, kuma tana sanya mutane gaba.",
+        label: "Mulki mai amfani da fasaha",
+        title: "Lagos mai hankali ga kowa.",
+        description:
+          "Manufar fasaha ba ado ba ce. Ya kamata ta rage layi, inganta sufuri, saukaka kasuwanci, karfafa lafiya, kuma ta taimaka wa matasan Lagos yin gasa a duniya.",
+        quote:
+          "Motsa mutane cikin sauri, aminci, da hankali. Shirya tunani. Bunkasa kasuwanci. Sabunta hidimomi.",
+      },
+    },
+    impact: {
+      ...en.impact,
+      head: {
+        title: "Nasarori da Tasiri",
+        description:
+          "Duba tasirin hidimar jama'a na Dr. Kadri Obafemi Hamzat a Lagos a fannonin sauyin dijital, kayan more rayuwa, gyaran bangaren jama'a, da kirkire-kirkiren matasa.",
+      },
+      hero: {
+        title: "An Gina Shi Kan Sakamako.",
+        description:
+          "Kamfen din ya dogara ne da tarihin hidimar jama'a: sauyin dijital, aiwatar da kayan more rayuwa, tsarin gyara, da damar gaba.",
+      },
+      pillarsIntro: {
+        label: "Ginshikan tasiri",
+        title: "Hujjojin da ke bayan kamfen.",
+        description:
+          "Sakon siyasa mafi karfi shi ne aikin da mutane za su iya gani a rayuwarsu ta yau da kullum.",
+      },
+      achievements: [
+        { metric: "11 ERP modules", title: "Sauyin Dijital", description: "Gyare-gyaren da fasaha ta jagoranta sun taimaka wajen sanya Lagos cikin gwamnatocin Afirka masu karfin dijital." },
+        { metric: "First cable-stayed", title: "Lekki-Ikoyi Link Bridge", description: "Gudummawa ga muhimman kayan more rayuwa ta karfafa hade-hade, rage matsin zirga-zirga, da tallafa wa kasuwanci." },
+        { metric: "An rage ghost workers", title: "Gyaran Hidimar Jama'a", description: "Tunanin tsari, hada fasaha, da natsuwar gudanarwa sun inganta isar da hidimar gwamnati." },
+        { metric: "Shirin gaba", title: "Matasa & Kirkire-kirkire", description: "Tallafi ga kirkire-kirkire, kasuwanci, da ilimin dijital yana ci gaba da zama tsakiyar Lagos ta gobe." },
+      ],
+      tracker: {
+        label: "Mai bin tasirin al'umma",
+        title: "Bi aikin ta jigo.",
+        description:
+          "Rumbun tasirin kamfen ya kamata ya taimaka wa masu zabe su bincika abin da aka yi, inda ya shafi rayuwarsu, da abin da ke gaba.",
+        filters: [
+          { id: "all", label: "Duka" },
+          { id: "digital", label: "Dijital" },
+          { id: "infrastructure", label: "Kayan more rayuwa" },
+          { id: "reform", label: "Gyara" },
+          { id: "youth", label: "Matasa" },
+        ],
+        items: [
+          { categoryId: "digital", category: "Dijital", title: "Sauyin Dijital", description: "Gyare-gyaren fasaha da tsarin enterprise sun taimaka wajen sabunta hidimar jama'a a Lagos." },
+          { categoryId: "infrastructure", category: "Kayan more rayuwa", title: "Kayan More Rayuwa Na Birni", description: "Ayyukan jama'a da gudummawar sufuri sun tallafa wa Lagos mega-city mai hade." },
+          { categoryId: "reform", category: "Gyara", title: "Gyaran Hidimar Jama'a", description: "Tunanin tsari da sabunta gudanarwa sun inganta yadda gwamnati ke aiki ga mutane." },
+          { categoryId: "youth", category: "Matasa", title: "Kirkire-kirkire & Dama", description: "Matasa, kasuwanci, ilimin dijital, da kirkire-kirkire suna tsakiyar makomar Lagos." },
+        ],
+      },
+      infrastructure: {
+        imageTitle: "Tunanin mega-city.",
+        imageCaption: "Kayan more rayuwa shi ne yadda dama ke motsi.",
+        label: "Kayan more rayuwa da sabuntawa",
+        title: "Tarihi da ke hade da makomar birnin Lagos.",
+        description:
+          "Sakon nasarori ya kamata ya hada aikin baya da burin gaba: hanyoyi, gadoji, tsarin sufuri, sabunta jama'a, da birnin da ke ci gaba da motsi.",
+        cta: "Ziyarci rumbun hukuma",
+      },
+      gallery: {
+        label: "Hotuna",
+        title: "Hidimar jama'a cikin hotuna.",
+        description:
+          "Rumbun hotuna ya kamata ya kasance mai motsa rai, mai nuna mutane, kuma na musamman ga Lagos.",
+        items: [
+          { title: "Kwarewa", caption: "Tattaunawar jagoranci da masu ruwa da tsaki na Lagos." },
+          { title: "Kayan more rayuwa", caption: "Lokutan dubawa da kaddamarwa a fadin Lagos." },
+          { title: "Yunkuri", caption: "Hadakar jama'a a fadin al'ummomi." },
+          { title: "Al'umma", caption: "Hulda da kungiyoyin hadin gwiwa da grassroots." },
+          { title: "Matasa", caption: "Bude hanyoyi ga matasa da hidimar jama'a." },
+          { title: "Imani & Hidima", caption: "Jagorancin jama'a da ya ginu kan girmamawa da al'umma." },
+        ],
+      },
+    },
+    join: {
+      ...en.join,
+      head: {
+        title: "Shiga Yunkurin",
+        description:
+          "Shiga yunkurin kamfen na Lagos 2027 na Dr. Kadri Obafemi Hamzat. Yi sa kai, shirya a ward dinka, shiga tallafin media, nuna sha'awa, ko karbi sabbin bayanan hukuma.",
+      },
+      hero: {
+        title: "Lagos Tana Tashi. Ka Kasance Cikin Ta.",
+        description:
+          "Wannan kamfen ya fi siyasa girma. Yana nufin al'ummomi masu aminci, kasuwanci masu karfi, matasa masu karfi, ilimi mai kyau, kayan more rayuwa na zamani, da Lagos inda kowa ke da damar bunkasa.",
+      },
+      why: {
+        label: "Dalilin da yunkurin yake da muhimmanci",
+        title: "Gaba tare, ward bayan ward.",
+        description:
+          "Cin Lagos yana bukatar fiye da sako. Yana bukatar mutane: dalibai, mata, shugabannin kasuwa, kwararru, masu kirkira, al'ummomin addini, masu fasaha, masu sana'a, da masu shirya al'umma.",
+        items: ["Al'ummomi masu aminci", "Kasuwanci masu karfi", "Matasa masu karfi", "Ilimi mai kyau", "Kayan more rayuwa na zamani", "Dama ga kowane dan kasa"],
+        imageTitle: "Dubban mutanen Lagos. Makoma daya.",
+        imageCaption: "Karfin al'umma, an tsara shi don Lagos mai girma.",
+      },
+      formIntro: {
+        label: "Fom din sa kai",
+        title: "Zabi yadda kake son yin hidima.",
+        description:
+          "Wannan fom ya shirya don hadin backend daga baya. A yanzu, yana daukar cikakken tsarin shiga kamfen kuma yana tabbatar da tafiyar sa kai.",
+        card:
+          "Zama muryar ward, mai tsara campus, abokin media, mai tuntubar masu bayarwa, ko mai motsa al'umma.",
+      },
+      form: {
+        fullName: "Cikakken suna",
+        fullNamePlaceholder: "Cikakken sunanka",
+        phone: "Waya / WhatsApp",
+        phonePlaceholder: "+234",
+        email: "Email",
+        emailPlaceholder: "you@example.com",
+        location: "LGA / Ward",
+        locationPlaceholder: "Ikeja, Ikorodu, Epe...",
+        participation: "Nau'in shiga",
+        message: "Sako",
+        messagePlaceholder: "Fada mana yadda kake son taimakawa.",
+        submit: "Aika Sha'awa",
+        submittedPrefix: "An rubuta sha'awarka ta",
+        submittedSuffix:
+          "a cikin wannan na'ura. Hada wannan fom da CRM, email, ko database na kamfen idan backend ya shirya.",
+        roles: [
+          "Mai sa kai",
+          "Mai tsara ward",
+          "Mai motsa matasa",
+          "Hadakar mata",
+          "Jakadan campus",
+          "Hadakar media",
+          "Rajistar taro",
+          "Sha'awar bayarwa",
+        ],
+      },
+      cards: [
+        { title: "Al'ummar WhatsApp", description: "Nemi gayyata don sabbin bayanan ward, canvassing, da sanarwar abubuwa." },
+        { title: "Hadakar Media", description: "Tallafa wa martani cikin sauri, labarai, daidaita press, da abun dijital." },
+        { title: "Event RSVP", description: "Yi rajistar sha'awa ga town halls, youth forums, ziyarar kasuwa, da abubuwan policy." },
+      ],
+      newsletter: {
+        title: "Karbi sabbin bayanan kamfen na hukuma.",
+        description:
+          "Labarai, sabbin bayanan filin aiki, jawabi, sanarwar media kit, ayyukan masu sa kai, da sanarwar taro daga yunkurin For A Greater Lagos.",
+        email: "Adireshin email",
+        placeholder: "you@example.com",
+        subscribe: "Yi rajista",
+        submitted: "An ajiye sha'awar newsletter a cikin wannan prototype.",
+      },
+    },
+  },
+  ig: {
+    ...en,
+    home: {
+      ...en.home,
+      head: {
+        title: "Kadri Obafemi Hamzat 2027 | Onye APC Na-acho Gọvanọ Lagos",
+        description:
+          "Ikpo okwu mkposa gọọmenti maka Dr. Kadri Obafemi Hamzat, onye APC na-acho Gọvanọ Lagos 2027. Lelee ọhụụ Greater Lagos, mmezu, akuko, na mmelite ndị ọrụ afọ ofufo.",
+      },
+      hero: {
+        label: "Onye APC Na-acho Gọvanọ 2027",
+        title: "Ahụmahụ Na Ọhụụ Maka Lagos Ka Mma.",
+        description:
+          "KOH 2027 bụ mmeghari na-ebute mmadụ ụzọ, wuru na ọrụ ọha, mgbanwe dijitalụ, akụrụngwa, na Lagos na-emepe ohere n'akụkụ niile.",
+        secondaryCta: "Lelee Manifesto",
+      },
+      heroSlides: [
+        { title: "Ahụmahụ Na Ọhụụ", caption: "Onye ọrụ ọha a nwalere, dị njikere ibuga Lagos n'isi nke ọzọ." },
+        { title: "Ndú N'ọrụ", caption: "Mkposa gbadoro ụkwụ na ige ntị, mkparịta ụka, na mmezu nwayọọ." },
+        { title: "Akụrụngwa Na-ejikọta", caption: "Ụzọ, ụgbọ oloko, ụzọ mmiri, na ọrụ ọha a haziri maka njem kwa ụbọchị." },
+        { title: "Ọdịnihu Wuru Na Ndị Ntorobịa", caption: "Nkà dijitalụ, azụmahịa, agụmakwụkwọ, na ohere maka ọgbọ na-abịa." },
+        { title: "Ike Grassroots", caption: "Mkposa ndị mmadụ na-ege obodo, ahịa, campus, na ward ntị." },
+      ],
+      leader: {
+        imageTitle: "Onye Ndú Lagos Tụkwasịrị Obi",
+        imageCaption: "Mmeghari gbadoro ụkwụ na ọrụ ọha, ọ bụghị mkpọtụ.",
+        label: "Onye ndu Lagos tukwasiri obi",
+        title: "Ọ bụghị onye ọhụrụ n'ọrụ. Kwadebere maka isi nke ọzọ.",
+        description:
+          "Site n'ịgbanwe akụrụngwa dijitalụ Lagos ruo n'ịrụ ọrụ dị ka Deputy Governor kemgbe 2019, ndu Dr. Obafemi Hamzat lekwasịrị anya na Lagos nwere ọgụgụ isi, nchekwa, na ọganihu maka onye ọ bụla.",
+        qualities: ["Injinia", "Onye teknokrat", "Onye mmezi", "Onye jikota ndi mmadu"],
+        quote: "Lagos na-arụ ọrụ maka onye ọ bụla.",
+      },
+      stats: [
+        { value: "25+", label: "Afọ Ọrụ", description: "Ọrụ ọha, teknụzụ, na ọchịchị na-aga n'ihu" },
+        { value: "2x", label: "Deputy Governor", description: "A họpụtara ya na 2019 ma họpụtakwa ọzọ na 2023" },
+        { value: "1st", label: "Oracle ERP", description: "Duru mbido Oracle ERP nke mbụ n'ọrụ ọha n'Afrika" },
+        { value: "2013", label: "Nwa Lagos", description: "A matara ya maka ọrụ, mmezi, na ihe ọhụrụ" },
+      ],
+      audience: {
+        label: "Maka onye Lagos ọ bụla",
+        title: "Ọdịnihu Lagos ga-etinyerịrị onye ọ bụla.",
+        description:
+          "Ma ị na-ewu azụmahịa, na-amụ nkà, na-agafe okporo ụzọ juru, na-azụ ezinụlọ, ma ọ bụ na-ejere obodo gị ozi, mmeghari a haziri ya gburugburu ọdịnihu gị.",
+        items: [
+          "Ụmụ akwụkwọ na Ikorodu",
+          "Ndị ahịa na Balogun",
+          "Ndị malitere tech na Yaba",
+          "Ndị ọkụ azụ na Epe",
+          "Ndị ọkachamara na Victoria Island",
+          "Ezinụlọ gafee Alimosho",
+        ],
+      },
+      vision: {
+        label: "Ọhụụ 2027",
+        title: "Isi nke ọzọ nke Lagos.",
+        description:
+          "Disiplin dị ka presidency, mmụọ Lagos, na mmezu na-ebute teknụzụ ụzọ.",
+        cta: "Gụọ manifesto zuru ezu",
+        pillars: [
+          { title: "Digital Lagos 2.0", summary: "Gọọmenti nwere ọgụgụ isi, akụ na ụba jikọtara, ọrụ ọha dijitalụ, hub ihe ọhụrụ, na sistemụ obodo dị njikere maka AI." },
+          { title: "Mgbanwe Akụrụngwa", summary: "Ụzọ, ụgbọ oloko, ụzọ mmiri, smart mobility, na corridors ga-ebuga ndị Lagos ngwa ngwa na nchekwa." },
+          { title: "Agụmakwụkwọ & Ike Mmadụ", summary: "Ụlọ akwụkwọ ọha nke oge a, STEM, ọgụgụ dijitalụ, ike ọrụ aka, na mmepe ndị nkuzi." },
+          { title: "Ahụike Maka Onye Ọ Bula", summary: "Ahụike mbụ siri ike, nlekọta nne, mmeghachi mberede, ahụike dijitalụ, na ụlọọgwụ obodo." },
+          { title: "Ọganihu Akụ Na Ụba", summary: "SME karịa, ike ndị ntorobịa, ụzọ itinye ego, ego azụmahịa, na mmezi na-eme ka azụmahịa dị mfe." },
+          { title: "Nchekwa & Udo", summary: "Akụrụngwa nchekwa nwere ọgụgụ isi, usoro mmeghachi obodo, na nhazi mberede ngwa ngwa." },
+        ],
+      },
+      map: {
+        title: "Map Mkposa Na-aga N'ihu",
+        activeFocus: "Ihe a na-elekwasị anya",
+        listeningTours: "Njem ige obodo ntị",
+        eventCalendar: "Kalenda ihe omume ga-emeghe n'oge adịghị anya",
+        zones: [
+          { name: "Lagos West", focus: "Ọrụ, enyemaka njem, SME, na ọrụ lekwasịrị ezinụlọ anya.", wards: "Alimosho, Badagry, Ojo, Ikeja axis" },
+          { name: "Lagos Central", focus: "Ahịa, nchekwa ọha, azụmahịa, na imegharị waterfront.", wards: "Lagos Island, Surulere, Apapa, Eti-Osa axis" },
+          { name: "Lagos East", focus: "Agụmakwụkwọ, ohere dijitalụ, ọrụ ugbo, na uto blue economy.", wards: "Ikorodu, Epe, Ibeju-Lekki, Kosofe axis" },
+        ],
+      },
+      press: {
+        label: "Akuko na press",
+        title: "Mmelite mkposa na-aga n'ihu.",
+        description:
+          "Mmelite a kwadoro, akụkọ ọha, na ọkwa mkposa n'otu ebe.",
+        updates: [
+          { source: "Press", title: "GAC kwadoro Hamzat dị ka onye APC kwenyere maka gọvanọ", date: "28 April 2026" },
+          { source: "Press", title: "Tinubu kwadoro Hamzat dị ka onye APC kwenyere na Lagos", date: "29 April 2026" },
+          { source: "Mkposa", title: "Ikpo okwu mkposa Obafemi Hamzat 2027 nke gọọmenti", date: "Live" },
+        ],
+      },
+      primaryResult: {
+        label: "Nsonaazụ primary APC",
+        title: "Hamzat ghọrọ onye APC na-acho gọvanọ Lagos 2027.",
+        description:
+          "Deputy Governor Lagos State nwetara tiketi gọvanọ APC mgbe ọ nwetara votu 657,974 na primary e mere na 21 May 2026.",
+        resultSummary:
+          "Hamzat meriri onye otu ya n'ịsọ mpi, onye nwetara otu votu, ma kwupụta nsonaazụ na APC secretariat na Ikeja.",
+        declared: "A kwupụtara ya na APC Secretariat, Ikeja na 21 May 2026.",
+        highlights: ["Votu enwetara", "Votu maka onye mpi", "Deputy Governor kemgbe"],
+        mediaTypeVideo: "Fiim mkposa",
+        mediaTypePhoto: "Akpa foto primary",
+        mediaSlides: [
+          { title: "Vidiyo nkwupụta primary", caption: "Fiim mkposa site na nkwupụta nsonaazụ primary APC." },
+          { title: "Oge primary 01", caption: "Nkwupụta nsonaazụ bidoro na APC secretariat na Ikeja." },
+          { title: "Oge primary 02", caption: "Ndị isi pati na ndị nkwado zukọrọ maka nsonaazụ gọọmenti." },
+          { title: "Oge primary 03", caption: "Nlele n'usoro oge nke omume primary nke 21 May." },
+          { title: "Oge primary 04", caption: "Mkposa APC Lagos 2027 batara n'ọkwa ọhụrụ." },
+        ],
+        featureCards: [
+          { title: "Media kit", copy: "Vidiyo nsonaazụ gọọmenti, foto, na akụrụngwa press." },
+          { title: "Okwu", copy: "Okwu, ndetu nnabata, na nkwupụta ọha." },
+          { title: "Fiim mkposa", copy: "Fiim mkpirikpi na oge vidiyo site na mmeghari." },
+        ],
+      },
+      gallery: {
+        label: "Gallery mkposa",
+        title: "Lagos n'ime mmegharị.",
+        description:
+          "Foto ndị ahụ lekwasịrị mmadụ anya: ọrụ ọha, akụrụngwa, ntorobịa, obodo, na ịdị adị nke ndu.",
+        items: [
+          { title: "Ahụmahụ", caption: "Mkparịta ụka ndu na ndị nwere oke na Lagos." },
+          { title: "Akụrụngwa", caption: "Oge nyocha na commissioning gafee Lagos." },
+          { title: "Mmeghari", caption: "Njikọ ndị mmadụ gafee obodo." },
+          { title: "Obodo", caption: "Mmekọrịta na cooperatives na grassroots." },
+          { title: "Ntorobịa", caption: "Imepe ụzọ maka ndị ntorobịa na ọrụ obodo." },
+          { title: "Okwukwe & Ọrụ", caption: "Ndú ọha gbadoro ụkwụ na nkwanye ùgwù na obodo." },
+        ],
+      },
+    },
+    about: {
+      ...en.about,
+      head: {
+        title: "Banyere Hamzat",
+        description:
+          "Gụọ biography Dr. Kadri Obafemi Hamzat, ndekọ ọrụ ọha, ndabere teknụzụ, ọrụ mmezi, na njem ndu ya na Lagos State.",
+      },
+      hero: {
+        title: "Ọrụ. Ihe Ọhụrụ. Nsonaazụ.",
+        description:
+          "Dr. Kadri Obafemi Hamzat ewuola ọrụ ya gburugburu idozi nsogbu, imezi sistemụ, na imepụta ohere maka ndị Lagos.",
+      },
+      biography: {
+        label: "Biography",
+        title: "Onye statesman nke oge a nke injinia, mmezi, na ọrụ Lagos kpụpụtara.",
+        description:
+          "A mụrụ Dr. Kadri Obafemi Hamzat n'ezinụlọ gbadoro ụkwụ n'ọrụ ọha, o tinyela ndụ ya n'imezi sistemụ na iwu ohere. Njem ọrụ ya gafere teknụzụ, ego, ọchịchị ọha, na ndu executive.",
+        paragraphs: [
+          "Ọ nwetara degrees site na University of Ibadan na Cranfield University na United Kingdom tupu o wuo ọrụ a na-akwanyere ùgwù na ụlọ ọrụ ụwa na azụmahịa Nigeria.",
+          "Ịbanye ya n'ọrụ ọha malitere otu n'ime njem ọchịchị kacha baa uru na Lagos State: mmezi teknụzụ, public works, modernisation njem, na ndu siri ike.",
+          "Àkwà mmiri n'etiti ahụmahụ na ihe ọhụrụ.",
+        ],
+        imageTitle: "Ikike a nwalere.",
+        imageCaption: "Ndú gbadoro ụkwụ na mmezu, ọ bụghị ngosi.",
+      },
+      credentials: {
+        label: "DNA Ndú",
+        title: "Profaịlụ Lagos chọrọ maka afọ iri na-abịa.",
+        description:
+          "Ntọala mkposa bụ ikike tinyere ịdịgide, ihe ọhụrụ, na itinye onye ọ bụla.",
+        items: [
+          { title: "Injinia", description: "Onye na-eche sistemụ, zụrụ iji dozie nsogbu obodo na akụrụngwa siri ike." },
+          { title: "Teknokrat", description: "Ahụmahụ gafee teknụzụ, ego, ọchịchị ọha, na governance." },
+          { title: "Onye Ọrụ Ọha", description: "Karịrị afọ iri abụọ n'inyere aka iwulite Lagos site na mmezi, ọrụ, na ihe ọhụrụ." },
+          { title: "Onye Na-akwado Agụmakwụkwọ", description: "Lekwasịrị anya na uche kwadebere, ọgụgụ dijitalụ, STEM, na ụzọ ohere." },
+        ],
+      },
+      timeline: {
+        label: "Usoro oge ọrụ ọha",
+        title: "Ndekọ wuru n'ime oge.",
+        description:
+          "Ọ bụghị mkposa abalị. Ọ bụ ogologo njem nke ọrụ, mmezi, na mmezu maka Lagos.",
+        items: [
+          { year: "Mbido Ọrụ", title: "Injinia na Teknokrat Ụwa", description: "Wuru ahụmahụ gafee teknụzụ, ego, na ọchịchị ọha tupu ịbanye n'ọrụ ọha." },
+          { year: "Science & Tech", title: "Commissioner for Science and Technology", description: "Duru modernisation ọrụ ọha site na teknụzụ ma nyere aka ịkwalite ntọala dijitalụ Lagos." },
+          { year: "Works", title: "Special Adviser on Works", description: "Nyere aka na nhazi akụrụngwa, discipline mmezu, na public works lekwasịrị njem anya." },
+          { year: "2019 - Ugbu a", title: "Deputy Governor of Lagos State", description: "Na-arụ ọrụ n'akụkụ Governor Babajide Sanwo-Olu n'otu n'ime akụ na ụba obodo kacha ibu n'Afrika." },
+          { year: "2027", title: "Nhọrọ APC Kwesịrị Ịkwado", description: "Ndị mgbasa ozi ukwu Nigeria kọrọ ya dị ka nhọrọ APC/GAC maka asọmpi gọvanọ Lagos 2027." },
+        ],
+      },
+      character: {
+        imageTitle: "Gbanyere mkpọrọgwụ n'obodo.",
+        imageCaption: "Mkposa na-ege ntị tupu ọ kwuo.",
+        label: "Àgwà ndu",
+        title: "Dị mfe iru, siri ike, ma lekwasịrị Lagos anya nke ọma.",
+        description:
+          "Akụ kacha sie ike n'ime mkposa Obafemi Hamzat abụghị mkpọtụ. Ọ bụ ndekọ nke ịpụta, ịghọta sistemụ, ịkwanyere obodo ùgwù, na ime ka Lagos na-aga n'ihu.",
+        quote:
+          "Ahụmahụ abụghị nostalgia. Ọ bụ nkwadebe maka ihe Lagos ga-abụ ọzọ.",
+      },
+    },
+    visionPage: {
+      ...en.visionPage,
+      head: {
+        title: "Ọhụụ 2027",
+        description:
+          "Nyochaa ọhụụ Lagos 2027 nke Dr. Kadri Obafemi Hamzat maka ọchịchị dijitalụ, ọrụ, agụmakwụkwọ, njem, akụrụngwa, ahụike, na nchekwa.",
+      },
+      hero: {
+        title: "Isi Ọzọ Nke Lagos.",
+        description:
+          "Gọọmenti nwere ọgụgụ isi. Akụ na ụba jikọtara. Lagos na-etinye onye ọ bụla. Ọhụụ 2027 wuru maka mmadụ, akụrụngwa, ohere, na teknụzụ.",
+      },
+      pillarsIntro: {
+        label: "Ogidi manifesto",
+        title: "Agenda ọchịchị, ọ bụghị slogan mkposa.",
+        description:
+          "Ọhụụ a haziri ya gburugburu sistemụ kwa ụbọchị na-ekpebi ma Lagos na-arụ ọrụ maka ụmụ akwụkwọ, ndị ahịa, founders, ndị ọrụ, ezinụlọ, na obodo.",
+      },
+      pillars: [
+        { title: "Digital Lagos 2.0", summary: "Gọọmenti nwere ọgụgụ isi, akụ na ụba jikọtara, ọrụ ọha dijitalụ, hub ihe ọhụrụ, na sistemụ obodo dị njikere maka AI.", points: ["Ọchịchị dijitalụ", "Smart transportation systems", "Wi-Fi ọha", "Hub ihe ọhụrụ", "Ọrụ ọha AI kwadoro"] },
+        { title: "Ọganihu Akụ Na Ụba", summary: "SME karịa, ike ndị ntorobịa, ụzọ itinye ego, ego azụmahịa, na mmezi na-eme ka azụmahịa dị mfe.", points: ["Ọrụ karịa", "SME karịa", "Ike ndị ntorobịa", "Ịdọta itinye ego", "Mmezi na-akwado azụmahịa"] },
+        { title: "Agụmakwụkwọ & Ike Mmadụ", summary: "Ụlọ akwụkwọ ọha nke oge a, STEM, ọgụgụ dijitalụ, ike ọrụ aka, na mmepe ndị nkuzi.", points: ["Ụlọ akwụkwọ ọha nke oge a", "Agụmakwụkwọ STEM", "Ike ọrụ aka", "Ọgụgụ dijitalụ", "Mmepe ndị nkuzi"] },
+        { title: "Mgbanwe Akụrụngwa", summary: "Ụzọ, ụgbọ oloko, ụzọ mmiri, smart mobility, na corridors ga-ebuga ndị Lagos ngwa ngwa na nchekwa.", points: ["Ụzọ na ụgbọ oloko", "Ụzọ mmiri", "Njem dị nchebe", "Commute a pụrụ ịtụ anya", "Akụrụngwa nwere ọgụgụ isi"] },
+        { title: "Ahụike Maka Onye Ọ Bula", summary: "Ahụike mbụ siri ike, nlekọta nne, mmeghachi mberede, ahụike dijitalụ, na ụlọọgwụ obodo.", points: ["Ahụike mbụ", "Nlekọta nne", "Mmeghachi mberede", "Akụrụngwa ahụike dijitalụ", "Ụlọọgwụ obodo"] },
+      ],
+      roadmapIntro: {
+        label: "Roadmap mmepe",
+        title: "Roadmap Lagos ndị mmadụ nwere ike iso.",
+        description:
+          "Mkposa kwesịrị ime ka nkwa pụta ìhè. Ụdị roadmap na-atụgharị priorities ka ọ bụrụ phases, dashboards, na mmezu ọha a pụrụ ịtụ.",
+      },
+      roadmap: [
+        { phase: "Ụbọchị 100 Mbụ", title: "Open Government Sprint", description: "Bipụta dashboard mmezu doro anya, kwado corridors kacha mkpa, ma mee ka ụzọ nzaghachi ụmụ amaala rụọ ọrụ." },
+        { phase: "Afọ Mbụ", title: "Smart Service Delivery", description: "Mee ka ọrụ gọọmenti a na-achọkarị bụrụ dijitalụ ma gbasaa ohere obodo site na mobile-first channels." },
+        { phase: "2027 - 2031", title: "Uto Lagos Maka Onye Ọ Bula", description: "Gbasaa ọrụ, agụmakwụkwọ, njem, ahụike, na mmemme ihe ọhụrụ gafee divisions ise niile nke Lagos." },
+      ],
+      dashboardNote:
+        "Echiche dashboard ọha: priorities, milestones, na nzaghachi obodo.",
+      tech: {
+        imageTitle: "Teknụzụ kwesịrị ime ka ndụ kwa ụbọchị ka mma.",
+        imageCaption: "Ọdịnihu Lagos bụ dijitalụ, nwere nkà, ma na-ebute mmadụ ụzọ.",
+        label: "Ọchịchị na-ebute tech ụzọ",
+        title: "Lagos nwere ọgụgụ isi maka onye ọ bụla.",
+        description:
+          "Ebumnuche teknụzụ abụghị ịchọ mma. Ọ kwesịrị ibelata ahịrị, ime ka njem ka mma, mee azụmahịa mfe, mee ka usoro ahụike sie ike, ma nyere ndị ntorobịa Lagos aka ịsọmpi n'ụwa.",
+        quote:
+          "Bugharịa ndị mmadụ ngwa ngwa, n'enweghị ihe egwu, na n'amamihe. Kwadebe uche. Too azụmahịa. Mee ọrụ ka ọ bụrụ nke oge a.",
+      },
+    },
+    impact: {
+      ...en.impact,
+      head: {
+        title: "Mmezu na Mmetụta",
+        description:
+          "Nyochaa mmetụta ọrụ ọha Dr. Kadri Obafemi Hamzat na Lagos gafee mgbanwe dijitalụ, akụrụngwa, mmezi public sector, na ihe ọhụrụ ndị ntorobịa.",
+      },
+      hero: {
+        title: "Wuru Na Nsonaazụ.",
+        description:
+          "Mkposa a gbadoro ụkwụ na ndekọ ọrụ ọha: mgbanwe dijitalụ, mmezu akụrụngwa, discipline mmezi, na ohere maka ọdịnihu.",
+      },
+      pillarsIntro: {
+        label: "Ogidi mmetụta",
+        title: "Ihe akaebe dị n'azụ mkposa.",
+        description:
+          "Ozi ndọrọ ndọrọ ọchịchị kacha sie ike bụ mmezu ndị mmadụ nwere ike ịhụ na ndụ kwa ụbọchị.",
+      },
+      achievements: [
+        { metric: "11 ERP modules", title: "Mgbanwe Dijitalụ", description: "Mmezi teknụzụ duziri nyere Lagos aka ịdị n'etiti gọọmenti Afrika nwere nnukwu ebumnuche dijitalụ." },
+        { metric: "First cable-stayed", title: "Lekki-Ikoyi Link Bridge", description: "Onyinye na akụrụngwa pụrụ iche siri njikọ ike, belata nrụgide njem, ma kwado azụmahịa." },
+        { metric: "Ghost workers belatara", title: "Mmezi Ọrụ Ọha", description: "Echiche sistemụ, ijikọ teknụzụ, na discipline nchịkwa mere ka ọrụ gọọmenti ka mma." },
+        { metric: "Njikere maka ọdịnihu", title: "Ntorobịa & Ihe Ọhụrụ", description: "Nkwado maka ihe ọhụrụ, entrepreneurship, na ọgụgụ dijitalụ ka nọ n'etiti Lagos nke echi." },
+      ],
+      tracker: {
+        label: "Nlele mmetụta obodo",
+        title: "Soro ọrụ site na isiokwu.",
+        description:
+          "Archive mmetụta mkposa kwesịrị inyere ndị ntuli aka nyochaa ihe emerela, ebe o metụtara ndụ ha, na ihe na-abịa.",
+        filters: [
+          { id: "all", label: "Niile" },
+          { id: "digital", label: "Dijitalụ" },
+          { id: "infrastructure", label: "Akụrụngwa" },
+          { id: "reform", label: "Mmezi" },
+          { id: "youth", label: "Ntorobịa" },
+        ],
+        items: [
+          { categoryId: "digital", category: "Dijitalụ", title: "Mgbanwe Dijitalụ", description: "Mmezi teknụzụ na enterprise systems nyere aka ime ka public service delivery na Lagos bụrụ nke oge a." },
+          { categoryId: "infrastructure", category: "Akụrụngwa", title: "Akụrụngwa Obodo", description: "Public works na onyinye transportation kwadoro Lagos mega-city jikọtara nke ọma." },
+          { categoryId: "reform", category: "Mmezi", title: "Mmezi Ọrụ Ọha", description: "Echiche sistemụ na modernization nchịkwa mere ka gọọmenti si arụ ọrụ maka mmadụ ka mma." },
+          { categoryId: "youth", category: "Ntorobịa", title: "Ihe Ọhụrụ & Ohere", description: "Ntorobịa, entrepreneurship, ọgụgụ dijitalụ, na ihe ọhụrụ dị n'etiti ọdịnihu Lagos." },
+        ],
+      },
+      infrastructure: {
+        imageTitle: "Echiche mega-city.",
+        imageCaption: "Akụrụngwa bụ otú ohere si aga.",
+        label: "Akụrụngwa na modernization",
+        title: "Ndekọ jikọtara na ọdịnihu obodo Lagos.",
+        description:
+          "Ozi mmezu kwesịrị ijikọ ọrụ gara aga na ebumnuche ọdịnihu: ụzọ, bridges, transport systems, public modernization, na obodo na-aga n'ihu.",
+        cta: "Gaa na archive gọọmenti",
+      },
+      gallery: {
+        label: "Gallery",
+        title: "Ọrụ ọha n'ime foto.",
+        description:
+          "Archive foto kwesịrị ịdị mmetụta, mmadụ, ma bụrụ nke Lagos kpọmkwem.",
+        items: [
+          { title: "Ahụmahụ", caption: "Mkparịta ụka ndu na ndị nwere oke na Lagos." },
+          { title: "Akụrụngwa", caption: "Oge nyocha na commissioning gafee Lagos." },
+          { title: "Mmeghari", caption: "Njikọ ndị mmadụ gafee obodo." },
+          { title: "Obodo", caption: "Mmekọrịta na cooperatives na grassroots." },
+          { title: "Ntorobịa", caption: "Imepe ụzọ maka ndị ntorobịa na ọrụ obodo." },
+          { title: "Okwukwe & Ọrụ", caption: "Ndú ọha gbadoro ụkwụ na nkwanye ùgwù na obodo." },
+        ],
+      },
+    },
+    join: {
+      ...en.join,
+      head: {
+        title: "Soro Mmeghari",
+        description:
+          "Soro mmeghari mkposa Lagos 2027 nke Dr. Kadri Obafemi Hamzat. Rụọ ọrụ afọ ofufo, hazie na ward gị, soro nkwado media, debanye mmasị, ma ọ bụ nata mmelite gọọmenti.",
+      },
+      hero: {
+        title: "Lagos Na-ebili. Soro Na Ya.",
+        description:
+          "Mkposa a karịrị ndọrọ ndọrọ ọchịchị. Ọ bụ maka obodo dị nchebe, azụmahịa siri ike, ndị ntorobịa nwere ike, agụmakwụkwọ ka mma, akụrụngwa nke oge a, na Lagos ebe onye ọ bụla nwere ohere ito.",
+      },
+      why: {
+        label: "Ihe mere mmeghari a ji dị mkpa",
+        title: "Gaba ọnụ, ward n'ward.",
+        description:
+          "Imeri Lagos chọrọ ihe karịrị ozi. Ọ chọrọ mmadụ: ụmụ akwụkwọ, ụmụ nwanyị, ndị isi ahịa, ndị ọkachamara, creatives, obodo okwukwe, tech builders, artisans, na ndị nhazi obodo.",
+        items: ["Obodo dị nchebe", "Azụmahịa siri ike", "Ndị ntorobịa nwere ike", "Agụmakwụkwọ ka mma", "Akụrụngwa nke oge a", "Ohere maka nwa amaala ọ bụla"],
+        imageTitle: "Puku kwuru puku ndị Lagos. Otu ọdịnihu.",
+        imageCaption: "Ike grassroots, ahaziri maka Lagos ka mma.",
+      },
+      formIntro: {
+        label: "Fọm ọrụ afọ ofufo",
+        title: "Họrọ otu ịchọrọ isi jee ozi.",
+        description:
+          "Fọm a dị njikere maka njikọ backend n'ọdịnihu. Maka ugbu a, ọ na-anakọta ụdị isonye mkposa zuru ezu ma kwado flow ndị ọrụ afọ ofufo.",
+        card:
+          "Bụrụ olu ward, onye nhazi campus, media partner, donor contact, ma ọ bụ community mobilizer.",
+      },
+      form: {
+        fullName: "Aha zuru ezu",
+        fullNamePlaceholder: "Aha gị zuru ezu",
+        phone: "Ekwentị / WhatsApp",
+        phonePlaceholder: "+234",
+        email: "Email",
+        emailPlaceholder: "you@example.com",
+        location: "LGA / Ward",
+        locationPlaceholder: "Ikeja, Ikorodu, Epe...",
+        participation: "Ụdị isonye",
+        message: "Ozi",
+        messagePlaceholder: "Gwa anyị otu ịchọrọ isi nyere aka.",
+        submit: "Zipu Mmasị",
+        submittedPrefix: "Edekọrọ mmasị gị maka",
+        submittedSuffix:
+          "n'ọrụ mpaghara a. Jikọọ fọm a na CRM, email, ma ọ bụ database mkposa mgbe backend dị njikere.",
+        roles: [
+          "Onye ọrụ afọ ofufo",
+          "Ward Coordinator",
+          "Youth Mobilizer",
+          "Women Coalition",
+          "Campus Ambassador",
+          "Media Partnership",
+          "Event Registration",
+          "Donation Interest",
+        ],
+      },
+      cards: [
+        { title: "Obodo WhatsApp", description: "Rịọ invite maka mmelite ward, canvassing, na alerts ihe omume." },
+        { title: "Media Partnership", description: "Kwado rapid response, storytelling, press coordination, na ọdịnaya dijitalụ." },
+        { title: "Event RSVP", description: "Debanye mmasị maka town halls, youth forums, ahịa visits, na policy events." },
+      ],
+      newsletter: {
+        title: "Nata mmelite mkposa gọọmenti.",
+        description:
+          "Akuko, mmelite field, speeches, media kit alerts, ọrụ ndị ọrụ afọ ofufo, na ọkwa ihe omume sitere na mmeghari For A Greater Lagos.",
+        email: "Adreesị email",
+        placeholder: "you@example.com",
+        subscribe: "Debanye aha",
+        submitted: "Echekwara mmasị newsletter n'obere prototype a.",
+      },
+    },
+  },
 };
 
 export function getCampaignPageCopy(language: LanguageCode) {

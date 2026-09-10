@@ -6,11 +6,8 @@ import {
   SectionIntro,
 } from "@/components/campaign/CampaignPrimitives";
 import { campaignAeoContent } from "@/data/aeoContent";
-import {
-  campaignImages,
-  campaignSite,
-  movementRoles,
-} from "@/data/campaignContent";
+import { campaignImages } from "@/data/campaignContent";
+import { useCampaignPageCopy } from "@/lib/pageCopy";
 import { containerVariants, fadeInUp, itemVariants } from "@/lib/utils";
 import {
   CheckCircle2,
@@ -23,19 +20,14 @@ import {
 import { motion } from "framer-motion";
 import { FormEvent, useState } from "react";
 
-const whyJoin = [
-  "Safer communities",
-  "Stronger businesses",
-  "Empowered youth",
-  "Better education",
-  "Modern infrastructure",
-  "Opportunity for every citizen",
-];
+const cardIcons = [MessageCircle, Megaphone, MapPin];
 
 export default function JoinPage() {
-  const [selectedRole, setSelectedRole] = useState(movementRoles[0]);
+  const { join } = useCampaignPageCopy();
+  const [selectedRoleIndex, setSelectedRoleIndex] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   const [newsletterSubmitted, setNewsletterSubmitted] = useState(false);
+  const selectedRole = join.form.roles[selectedRoleIndex] ?? join.form.roles[0];
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -50,8 +42,8 @@ export default function JoinPage() {
   return (
     <CampaignLayout>
       <CampaignHead
-        title="Join The Movement"
-        description="Join Dr. Kadri Obafemi Hamzat's Lagos 2027 campaign movement. Volunteer, organize in your ward, join media support, register interest, or get official updates."
+        title={join.head.title}
+        description={join.head.description}
         path="/join"
         keywords={[
           "join Obafemi Hamzat campaign",
@@ -65,8 +57,8 @@ export default function JoinPage() {
 
       <main>
         <PageHero
-          title="Lagos Is Rising. Be Part Of It."
-          description="This campaign is bigger than politics. It is about safer communities, stronger businesses, empowered youth, better education, modern infrastructure, and a Lagos where everyone has the opportunity to thrive."
+          title={join.hero.title}
+          description={join.hero.description}
           image={campaignImages.community}
         />
 
@@ -74,9 +66,9 @@ export default function JoinPage() {
           <div className="container mx-auto grid gap-12 lg:grid-cols-[0.86fr_1.14fr] lg:items-center">
             <div>
               <SectionIntro
-                label="Why this movement matters"
-                title="Forward together, ward by ward."
-                description="Winning Lagos requires more than a message. It requires people: students, women, market leaders, professionals, creatives, faith communities, tech builders, artisans, and local organizers."
+                label={join.why.label}
+                title={join.why.title}
+                description={join.why.description}
               />
               <motion.div
                 initial="hidden"
@@ -85,7 +77,7 @@ export default function JoinPage() {
                 whileInView="visible"
                 className="mt-8 grid gap-3 sm:grid-cols-2"
               >
-                {whyJoin.map((item) => (
+                {join.why.items.map((item) => (
                   <motion.div
                     key={item}
                     variants={itemVariants}
@@ -102,8 +94,8 @@ export default function JoinPage() {
             </div>
             <ImagePanel
               image={campaignImages.impact}
-              title="Thousands of Lagosians. One future."
-              caption="Grassroots energy, organized for a greater Lagos."
+              title={join.why.imageTitle}
+              caption={join.why.imageCaption}
               className="h-[520px]"
             />
           </div>
@@ -113,9 +105,9 @@ export default function JoinPage() {
           <div className="container mx-auto grid gap-12 lg:grid-cols-[0.76fr_1.24fr]">
             <div>
               <SectionIntro
-                label="Volunteer form"
-                title="Choose how you want to serve."
-                description="This form is ready for backend connection later. For now, it captures the full campaign participation model and confirms the volunteer flow."
+                label={join.formIntro.label}
+                title={join.formIntro.title}
+                description={join.formIntro.description}
               />
               <motion.div
                 initial="hidden"
@@ -126,8 +118,7 @@ export default function JoinPage() {
               >
                 <UsersRound aria-hidden="true" className="h-8 w-8 text-secondary-400" />
                 <p className="mt-5 font-heading text-2xl font-black leading-tight text-white">
-                  Become a ward voice, campus organizer, media partner, donor
-                  contact, or community mobilizer.
+                  {join.formIntro.card}
                 </p>
               </motion.div>
             </div>
@@ -146,53 +137,53 @@ export default function JoinPage() {
                     htmlFor="full-name"
                     className="text-sm font-black text-text-primary"
                   >
-                    Full name
+                    {join.form.fullName}
                   </label>
                   <input
                     id="full-name"
                     required
                     className="mt-2 h-12 w-full rounded-card border border-[#D0D5DD] px-4 text-sm outline-none transition-colors focus:border-[var(--campaign-green-700)]"
-                    placeholder="Your full name"
+                    placeholder={join.form.fullNamePlaceholder}
                   />
                 </div>
                 <div>
                   <label htmlFor="phone" className="text-sm font-black text-text-primary">
-                    Phone / WhatsApp
+                    {join.form.phone}
                   </label>
                   <input
                     id="phone"
                     required
                     className="mt-2 h-12 w-full rounded-card border border-[#D0D5DD] px-4 text-sm outline-none transition-colors focus:border-[var(--campaign-green-700)]"
-                    placeholder="+234"
+                    placeholder={join.form.phonePlaceholder}
                   />
                 </div>
                 <div>
                   <label htmlFor="email" className="text-sm font-black text-text-primary">
-                    Email
+                    {join.form.email}
                   </label>
                   <input
                     id="email"
                     type="email"
                     className="mt-2 h-12 w-full rounded-card border border-[#D0D5DD] px-4 text-sm outline-none transition-colors focus:border-[var(--campaign-green-700)]"
-                    placeholder="you@example.com"
+                    placeholder={join.form.emailPlaceholder}
                   />
                 </div>
                 <div>
                   <label htmlFor="location" className="text-sm font-black text-text-primary">
-                    LGA / Ward
+                    {join.form.location}
                   </label>
                   <input
                     id="location"
                     required
                     className="mt-2 h-12 w-full rounded-card border border-[#D0D5DD] px-4 text-sm outline-none transition-colors focus:border-[var(--campaign-green-700)]"
-                    placeholder="Ikeja, Ikorodu, Epe..."
+                    placeholder={join.form.locationPlaceholder}
                   />
                 </div>
               </div>
 
               <fieldset className="mt-6">
                 <legend className="text-sm font-black text-text-primary">
-                  Participation type
+                  {join.form.participation}
                 </legend>
                 <motion.div
                   initial="hidden"
@@ -201,14 +192,14 @@ export default function JoinPage() {
                   whileInView="visible"
                   className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
                 >
-                  {movementRoles.map((role) => (
+                  {join.form.roles.map((role, index) => (
                     <motion.button
                       key={role}
                       type="button"
-                      onClick={() => setSelectedRole(role)}
+                      onClick={() => setSelectedRoleIndex(index)}
                       variants={itemVariants}
                       className={`min-h-[70px] rounded-card border px-4 py-3 text-left text-sm font-black transition-colors duration-200 ${
-                        selectedRole === role
+                        selectedRoleIndex === index
                           ? "border-[var(--campaign-green-900)] bg-[var(--campaign-green-900)] text-white"
                           : "border-[#D0D5DD] bg-bg-primary text-text-primary hover:border-secondary-500"
                       }`}
@@ -221,13 +212,13 @@ export default function JoinPage() {
 
               <div className="mt-6">
                 <label htmlFor="message" className="text-sm font-black text-text-primary">
-                  Message
+                  {join.form.message}
                 </label>
                 <textarea
                   id="message"
                   rows={5}
                   className="mt-2 w-full rounded-card border border-[#D0D5DD] px-4 py-3 text-sm outline-none transition-colors focus:border-[var(--campaign-green-700)]"
-                  placeholder="Tell us how you want to help."
+                  placeholder={join.form.messagePlaceholder}
                 />
               </div>
 
@@ -235,14 +226,13 @@ export default function JoinPage() {
                 type="submit"
                 className="mt-6 h-12 w-full rounded-card bg-secondary-500 px-6 text-sm font-black text-primary-900 transition-colors duration-200 hover:bg-secondary-400"
               >
-                Submit Interest
+                {join.form.submit}
               </button>
 
               {submitted && (
                 <p className="mt-4 rounded-card bg-[var(--lagos-sky)] p-4 text-sm font-bold leading-6 text-[var(--campaign-green-900)]">
-                  Your {selectedRole.toLowerCase()} interest has been recorded
-                  locally. Connect this form to CRM, email, or campaign database
-                  when the backend is ready.
+                  {join.form.submittedPrefix} {selectedRole}{" "}
+                  {join.form.submittedSuffix}
                 </p>
               )}
             </motion.form>
@@ -257,42 +247,27 @@ export default function JoinPage() {
             whileInView="visible"
             className="container mx-auto grid gap-4 md:grid-cols-3"
           >
-            {[
-              {
-                title: "WhatsApp Community",
-                description:
-                  "Request an invite for ward-level updates, canvassing, and event alerts.",
-                Icon: MessageCircle,
-              },
-              {
-                title: "Media Partnership",
-                description:
-                  "Support rapid response, storytelling, press coordination, and digital content.",
-                Icon: Megaphone,
-              },
-              {
-                title: "Event RSVP",
-                description:
-                  "Register interest for town halls, youth forums, market visits, and policy events.",
-                Icon: MapPin,
-              },
-            ].map(({ title, description, Icon }) => (
-              <motion.article
-                key={title}
-                variants={itemVariants}
-                className="rounded-card border border-[rgba(6,59,46,0.12)] bg-bg-primary p-6"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-card bg-[var(--campaign-green-900)] text-white">
-                  <Icon aria-hidden="true" className="h-6 w-6" />
-                </div>
-                <h2 className="mt-5 font-heading text-2xl font-black text-text-primary">
-                  {title}
-                </h2>
-                <p className="mt-3 text-sm leading-7 text-text-secondary">
-                  {description}
-                </p>
-              </motion.article>
-            ))}
+            {join.cards.map(({ title, description }, index) => {
+              const Icon = cardIcons[index] ?? MessageCircle;
+
+              return (
+                <motion.article
+                  key={title}
+                  variants={itemVariants}
+                  className="rounded-card border border-[rgba(6,59,46,0.12)] bg-bg-primary p-6"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-card bg-[var(--campaign-green-900)] text-white">
+                    <Icon aria-hidden="true" className="h-6 w-6" />
+                  </div>
+                  <h2 className="mt-5 font-heading text-2xl font-black text-text-primary">
+                    {title}
+                  </h2>
+                  <p className="mt-3 text-sm leading-7 text-text-secondary">
+                    {description}
+                  </p>
+                </motion.article>
+              );
+            })}
           </motion.div>
         </section>
 
@@ -309,15 +284,13 @@ export default function JoinPage() {
                 variants={fadeInUp}
                 className="mt-5 max-w-2xl font-heading text-4xl font-black leading-tight text-white md:text-5xl"
               >
-                Get official campaign updates.
+                {join.newsletter.title}
               </motion.h2>
               <motion.p
                 variants={fadeInUp}
                 className="mt-5 max-w-xl text-base leading-8 text-white/72"
               >
-                News, field updates, speeches, media kit alerts, volunteer
-                assignments, and event announcements from the {campaignSite.tagline}
-                movement.
+                {join.newsletter.description}
               </motion.p>
             </motion.div>
             <motion.form
@@ -329,7 +302,7 @@ export default function JoinPage() {
               className="rounded-card bg-white p-6 text-text-primary md:p-8"
             >
               <label htmlFor="newsletter-email" className="text-sm font-black">
-                Email address
+                {join.newsletter.email}
               </label>
               <div className="mt-3 grid gap-3 sm:grid-cols-[1fr_auto]">
                 <input
@@ -337,18 +310,18 @@ export default function JoinPage() {
                   type="email"
                   required
                   className="h-12 rounded-card border border-[#D0D5DD] px-4 text-sm outline-none transition-colors focus:border-[var(--campaign-green-700)]"
-                  placeholder="you@example.com"
+                  placeholder={join.newsletter.placeholder}
                 />
                 <button
                   type="submit"
                   className="h-12 rounded-card bg-secondary-500 px-6 text-sm font-black text-primary-900 transition-colors duration-200 hover:bg-secondary-400"
                 >
-                  Subscribe
+                  {join.newsletter.subscribe}
                 </button>
               </div>
               {newsletterSubmitted && (
                 <p className="mt-4 text-sm font-bold text-[var(--campaign-green-700)]">
-                  Newsletter interest saved locally for this prototype.
+                  {join.newsletter.submitted}
                 </p>
               )}
             </motion.form>

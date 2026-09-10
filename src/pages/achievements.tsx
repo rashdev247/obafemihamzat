@@ -7,11 +7,8 @@ import {
   SectionIntro,
 } from "@/components/campaign/CampaignPrimitives";
 import { campaignAeoContent } from "@/data/aeoContent";
-import {
-  achievements,
-  campaignImages,
-  galleryItems,
-} from "@/data/campaignContent";
+import { campaignImages, galleryItems } from "@/data/campaignContent";
+import { useCampaignPageCopy } from "@/lib/pageCopy";
 import { containerVariants, fadeInUp, itemVariants } from "@/lib/utils";
 import {
   ArrowUpRight,
@@ -25,54 +22,29 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 
-const impactFilters = ["All", "Digital", "Infrastructure", "Reform", "Youth"];
-
-const impactItems = [
-  {
-    category: "Digital",
-    title: "Digital Transformation",
-    description:
-      "Technology-led reforms and enterprise systems helped modernize public service delivery in Lagos.",
-    Icon: Cpu,
-  },
-  {
-    category: "Infrastructure",
-    title: "Urban Infrastructure",
-    description:
-      "Public works and transportation contributions supported a more connected Lagos mega-city.",
-    Icon: Building,
-  },
-  {
-    category: "Reform",
-    title: "Public Service Reform",
-    description:
-      "Systems thinking and administrative modernization improved how government works for people.",
-    Icon: Wrench,
-  },
-  {
-    category: "Youth",
-    title: "Innovation & Opportunity",
-    description:
-      "Youth, entrepreneurship, digital literacy, and innovation remain central to the Lagos future.",
-    Icon: UsersRound,
-  },
-];
+const impactIcons = {
+  digital: Cpu,
+  infrastructure: Building,
+  reform: Wrench,
+  youth: UsersRound,
+};
 
 export default function AchievementsPage() {
-  const [filter, setFilter] = useState("All");
+  const { impact } = useCampaignPageCopy();
+  const [filter, setFilter] = useState("all");
   const filteredItems = useMemo(
     () =>
-      filter === "All"
-        ? impactItems
-        : impactItems.filter((item) => item.category === filter),
-    [filter]
+      filter === "all"
+        ? impact.tracker.items
+        : impact.tracker.items.filter((item) => item.categoryId === filter),
+    [filter, impact.tracker.items]
   );
 
   return (
     <CampaignLayout>
       <CampaignHead
-        title="Achievements and Impact"
-        description="Review Dr. Kadri Obafemi Hamzat's Lagos public service impact across digital transformation, infrastructure, public sector reform, and youth innovation."
+        title={impact.head.title}
+        description={impact.head.description}
         path="/achievements"
         keywords={[
           "Obafemi Hamzat achievements",
@@ -86,17 +58,17 @@ export default function AchievementsPage() {
 
       <main>
         <PageHero
-          title="Built on Results."
-          description="The campaign is anchored in a public service record: digital transformation, infrastructure delivery, reform discipline, and future-focused opportunity."
+          title={impact.hero.title}
+          description={impact.hero.description}
           image={campaignImages.impact}
         />
         <section className="bg-white px-6 py-20">
           <div className="container mx-auto">
             <SectionIntro
               align="center"
-              label="Impact pillars"
-              title="The proof points behind the campaign."
-              description="The strongest political message is delivery that people can recognize in their daily lives."
+              label={impact.pillarsIntro.label}
+              title={impact.pillarsIntro.title}
+              description={impact.pillarsIntro.description}
             />
             <motion.div
               initial="hidden"
@@ -105,7 +77,7 @@ export default function AchievementsPage() {
               whileInView="visible"
               className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-4"
             >
-              {achievements.map((item) => (
+              {impact.achievements.map((item) => (
                 <motion.article
                   key={item.title}
                   variants={itemVariants}
@@ -130,9 +102,9 @@ export default function AchievementsPage() {
           <div className="container mx-auto grid gap-12 lg:grid-cols-[0.82fr_1.18fr]">
             <div>
               <SectionIntro
-                label="Community impact tracker"
-                title="Track the work by theme."
-                description="A campaign-grade impact archive should help voters explore what has been done, where it connects to their lives, and what comes next."
+                label={impact.tracker.label}
+                title={impact.tracker.title}
+                description={impact.tracker.description}
               />
               <motion.div
                 initial="hidden"
@@ -141,20 +113,20 @@ export default function AchievementsPage() {
                 whileInView="visible"
                 className="mt-8 flex flex-wrap gap-3"
               >
-                {impactFilters.map((item) => (
+                {impact.tracker.filters.map((item) => (
                   <motion.button
-                    key={item}
+                    key={item.id}
                     type="button"
-                    onClick={() => setFilter(item)}
+                    onClick={() => setFilter(item.id)}
                     variants={itemVariants}
                     className={`inline-flex h-11 items-center gap-2 rounded-card border px-4 text-sm font-black transition-colors duration-200 ${
-                      filter === item
+                      filter === item.id
                         ? "border-[var(--campaign-green-900)] bg-[var(--campaign-green-900)] text-white"
                         : "border-[rgba(6,59,46,0.16)] bg-white text-text-primary hover:border-secondary-500"
                     }`}
                   >
                     <Filter aria-hidden="true" className="h-4 w-4" />
-                    {item}
+                    {item.label}
                   </motion.button>
                 ))}
               </motion.div>
@@ -166,28 +138,33 @@ export default function AchievementsPage() {
               whileInView="visible"
               className="grid gap-4"
             >
-              {filteredItems.map(({ title, description, Icon, category }) => (
-                <motion.article
-                  key={title}
-                  variants={itemVariants}
-                  className="grid gap-5 rounded-card border border-[rgba(6,59,46,0.12)] bg-white p-6 shadow-brand-card md:grid-cols-[auto_1fr]"
-                >
-                  <div className="flex h-14 w-14 items-center justify-center rounded-card bg-[var(--lagos-sky)] text-[var(--campaign-green-700)]">
-                    <Icon aria-hidden="true" className="h-7 w-7" />
-                  </div>
-                  <div>
-                    <p className="text-xs font-black uppercase tracking-[0.2em] text-secondary-500">
-                      {category}
-                    </p>
-                    <h3 className="mt-2 font-heading text-2xl font-black text-text-primary">
-                      {title}
-                    </h3>
-                    <p className="mt-3 text-sm leading-7 text-text-secondary">
-                      {description}
-                    </p>
-                  </div>
-                </motion.article>
-              ))}
+              {filteredItems.map(({ title, description, category, categoryId }) => {
+                const Icon =
+                  impactIcons[categoryId as keyof typeof impactIcons] ?? Cpu;
+
+                return (
+                  <motion.article
+                    key={title}
+                    variants={itemVariants}
+                    className="grid gap-5 rounded-card border border-[rgba(6,59,46,0.12)] bg-white p-6 shadow-brand-card md:grid-cols-[auto_1fr]"
+                  >
+                    <div className="flex h-14 w-14 items-center justify-center rounded-card bg-[var(--lagos-sky)] text-[var(--campaign-green-700)]">
+                      <Icon aria-hidden="true" className="h-7 w-7" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-black uppercase tracking-[0.2em] text-secondary-500">
+                        {category}
+                      </p>
+                      <h3 className="mt-2 font-heading text-2xl font-black text-text-primary">
+                        {title}
+                      </h3>
+                      <p className="mt-3 text-sm leading-7 text-text-secondary">
+                        {description}
+                      </p>
+                    </div>
+                  </motion.article>
+                );
+              })}
             </motion.div>
           </div>
         </section>
@@ -196,16 +173,16 @@ export default function AchievementsPage() {
           <div className="container mx-auto grid gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
             <ImagePanel
               image={campaignImages.infrastructure}
-              title="Mega-city thinking."
-              caption="Infrastructure is how opportunity moves."
+              title={impact.infrastructure.imageTitle}
+              caption={impact.infrastructure.imageCaption}
               className="h-[540px]"
             />
             <div>
               <SectionIntro
                 inverse
-                label="Infrastructure and modernization"
-                title="A record connected to Lagos' urban future."
-                description="The achievements message should always connect past delivery to future ambition: roads, bridges, transport systems, public modernization, and a city that keeps moving."
+                label={impact.infrastructure.label}
+                title={impact.infrastructure.title}
+                description={impact.infrastructure.description}
               />
               <motion.a
                 initial="hidden"
@@ -217,7 +194,7 @@ export default function AchievementsPage() {
                 rel="noreferrer"
                 className="mt-8 inline-flex h-12 items-center gap-2 rounded-card bg-secondary-500 px-6 text-sm font-black text-primary-900 transition-colors duration-200 hover:bg-secondary-400"
               >
-                Visit official archive
+                {impact.infrastructure.cta}
                 <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
               </motion.a>
             </div>
@@ -228,9 +205,9 @@ export default function AchievementsPage() {
           <div className="container mx-auto">
             <SectionIntro
               align="center"
-              label="Gallery"
-              title="Public service in pictures."
-              description="The visual archive should feel emotional, human, and Lagos-specific."
+              label={impact.gallery.label}
+              title={impact.gallery.title}
+              description={impact.gallery.description}
             />
             <motion.div
               initial="hidden"
@@ -239,15 +216,18 @@ export default function AchievementsPage() {
               whileInView="visible"
               className="mt-10 grid gap-4 md:grid-cols-2 lg:grid-cols-3"
             >
-              {galleryItems.map((item) => (
+              {impact.gallery.items.map((item, index) => {
+                const image = galleryItems[index]?.image ?? campaignImages.impact;
+
+                return (
                 <motion.figure
-                  key={item.title}
+                  key={`${item.title}-${index}`}
                   variants={itemVariants}
                   className="group overflow-hidden rounded-card border border-[rgba(6,59,46,0.12)] bg-bg-primary"
                 >
                   <div className="relative h-[280px] overflow-hidden">
                     <Image
-                      src={item.image}
+                      src={image}
                       alt={item.title}
                       fill
                       sizes="(max-width: 1024px) 100vw, 33vw"
@@ -263,7 +243,8 @@ export default function AchievementsPage() {
                     </p>
                   </figcaption>
                 </motion.figure>
-              ))}
+                );
+              })}
             </motion.div>
           </div>
         </section>

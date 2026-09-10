@@ -7,7 +7,7 @@ import {
   SectionIntro,
 } from "@/components/campaign/CampaignPrimitives";
 import { campaignAeoContent } from "@/data/aeoContent";
-import { campaignImages, roadmap, visionPillars } from "@/data/campaignContent";
+import { campaignImages } from "@/data/campaignContent";
 import { containerVariants, fadeInUp, itemVariants } from "@/lib/utils";
 import {
   BriefcaseBusiness,
@@ -20,73 +20,27 @@ import {
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { getBlobImageUrl } from "@/lib/blobImages";
+import { useCampaignPageCopy } from "@/lib/pageCopy";
 
-const pillarDetails = [
-  {
-    ...visionPillars[0],
-    Icon: Smartphone,
-    points: [
-      "Digital governance",
-      "Smart transportation systems",
-      "Public Wi-Fi access",
-      "Innovation hubs",
-      "AI-powered public services",
-    ],
-  },
-  {
-    ...visionPillars[1],
-    Icon: BriefcaseBusiness,
-    points: [
-      "More jobs",
-      "More SMEs",
-      "Youth empowerment",
-      "Investment attraction",
-      "Business-friendly reforms",
-    ],
-  },
-  {
-    ...visionPillars[2],
-    Icon: GraduationCap,
-    points: [
-      "Modern public schools",
-      "STEM education",
-      "Vocational empowerment",
-      "Digital literacy",
-      "Teacher development",
-    ],
-  },
-  {
-    ...visionPillars[3],
-    Icon: Route,
-    points: [
-      "Roads and rail",
-      "Waterways",
-      "Safer mobility",
-      "Predictable commutes",
-      "Smart infrastructure",
-    ],
-  },
-  {
-    ...visionPillars[4],
-    Icon: HeartPulse,
-    points: [
-      "Primary healthcare",
-      "Maternal care",
-      "Emergency response",
-      "Digital health infrastructure",
-      "Community clinics",
-    ],
-  },
+const pillarIcons = [
+  Smartphone,
+  BriefcaseBusiness,
+  GraduationCap,
+  Route,
+  HeartPulse,
 ];
 
 export default function VisionPage() {
-  const [activePhase, setActivePhase] = useState(roadmap[0]);
+  const { visionPage } = useCampaignPageCopy();
+  const [activePhaseIndex, setActivePhaseIndex] = useState(0);
+  const activePhase =
+    visionPage.roadmap[activePhaseIndex] ?? visionPage.roadmap[0];
 
   return (
     <CampaignLayout>
       <CampaignHead
-        title="Vision 2027"
-        description="Explore Dr. Kadri Obafemi Hamzat's Lagos 2027 vision for digital governance, jobs, education, transport, infrastructure, healthcare, and security."
+        title={visionPage.head.title}
+        description={visionPage.head.description}
         path="/vision-2027"
         keywords={[
           "Obafemi Hamzat Vision 2027",
@@ -100,8 +54,8 @@ export default function VisionPage() {
 
       <main>
         <PageHero
-          title="The Next Chapter of Lagos."
-          description="A smarter government. A connected economy. A more inclusive Lagos. The 2027 vision is built for people, infrastructure, opportunity, and technology."
+          title={visionPage.hero.title}
+          description={visionPage.hero.description}
           image={getBlobImageUrl(
             "i-represented-the-governor-of-lagos-state-mr-babajide-olusola-sanwo-olu-as-special-guest-at-the-_1_fptuu4.jpg",
           )}
@@ -110,9 +64,9 @@ export default function VisionPage() {
           <div className="container mx-auto">
             <SectionIntro
               align="center"
-              label="Manifesto pillars"
-              title="A governing agenda, not campaign slogans."
-              description="The vision is organized around the everyday systems that determine whether Lagos works for students, traders, founders, workers, families, and communities."
+              label={visionPage.pillarsIntro.label}
+              title={visionPage.pillarsIntro.title}
+              description={visionPage.pillarsIntro.description}
             />
             <motion.div
               initial="hidden"
@@ -121,41 +75,45 @@ export default function VisionPage() {
               whileInView="visible"
               className="mt-12 grid gap-5"
             >
-              {pillarDetails.map(({ title, summary, points, Icon }, index) => (
-                <motion.article
-                  key={title}
-                  variants={itemVariants}
-                  className={`grid gap-8 rounded-card border border-[rgba(6,59,46,0.12)] p-6 md:grid-cols-[0.82fr_1.18fr] md:p-8 ${
-                    index % 2 === 0 ? "bg-bg-primary" : "bg-white"
-                  }`}
-                >
-                  <div>
-                    <div className="flex h-14 w-14 items-center justify-center rounded-card bg-[var(--campaign-green-900)] text-white">
-                      <Icon aria-hidden="true" className="h-7 w-7" />
-                    </div>
-                    <h2 className="mt-5 font-heading text-3xl font-black leading-tight text-text-primary">
-                      {title}
-                    </h2>
-                    <p className="mt-4 text-base leading-8 text-text-secondary">
-                      {summary}
-                    </p>
-                  </div>
-                  <motion.div
-                    variants={containerVariants}
-                    className="grid gap-3 sm:grid-cols-2"
+              {visionPage.pillars.map(({ title, summary, points }, index) => {
+                const Icon = pillarIcons[index] ?? Smartphone;
+
+                return (
+                  <motion.article
+                    key={title}
+                    variants={itemVariants}
+                    className={`grid gap-8 rounded-card border border-[rgba(6,59,46,0.12)] p-6 md:grid-cols-[0.82fr_1.18fr] md:p-8 ${
+                      index % 2 === 0 ? "bg-bg-primary" : "bg-white"
+                    }`}
                   >
-                    {points.map((point) => (
-                      <motion.div
-                        key={point}
-                        variants={itemVariants}
-                        className="flex min-h-[78px] items-center rounded-card border border-[rgba(6,59,46,0.1)] bg-white px-5 font-bold text-primary-900 shadow-[0_12px_30px_rgba(7,47,107,0.05)]"
-                      >
-                        {point}
-                      </motion.div>
-                    ))}
-                  </motion.div>
-                </motion.article>
-              ))}
+                    <div>
+                      <div className="flex h-14 w-14 items-center justify-center rounded-card bg-[var(--campaign-green-900)] text-white">
+                        <Icon aria-hidden="true" className="h-7 w-7" />
+                      </div>
+                      <h2 className="mt-5 font-heading text-3xl font-black leading-tight text-text-primary">
+                        {title}
+                      </h2>
+                      <p className="mt-4 text-base leading-8 text-text-secondary">
+                        {summary}
+                      </p>
+                    </div>
+                    <motion.div
+                      variants={containerVariants}
+                      className="grid gap-3 sm:grid-cols-2"
+                    >
+                      {points.map((point) => (
+                        <motion.div
+                          key={point}
+                          variants={itemVariants}
+                          className="flex min-h-[78px] items-center rounded-card border border-[rgba(6,59,46,0.1)] bg-white px-5 font-bold text-primary-900 shadow-[0_12px_30px_rgba(7,47,107,0.05)]"
+                        >
+                          {point}
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  </motion.article>
+                );
+              })}
             </motion.div>
           </div>
         </section>
@@ -165,9 +123,9 @@ export default function VisionPage() {
             <div>
               <SectionIntro
                 inverse
-                label="Development roadmap"
-                title="A Lagos roadmap people can track."
-                description="A campaign should make promises visible. The roadmap model turns priorities into phases, dashboards, and measurable public delivery."
+                label={visionPage.roadmapIntro.label}
+                title={visionPage.roadmapIntro.title}
+                description={visionPage.roadmapIntro.description}
               />
               <motion.div
                 initial="hidden"
@@ -176,11 +134,11 @@ export default function VisionPage() {
                 whileInView="visible"
                 className="mt-8 grid gap-3"
               >
-                {roadmap.map((phase) => (
+                {visionPage.roadmap.map((phase, index) => (
                   <motion.button
                     key={phase.phase}
                     type="button"
-                    onClick={() => setActivePhase(phase)}
+                    onClick={() => setActivePhaseIndex(index)}
                     variants={itemVariants}
                     className={`rounded-card border px-5 py-4 text-left transition-colors duration-200 ${
                       activePhase.phase === phase.phase
@@ -222,8 +180,7 @@ export default function VisionPage() {
                 <div className="h-full w-2/3 bg-secondary-500" />
               </div>
               <p className="mt-4 text-sm font-bold text-text-muted">
-                Public dashboard concept: priorities, milestones, and community
-                feedback.
+                {visionPage.dashboardNote}
               </p>
             </motion.div>
           </div>
@@ -233,15 +190,15 @@ export default function VisionPage() {
           <div className="container mx-auto grid gap-12 lg:grid-cols-[1.08fr_0.92fr] lg:items-center">
             <ImagePanel
               image={campaignImages.youth}
-              title="Technology should improve everyday life."
-              caption="The Lagos future is digital, skilled, and people-first."
+              title={visionPage.tech.imageTitle}
+              caption={visionPage.tech.imageCaption}
               className="h-[520px]"
             />
             <div>
               <SectionIntro
-                label="Tech-forward governance"
-                title="A smarter Lagos for everyone."
-                description="The purpose of technology is not decoration. It should shorten queues, improve transit, simplify business, strengthen health systems, and help young Lagosians compete globally."
+                label={visionPage.tech.label}
+                title={visionPage.tech.title}
+                description={visionPage.tech.description}
               />
               <motion.div
                 initial="hidden"
@@ -251,8 +208,7 @@ export default function VisionPage() {
                 className="mt-8 rounded-card bg-white p-6 shadow-brand-card"
               >
                 <p className="font-heading text-2xl font-black leading-tight text-[var(--campaign-green-900)]">
-                  Move people faster, safer, and smarter. Prepare minds. Grow
-                  enterprise. Modernize services.
+                  {visionPage.tech.quote}
                 </p>
               </motion.div>
             </div>

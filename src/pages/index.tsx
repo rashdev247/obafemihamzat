@@ -16,13 +16,10 @@ import {
 import {
   campaignImages,
   campaignUpdates,
-  lagosAudience,
-  lagosZones,
-  movementStats,
-  primaryResult,
-  visionPillars,
+  primaryResult as primaryResultData,
 } from "@/data/campaignContent";
 import { getAllBlogPosts } from "@/lib/codaService";
+import { useCampaignPageCopy } from "@/lib/pageCopy";
 import { containerVariants, fadeInUp, itemVariants } from "@/lib/utils";
 import type { BlogPost } from "@/types";
 import {
@@ -50,13 +47,24 @@ type HomeProps = {
 };
 
 export default function Home({ recentPosts }: HomeProps) {
-  const [activeZone, setActiveZone] = useState(lagosZones[0]);
+  const { home } = useCampaignPageCopy();
+  const [activeZoneIndex, setActiveZoneIndex] = useState(0);
+  const zones = home.map.zones;
+  const activeZone = zones[activeZoneIndex] ?? zones[0];
+  const pressUpdates = home.press.updates.map((update, index) => ({
+    ...update,
+    href: campaignUpdates[index]?.href ?? "#",
+  }));
+  const primaryHighlights = primaryResultData.highlights.map((item, index) => ({
+    ...item,
+    label: home.primaryResult.highlights[index] ?? item.label,
+  }));
 
   return (
     <CampaignLayout>
       <CampaignHead
-        title="Kadri Obafemi Hamzat 2027 | APC Lagos Governorship Candidate"
-        description="Official campaign platform for Dr. Kadri Obafemi Hamzat, APC candidate for Lagos Governor 2027. Explore his Greater Lagos vision, achievements, news, and volunteer updates."
+        title={home.head.title}
+        description={home.head.description}
         keywords={[
           "Kadri Obafemi Hamzat 2027",
           "Obafemi Hamzat Lagos Governor",
@@ -100,23 +108,21 @@ export default function Home({ recentPosts }: HomeProps) {
                 className="mb-6 inline-flex items-center gap-3 rounded-card border border-white/14 bg-white/10 px-4 py-3 text-xs font-black uppercase tracking-[0.18em] text-secondary-400 backdrop-blur"
               >
                 <span className="h-2 w-2 rounded-full bg-secondary-500" />
-                APC Governorship Candidate 2027
+                {home.hero.label}
               </motion.div>
               <motion.h1
                 variants={fadeInUp}
                 className="max-w-[10ch] break-words font-heading text-4xl font-black leading-[0.95] text-white [text-shadow:0_12px_44px_rgba(0,0,0,0.34)] xs:text-5xl md:max-w-none md:text-7xl"
               >
-                Experience Meets Vision For A Greater Lagos.
+                {home.hero.title}
               </motion.h1>
               <motion.p
                 variants={fadeInUp}
                 className="mt-7 max-w-2xl text-lg leading-8 text-white/75"
               >
-                KOH 2027 is a people-first movement built on public service,
-                digital transformation, infrastructure delivery, and a Lagos
-                that creates opportunity across every division.
+                {home.hero.description}
               </motion.p>
-              <CTAGroup secondaryLabel="Explore The Manifesto" />
+              <CTAGroup secondaryLabel={home.hero.secondaryCta} />
             </motion.div>
 
             <motion.div
@@ -136,15 +142,15 @@ export default function Home({ recentPosts }: HomeProps) {
           <div className="container mx-auto grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
             <ImagePanel
               image={campaignImages.impact}
-              title="The Leader Lagos Trusts"
-              caption="A movement grounded in public service, not noise."
+              title={home.leader.imageTitle}
+              caption={home.leader.imageCaption}
               className="h-[460px]"
             />
             <div>
               <SectionIntro
-                label="The leader Lagos trusts"
-                title="Not new to service. Built for the next chapter."
-                description="From transforming Lagos' digital infrastructure to serving as Deputy Governor since 2019, Dr. Obafemi Hamzat's leadership has consistently focused on building a smarter, safer, and more prosperous Lagos for everyone."
+                label={home.leader.label}
+                title={home.leader.title}
+                description={home.leader.description}
               />
               <motion.div
                 initial="hidden"
@@ -153,7 +159,7 @@ export default function Home({ recentPosts }: HomeProps) {
                 whileInView="visible"
                 className="mt-8 grid gap-3 sm:grid-cols-2"
               >
-                {["Engineer", "Technocrat", "Reformer", "Bridge-builder"].map(
+                {home.leader.qualities.map(
                   (item) => (
                     <motion.div
                       key={item}
@@ -174,7 +180,7 @@ export default function Home({ recentPosts }: HomeProps) {
                 whileInView="visible"
                 className="mt-8 border-l-4 border-secondary-500 pl-5 font-heading text-3xl font-black leading-tight text-[var(--campaign-green-900)]"
               >
-                A Lagos that works for everyone.
+                {home.leader.quote}
               </motion.blockquote>
             </div>
           </div>
@@ -185,7 +191,7 @@ export default function Home({ recentPosts }: HomeProps) {
           className="stats-gradient-section relative overflow-hidden px-6 py-20"
         >
           <div className="container relative z-10 mx-auto grid gap-4 md:grid-cols-4">
-            {movementStats.map((stat, index) => (
+            {home.stats.map((stat, index) => (
               <AnimatedStatCard key={stat.label} stat={stat} index={index} />
             ))}
           </div>
@@ -195,9 +201,9 @@ export default function Home({ recentPosts }: HomeProps) {
           <div className="container mx-auto">
             <SectionIntro
               align="center"
-              label="For every Lagosian"
-              title="The future of Lagos must include everyone."
-              description="Whether you are building a business, learning a skill, moving through traffic, raising a family, or serving your community, this movement is designed around your future."
+              label={home.audience.label}
+              title={home.audience.title}
+              description={home.audience.description}
             />
             <motion.div
               initial="hidden"
@@ -206,7 +212,7 @@ export default function Home({ recentPosts }: HomeProps) {
               whileInView="visible"
               className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3"
             >
-              {lagosAudience.map((item) => (
+              {home.audience.items.map((item) => (
                 <motion.div
                   key={item}
                   variants={itemVariants}
@@ -246,9 +252,9 @@ export default function Home({ recentPosts }: HomeProps) {
           <div className="container relative z-10 mx-auto grid gap-12 lg:grid-cols-[0.86fr_1.14fr]">
             <div>
               <SectionIntro
-                label="Vision 2027"
-                title="The next chapter of Lagos."
-                description="Presidential in discipline, Lagos in spirit, and technology-forward in execution."
+                label={home.vision.label}
+                title={home.vision.title}
+                description={home.vision.description}
               />
               <motion.div
                 initial="hidden"
@@ -260,7 +266,7 @@ export default function Home({ recentPosts }: HomeProps) {
                   href="/vision-2027"
                   className="button-lift mt-8 inline-flex h-12 items-center gap-2 rounded-card bg-[var(--campaign-green-900)] px-6 text-sm font-black text-white transition-all duration-300 hover:bg-[var(--campaign-green-700)]"
                 >
-                  Read the full manifesto
+                  {home.vision.cta}
                   <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                 </Link>
               </motion.div>
@@ -272,7 +278,7 @@ export default function Home({ recentPosts }: HomeProps) {
               whileInView="visible"
               className="grid gap-4 md:grid-cols-2"
             >
-              {visionPillars.map((pillar, index) => (
+              {home.vision.pillars.map((pillar, index) => (
                 <motion.article
                   key={pillar.title}
                   variants={itemVariants}
@@ -314,15 +320,15 @@ export default function Home({ recentPosts }: HomeProps) {
               <div className="flex items-center gap-3">
                 <MapPin aria-hidden="true" className="h-6 w-6 text-secondary-400" />
                 <p className="font-heading text-2xl font-black text-white">
-                  Live Campaign Map
+                  {home.map.title}
                 </p>
               </div>
               <div className="mt-6 grid gap-3">
-                {lagosZones.map((zone) => (
+                {zones.map((zone, index) => (
                   <button
                     key={zone.name}
                     type="button"
-                    onClick={() => setActiveZone(zone)}
+                    onClick={() => setActiveZoneIndex(index)}
                     className={`rounded-card border px-4 py-4 text-left transition-all duration-300 hover:-translate-y-0.5 ${
                       activeZone.name === zone.name
                         ? "border-secondary-500 bg-secondary-500 text-primary-900"
@@ -347,7 +353,7 @@ export default function Home({ recentPosts }: HomeProps) {
               className="interactive-card rounded-card border border-[rgba(6,59,46,0.12)] bg-white p-8 shadow-brand-card"
             >
               <p className="text-xs font-black uppercase tracking-[0.22em] text-[var(--campaign-green-700)]">
-                Active focus
+                {home.map.activeFocus}
               </p>
               <h3 className="mt-4 font-heading text-4xl font-black leading-tight text-text-primary">
                 {activeZone.name}
@@ -359,13 +365,13 @@ export default function Home({ recentPosts }: HomeProps) {
                 <div className="interactive-card rounded-card bg-bg-secondary p-5">
                   <Radio aria-hidden="true" className="h-5 w-5 text-[var(--campaign-green-700)]" />
                   <p className="mt-4 font-bold text-text-primary">
-                    Community listening tours
+                    {home.map.listeningTours}
                   </p>
                 </div>
                 <div className="interactive-card rounded-card bg-bg-secondary p-5">
                   <CalendarDays aria-hidden="true" className="h-5 w-5 text-[var(--campaign-green-700)]" />
                   <p className="mt-4 font-bold text-text-primary">
-                    Event calendar opening soon
+                    {home.map.eventCalendar}
                   </p>
                 </div>
               </div>
@@ -377,9 +383,9 @@ export default function Home({ recentPosts }: HomeProps) {
           <div className="container mx-auto">
             <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
               <SectionIntro
-                label="News and press"
-                title="Live campaign updates."
-                description="Verified updates, public reporting, and campaign announcements in one place."
+                label={home.press.label}
+                title={home.press.title}
+                description={home.press.description}
               />
               <motion.div
                 initial="hidden"
@@ -388,7 +394,7 @@ export default function Home({ recentPosts }: HomeProps) {
                 whileInView="visible"
                 className="grid gap-4"
               >
-                {campaignUpdates.map((update) => (
+                {pressUpdates.map((update) => (
                   <motion.a
                     key={update.href}
                     href={update.href}
@@ -436,25 +442,25 @@ export default function Home({ recentPosts }: HomeProps) {
                 variants={fadeInUp}
                 className="text-xs font-black uppercase tracking-[0.24em] text-secondary-400"
               >
-                {primaryResult.label}
+                {home.primaryResult.label}
               </motion.p>
               <motion.h2
                 variants={fadeInUp}
                 className="mt-5 max-w-4xl font-heading text-4xl font-black leading-tight text-white md:text-6xl"
               >
-                {primaryResult.title}
+                {home.primaryResult.title}
               </motion.h2>
               <motion.p
                 variants={fadeInUp}
                 className="mt-6 max-w-3xl text-lg leading-8 text-white/76"
               >
-                {primaryResult.description}
+                {home.primaryResult.description}
               </motion.p>
               <motion.div
                 variants={containerVariants}
                 className="mt-7 grid gap-3 sm:grid-cols-3"
               >
-                {primaryResult.highlights.map((item) => (
+                {primaryHighlights.map((item) => (
                   <motion.div
                     key={item.label}
                     variants={itemVariants}
@@ -482,7 +488,7 @@ export default function Home({ recentPosts }: HomeProps) {
                     className="mt-1 h-5 w-5 flex-none text-secondary-400"
                   />
                   <p className="text-sm leading-7 text-white/76">
-                    {primaryResult.resultSummary}
+                    {home.primaryResult.resultSummary}
                   </p>
                 </motion.div>
                 <motion.div
@@ -494,8 +500,7 @@ export default function Home({ recentPosts }: HomeProps) {
                     className="mt-1 h-5 w-5 flex-none text-secondary-400"
                   />
                   <p className="text-sm leading-7 text-white/76">
-                    Declared at {primaryResult.location} on{" "}
-                    {primaryResult.resultDate}.
+                    {home.primaryResult.declared}
                   </p>
                 </motion.div>
               </motion.div>
@@ -509,11 +514,11 @@ export default function Home({ recentPosts }: HomeProps) {
           <div className="container mx-auto">
             <SectionIntro
               align="center"
-              label="Campaign gallery"
-              title="Lagos in motion."
-              description="The imagery is human-centered: public service, infrastructure, youth, communities, and leadership presence."
+              label={home.gallery.label}
+              title={home.gallery.title}
+              description={home.gallery.description}
             />
-            <CampaignGalleryCarousel />
+            <CampaignGalleryCarousel items={home.gallery.items} />
           </div>
         </section>
 

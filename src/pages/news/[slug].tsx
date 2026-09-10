@@ -12,6 +12,7 @@ import {
   generateSpeakableSpecification,
 } from "@/lib/aeo";
 import { getBlogPostBySlug, getRelatedPosts } from "@/lib/codaService";
+import { languageLocaleMap, useI18n } from "@/lib/i18n";
 import { mixedToSafeHtml } from "@/lib/mixedToHtml";
 import {
   SITE_IMAGE,
@@ -55,10 +56,10 @@ const ensureAbsoluteUrl = (url: string) => {
   return `${SITE_URL}/${url}`;
 };
 
-const formatDate = (dateString: string) => {
+const formatDate = (dateString: string, locale: string) => {
   try {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
+    return date.toLocaleDateString(locale, {
       year: "numeric",
       month: "long",
       day: "numeric",
@@ -75,32 +76,34 @@ const BlogDetailPage: React.FC<Props> = ({
   fullUrl,
 }) => {
   const router = useRouter();
+  const { language, t } = useI18n();
+  const locale = languageLocaleMap[language];
 
   if (!post) {
     return (
       <CampaignLayout>
         <Head>
-          <title>News post not found | {campaignSite.shortName}</title>
+          <title>{t("blog.detail.notFoundTitle")} | {campaignSite.shortName}</title>
           <meta
             name="description"
-            content="No news post matches this campaign update URL."
+            content={t("blog.detail.notFoundDescription")}
           />
         </Head>
         <main className="min-h-screen bg-bg-primary px-6 pb-20 pt-25 lg:pt-32">
-          <Title text="News post not found" />
+          <Title text={t("blog.detail.notFoundTitle")} />
           <div className="container mx-auto rounded-card border border-[rgba(6,59,46,0.12)] bg-white p-8 text-center shadow-brand-card">
             <h1 className="font-heading text-4xl font-black text-text-primary">
-              News post not found
+              {t("blog.detail.notFoundTitle")}
             </h1>
             <p className="mx-auto mt-4 max-w-xl text-text-secondary">
-              No campaign update matches this URL.
+              {t("blog.detail.notFoundDescription")}
             </p>
             <button
               type="button"
               onClick={() => router.push("/news")}
               className="button-lift mt-8 cursor-pointer inline-flex h-12 items-center justify-center rounded-card bg-secondary-500 px-6 text-sm font-black text-primary-900 transition-all duration-300 hover:bg-secondary-400"
             >
-              Back to news
+              {t("blog.detail.backToNews")}
             </button>
           </div>
         </main>
@@ -119,7 +122,7 @@ const BlogDetailPage: React.FC<Props> = ({
     post.publishedDate ||
     new Date().toISOString();
   const shareUrl = fullUrl || `${SITE_URL}/news/${post.slug}`;
-  const shareText = `Read this campaign update: ${post.title}`;
+  const shareText = `${t("blog.detail.readCampaignUpdate")} ${post.title}`;
   const seoTitle = post.seo?.title || post.title;
   const seoDescription = post.seo?.description || post.description;
   const seoImage = ensureAbsoluteUrl(post.seo?.ogImage || post.imageUrl);
@@ -208,9 +211,15 @@ const BlogDetailPage: React.FC<Props> = ({
         <meta name="twitter:title" content={seoTitle} />
         <meta name="twitter:description" content={seoDescription} />
         <meta name="twitter:image" content={seoImage} />
-        <meta name="twitter:label1" content="Reading time" />
-        <meta name="twitter:data1" content={`${readingTime} min read`} />
-        <meta name="twitter:label2" content="Written by" />
+        <meta name="twitter:label1" content={t("blog.detail.readingTime")} />
+        <meta
+          name="twitter:data1"
+          content={t("blog.detail.minRead").replace(
+            "{minutes}",
+            String(readingTime),
+          )}
+        />
+        <meta name="twitter:label2" content={t("blog.detail.writtenBy")} />
         <meta name="twitter:data2" content={authorName} />
         <meta name="theme-color" content="#063b2e" />
         <script
@@ -280,18 +289,18 @@ const BlogDetailPage: React.FC<Props> = ({
         )}
       </Head>
 
-      <main className="min-h-screen overflow-hidden bg-bg-primary">
+      <main className="min-h-screen bg-bg-primary">
         <Title text={`Obafemi Hamzat - ${post.title}`} />
 
         <article className="px-6 pb-20 pt-25 lg:pt-32">
           <div className="container mx-auto">
             <nav className="mb-6 flex flex-wrap items-center gap-2 text-sm text-text-muted">
               <Link href="/" className="font-semibold hover:text-primary-900">
-                Home
+                {t("nav.home")}
               </Link>
               <span>/</span>
               <Link href="/news" className="font-semibold hover:text-primary-900">
-                News
+                {t("nav.news")}
               </Link>
               <span>/</span>
               <span className="max-w-full truncate text-text-primary font-medium">
@@ -305,7 +314,7 @@ const BlogDetailPage: React.FC<Props> = ({
               className="mb-8 inline-flex cursor-pointer h-11 items-center gap-2 rounded-card px-4 text-sm font-black text-primary-900 transition-all duration-300"
             >
               <ArrowLeft aria-hidden="true" className="h-4 w-4" />
-              Back to news
+              {t("blog.detail.backToNews")}
             </button>
 
             <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
@@ -352,11 +361,16 @@ const BlogDetailPage: React.FC<Props> = ({
                   </div>
                   <div className="flex items-center gap-2">
                     <Calendar className="h-4 w-4" />
-                    <span>{formatDate(postDate)}</span>
+                    <span>{formatDate(postDate, locale)}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Clock className="h-4 w-4" />
-                    <span>{readingTime} min read</span>
+                    <span>
+                      {t("blog.detail.minRead").replace(
+                        "{minutes}",
+                        String(readingTime),
+                      )}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -373,7 +387,7 @@ const BlogDetailPage: React.FC<Props> = ({
                 <div className="absolute inset-0 bg-gradient-to-t from-primary-900/74 via-transparent to-transparent" />
                 {post.featured && (
                   <div className="absolute left-4 top-4 rounded-card bg-secondary-500 px-4 py-2 text-sm font-black text-primary-900">
-                    Featured Article
+                    {t("blog.detail.featured")}
                   </div>
                 )}
               </div>
@@ -391,71 +405,72 @@ const BlogDetailPage: React.FC<Props> = ({
               />
             </article>
 
-            <aside className="space-y-4">
-              <div className="rounded-card border border-[rgba(6,59,46,0.12)] bg-bg-primary p-5">
-                <div className="flex items-center gap-2 text-sm font-black text-text-primary">
-                  <Share2 className="h-4 w-4 text-[var(--campaign-green-700)]" />
-                  Share this update
-                </div>
-                <div className="mt-4 grid grid-cols-3 gap-2">
-                  <button
-                    type="button"
-                    onClick={() => handleShare("facebook")}
-                    className="button-lift flex h-11 items-center justify-center rounded-card bg-[#1877f2] text-white"
-                    aria-label="Share on Facebook"
-                  >
-                    <Facebook className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleShare("twitter")}
-                    className="button-lift flex h-11 items-center justify-center rounded-card bg-[#0f172a] text-white"
-                    aria-label="Share on X"
-                  >
-                    <Twitter className="h-4 w-4" />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleShare("linkedin")}
-                    className="button-lift flex h-11 items-center justify-center rounded-card bg-[#0a66c2] text-white"
-                    aria-label="Share on LinkedIn"
-                  >
-                    <Linkedin className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-
-              <div className="rounded-card border border-[rgba(6,59,46,0.12)] bg-bg-primary p-5">
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--campaign-green-700)]">
-                  About the author
-                </p>
-                <h2 className="mt-3 font-heading text-2xl font-black text-text-primary">
-                  {authorName}
-                </h2>
-                <p className="mt-3 text-sm leading-7 text-text-secondary">
-                  Campaign updates and public service dispatches from the
-                  Obafemi Hamzat 2027 movement.
-                </p>
-              </div>
-
-              {post.tags && post.tags.length > 0 && (
+            <aside className="news-detail-sidebar">
+              <div className="space-y-4">
                 <div className="rounded-card border border-[rgba(6,59,46,0.12)] bg-bg-primary p-5">
-                  <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--campaign-green-700)]">
-                    Tags
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {post.tags.map((tag) => (
-                      <Link
-                        key={tag}
-                        href={`/news?tag=${tag.toLowerCase().replace(/\s+/g, "-")}`}
-                        className="rounded-card bg-white px-3 py-1 text-sm font-semibold text-text-secondary transition-colors duration-200 hover:text-primary-900"
-                      >
-                        #{tag}
-                      </Link>
-                    ))}
+                  <div className="flex items-center gap-2 text-sm font-black text-text-primary">
+                    <Share2 className="h-4 w-4 text-[var(--campaign-green-700)]" />
+                    {t("blog.detail.share")}
+                  </div>
+                  <div className="mt-4 grid grid-cols-3 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleShare("facebook")}
+                      className="button-lift flex h-11 items-center justify-center rounded-card bg-[#1877f2] text-white"
+                      aria-label={t("blog.detail.shareFacebook")}
+                    >
+                      <Facebook className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleShare("twitter")}
+                      className="button-lift flex h-11 items-center justify-center rounded-card bg-[#0f172a] text-white"
+                      aria-label={t("blog.detail.shareX")}
+                    >
+                      <Twitter className="h-4 w-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleShare("linkedin")}
+                      className="button-lift flex h-11 items-center justify-center rounded-card bg-[#0a66c2] text-white"
+                      aria-label={t("blog.detail.shareLinkedIn")}
+                    >
+                      <Linkedin className="h-4 w-4" />
+                    </button>
                   </div>
                 </div>
-              )}
+
+                <div className="rounded-card border border-[rgba(6,59,46,0.12)] bg-bg-primary p-5">
+                  <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--campaign-green-700)]">
+                    {t("blog.detail.aboutAuthor")}
+                  </p>
+                  <h2 className="mt-3 font-heading text-2xl font-black text-text-primary">
+                    {authorName}
+                  </h2>
+                  <p className="mt-3 text-sm leading-7 text-text-secondary">
+                    {t("blog.detail.authorDescription")}
+                  </p>
+                </div>
+
+                {post.tags && post.tags.length > 0 && (
+                  <div className="rounded-card border border-[rgba(6,59,46,0.12)] bg-bg-primary p-5">
+                    <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--campaign-green-700)]">
+                      {t("blog.tags")}
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-2">
+                      {post.tags.map((tag) => (
+                        <Link
+                          key={tag}
+                          href={`/news?tag=${tag.toLowerCase().replace(/\s+/g, "-")}`}
+                          className="rounded-card bg-white px-3 py-1 text-sm font-semibold text-text-secondary transition-colors duration-200 hover:text-primary-900"
+                        >
+                          #{tag}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </aside>
           </div>
         </section>
@@ -471,10 +486,10 @@ const BlogDetailPage: React.FC<Props> = ({
             <div className="container mx-auto">
               <div className="max-w-3xl">
                 <p className="text-xs font-black uppercase tracking-[0.22em] text-[var(--campaign-green-700)]">
-                  Keep reading
+                  {t("blog.detail.keepReading")}
                 </p>
                 <h2 className="mt-4 font-heading text-3xl font-black leading-tight text-[var(--campaign-green-950)] md:text-5xl">
-                  Related news
+                  {t("blog.detail.relatedNews")}
                 </h2>
               </div>
               <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">

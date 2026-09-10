@@ -1,5 +1,6 @@
 import type { CampaignGalleryItem } from "@/data/campaignContent";
 import { galleryItems, heroSlides, primaryResult } from "@/data/campaignContent";
+import { useCampaignPageCopy } from "@/lib/pageCopy";
 import { ArrowLeft, ArrowRight, FileVideo, Mic2, Play } from "lucide-react";
 import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
@@ -142,12 +143,23 @@ const primaryResultFeatureCards = [
 
 type PrimaryResultMediaSlide = (typeof primaryResult.mediaSlides)[number];
 type PrimaryResultFeatureCard = (typeof primaryResultFeatureCards)[number];
+type GalleryCopyItem = {
+  title: string;
+  caption: string;
+};
 
 export function CampaignHeroCarousel() {
+  const { home } = useCampaignPageCopy();
+  const slides = heroSlides.map((slide, index) => ({
+    ...slide,
+    title: home.heroSlides[index]?.title ?? slide.title,
+    caption: home.heroSlides[index]?.caption ?? slide.caption,
+  }));
+
   return (
     <div className="koh-hero-carousel relative min-w-0 overflow-hidden rounded-card border border-white/12 bg-white/8 shadow-[0_35px_100px_rgba(0,0,0,0.36)] backdrop-blur">
       <Slider {...heroCarouselSettings}>
-        {heroSlides.map((slide, index) => (
+        {slides.map((slide, index) => (
           <article key={slide.title} className="relative h-[520px] md:h-[540px]">
             <Image
               src={slide.image}
@@ -246,11 +258,22 @@ function PrimaryResultFeatureCard({ item }: { item: PrimaryResultFeatureCard }) 
 }
 
 export function PrimaryResultMediaCarousel() {
+  const { home } = useCampaignPageCopy();
+  const primaryCopy = home.primaryResult;
   const [activeSlide, setActiveSlide] = useState(0);
   const carouselRef = useRef<HTMLDivElement>(null);
-  const activeMedia =
-    primaryResult.mediaSlides[activeSlide] ?? primaryResult.mediaSlides[0];
-  const slideCount = primaryResult.mediaSlides.length;
+  const mediaSlides = primaryResult.mediaSlides.map((slide, index) => ({
+    ...slide,
+    title: primaryCopy.mediaSlides[index]?.title ?? slide.title,
+    caption: primaryCopy.mediaSlides[index]?.caption ?? slide.caption,
+  }));
+  const featureCards = primaryResultFeatureCards.map((item, index) => ({
+    ...item,
+    title: primaryCopy.featureCards[index]?.title ?? item.title,
+    copy: primaryCopy.featureCards[index]?.copy ?? item.copy,
+  }));
+  const activeMedia = mediaSlides[activeSlide] ?? mediaSlides[0];
+  const slideCount = mediaSlides.length;
   const mediaSettings = useMemo<Settings>(
     () => ({
       ...primaryResultMediaSettings,
@@ -272,7 +295,7 @@ export function PrimaryResultMediaCarousel() {
     >
       <div className="koh-primary-media-carousel relative min-w-0 overflow-hidden rounded-card">
         <Slider {...mediaSettings}>
-          {primaryResult.mediaSlides.map((slide, index) => (
+          {mediaSlides.map((slide, index) => (
             <PrimaryMediaSlide
               key={slide.src}
               slide={slide}
@@ -285,8 +308,8 @@ export function PrimaryResultMediaCarousel() {
         <div>
           <p className="text-xs font-black uppercase tracking-[0.18em] text-secondary-400">
             {activeMedia.type === "video"
-              ? "Campaign film"
-              : "Primary photo archive"}
+              ? primaryCopy.mediaTypeVideo
+              : primaryCopy.mediaTypePhoto}
           </p>
           <p className="mt-2 font-heading text-xl font-black leading-tight text-white">
             {activeMedia.title}
@@ -301,7 +324,7 @@ export function PrimaryResultMediaCarousel() {
         </p>
       </div>
       <div className="grid gap-3 pt-3 sm:grid-cols-3">
-        {primaryResultFeatureCards.map((item) => (
+        {featureCards.map((item) => (
           <PrimaryResultFeatureCard key={item.title} item={item} />
         ))}
       </div>
@@ -309,11 +332,23 @@ export function PrimaryResultMediaCarousel() {
   );
 }
 
-export function CampaignGalleryCarousel() {
+export function CampaignGalleryCarousel({
+  items,
+}: {
+  items?: readonly GalleryCopyItem[];
+}) {
+  const { home } = useCampaignPageCopy();
+  const copyItems = items ?? home.gallery.items;
+  const slides = galleryItems.map((item, index) => ({
+    ...item,
+    title: copyItems[index]?.title ?? item.title,
+    caption: copyItems[index]?.caption ?? item.caption,
+  }));
+
   return (
     <div className="koh-gallery-carousel relative -mx-2 mt-10 min-w-0">
       <Slider {...galleryCarouselSettings}>
-        {galleryItems.map((item) => (
+        {slides.map((item) => (
           <GallerySlide key={item.title} item={item} />
         ))}
       </Slider>
