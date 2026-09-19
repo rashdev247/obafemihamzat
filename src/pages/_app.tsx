@@ -15,6 +15,7 @@ import { PreferencesProvider, usePreferences } from "../context/PreferencesConte
 import Script from "next/script";
 import { initPerformanceMonitoring, preloadCriticalResources } from "../lib/performance";
 import TawkToWidget from "../scripts/TawkTo";
+import ProductionBrowserLock from "../components/ProductionBrowserLock";
 
 function unregisterDevelopmentServiceWorkers() {
   if (
@@ -124,6 +125,7 @@ function AppRuntime({
 
   return (
     <>
+      <ProductionBrowserLock />
       {/* <CookieConsentBanner /> */}
       {/* Google Analytics (gtag.js) - Deferred for better performance */}
       {analyticsEnabled && gaId && (

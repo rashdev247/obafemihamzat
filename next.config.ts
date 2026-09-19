@@ -36,10 +36,15 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: true,
   output: "standalone",
+  productionBrowserSourceMaps: false,
   
   // Performance optimizations
   compress: true,
   poweredByHeader: false,
+  compiler: {
+    removeConsole:
+      process.env.NODE_ENV === "production" ? { exclude: ["error"] } : false,
+  },
   
   // Image optimization
   images: {
@@ -106,6 +111,7 @@ const nextConfig: NextConfig = {
   webpack: (config, { dev, isServer }) => {
     // Production optimizations
     if (!dev && !isServer) {
+      config.devtool = false;
       config.optimization = {
         ...config.optimization,
         splitChunks: {
