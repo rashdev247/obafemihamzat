@@ -12,7 +12,7 @@ The site presents the "For A Greater Lagos" movement through biography content, 
 
 ## Project Links
 
-- Production: https://drobafemihamzat.vercel.app
+- Production: https://www.kadriobafemihamzat.com
 - Official website: https://www.obafemihamzat.com/
 
 ## Tech Stack

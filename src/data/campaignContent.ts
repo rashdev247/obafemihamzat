@@ -1,4 +1,5 @@
 import { getBlobImageUrl } from "@/lib/blobImages";
+import { SITE_URL } from "@/lib/seo";
 
 export const campaignSite = {
   name: "Dr. Kadri Obafemi Hamzat",
@@ -6,7 +7,7 @@ export const campaignSite = {
   title: "Obafemi Hamzat 2027 | For A Greater Lagos",
   description:
     "A modern Lagos-focused campaign platform for Dr. Kadri Obafemi Hamzat's 2027 governorship movement: competence, stability, innovation, and inclusion.",
-  url: "https://drobafemihamzat.vercel.app",
+  url: SITE_URL,
   officialUrl: "https://www.obafemihamzat.com/",
   tagline: "For A Greater Lagos",
 };

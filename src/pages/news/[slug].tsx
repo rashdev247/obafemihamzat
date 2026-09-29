@@ -16,6 +16,7 @@ import { languageLocaleMap, useI18n } from "@/lib/i18n";
 import { mixedToSafeHtml } from "@/lib/mixedToHtml";
 import {
   SITE_IMAGE,
+  SITE_IMAGE_ALT,
   SITE_LANGUAGE,
   SITE_LOCALE,
   SITE_LOGO,
@@ -211,6 +212,10 @@ const BlogDetailPage: React.FC<Props> = ({
         <meta name="twitter:title" content={seoTitle} />
         <meta name="twitter:description" content={seoDescription} />
         <meta name="twitter:image" content={seoImage} />
+        <meta
+          name="twitter:image:alt"
+          content={seoImage === SITE_IMAGE ? SITE_IMAGE_ALT : post.title}
+        />
         <meta name="twitter:label1" content={t("blog.detail.readingTime")} />
         <meta
           name="twitter:data1"
@@ -522,7 +527,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   const protocol = context.req.headers["x-forwarded-proto"] || "https";
-  const host = context.req.headers.host || "drobafemihamzat.vercel.app";
+  const host = context.req.headers.host || new URL(SITE_URL).host;
   const fullUrl = `${protocol}://${host}/news/${slug}`;
 
   let post: BlogPost | null = null;

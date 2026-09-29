@@ -6,7 +6,7 @@ Allow: /llms-full.txt
 Disallow: /api/
 
 # Host
-Host: drobafemihamzat.vercel.app
+Host: www.kadriobafemihamzat.com
 
 # Sitemaps
-Sitemap: https://drobafemihamzat.vercel.app/sitemap.xml
+Sitemap: https://www.kadriobafemihamzat.com/sitemap.xml

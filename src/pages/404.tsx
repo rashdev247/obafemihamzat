@@ -1,6 +1,10 @@
 import { getBlobImageUrl } from "@/lib/blobImages";
 import {
   SITE_IMAGE,
+  SITE_IMAGE_ALT,
+  SITE_IMAGE_HEIGHT,
+  SITE_IMAGE_TYPE,
+  SITE_IMAGE_WIDTH,
   SITE_LOCALE,
   SITE_NAME,
   SITE_URL,
@@ -63,12 +67,17 @@ export default function Custom404() {
         <meta property="og:type" content="website" />
         <meta property="og:url" content={`${SITE_URL}/404`} />
         <meta property="og:image" content={SITE_IMAGE} />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
+        <meta property="og:image:secure_url" content={SITE_IMAGE} />
+        <meta property="og:image:type" content={SITE_IMAGE_TYPE} />
+        <meta property="og:image:width" content={String(SITE_IMAGE_WIDTH)} />
+        <meta property="og:image:height" content={String(SITE_IMAGE_HEIGHT)} />
+        <meta property="og:image:alt" content={SITE_IMAGE_ALT} />
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={`${SITE_URL}/404`} />
         <meta name="twitter:title" content={pageTitle} />
         <meta name="twitter:description" content={pageDescription} />
         <meta name="twitter:image" content={SITE_IMAGE} />
+        <meta name="twitter:image:alt" content={SITE_IMAGE_ALT} />
         <link rel="canonical" href={`${SITE_URL}/404`} />
       </Head>
 

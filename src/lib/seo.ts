@@ -13,13 +13,22 @@ import {
 } from "@/lib/aeo";
 import type { BlogPost } from "@/types";
 
-export const SITE_URL = "https://drobafemihamzat.vercel.app";
+const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
+
+export const SITE_URL = (
+  configuredSiteUrl || "https://www.kadriobafemihamzat.com"
+).replace(/\/+$/, "");
 export const SITE_NAME = "Dr. Kadri Obafemi Hamzat";
 export const SITE_TITLE =
   "Kadri Obafemi Hamzat 2027 | APC Lagos Governorship Candidate";
 export const SITE_DESCRIPTION =
   "Official campaign platform for Dr. Kadri Obafemi Hamzat, APC candidate for Lagos Governor 2027, with vision, achievements, news, and volunteer updates.";
-export const SITE_IMAGE = `${SITE_URL}/og-image.png`;
+export const SITE_IMAGE = `${SITE_URL}/social-preview-v3.png`;
+export const SITE_IMAGE_TYPE = "image/png";
+export const SITE_IMAGE_WIDTH = 1200;
+export const SITE_IMAGE_HEIGHT = 630;
+export const SITE_IMAGE_ALT =
+  "Dr. Kadri Obafemi Hamzat — For A Greater Lagos, Lagos 2027";
 export const SITE_LOGO = `${SITE_URL}/logo.webp`;
 export const SITE_LANGUAGE = "en-NG";
 export const SITE_LOCALE = "en_NG";

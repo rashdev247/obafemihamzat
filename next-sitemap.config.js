@@ -9,6 +9,8 @@ const campaignRoutes = [
 
 const CODA_API_BASE = process.env.CODA_API_BASE || 'https://coda.io/apis/v1';
 const CODA_TABLE_NAME = process.env.CODA_TABLE_NAME || 'Blog Posts';
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kadriobafemihamzat.com')
+  .replace(/\/+$/, '');
 
 async function resolveBlogTableId() {
   if (process.env.CODA_TABLE_ID) {
@@ -93,7 +95,7 @@ async function fetchNewsSitemapEntries() {
 
 /** @type {import('next-sitemap').IConfig} */
 module.exports = {
-  siteUrl: 'https://drobafemihamzat.vercel.app',
+  siteUrl: SITE_URL,
   generateRobotsTxt: true,
   generateIndexSitemap: true,
   sitemapSize: 5000,
@@ -135,8 +137,8 @@ module.exports = {
     ],
     transformRobotsTxt: async (_, robotsTxt) =>
       robotsTxt.replace(
-        'Host: https://drobafemihamzat.vercel.app',
-        'Host: drobafemihamzat.vercel.app'
+        `Host: ${SITE_URL}`,
+        `Host: ${new URL(SITE_URL).host}`
       ),
   },
 }

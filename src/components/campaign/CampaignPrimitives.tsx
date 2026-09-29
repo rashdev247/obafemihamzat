@@ -4,10 +4,15 @@ import { useI18n } from "@/lib/i18n";
 import { containerVariants, fadeInUp, itemVariants } from "@/lib/utils";
 import {
   SITE_IMAGE,
+  SITE_IMAGE_ALT,
+  SITE_IMAGE_HEIGHT,
+  SITE_IMAGE_TYPE,
+  SITE_IMAGE_WIDTH,
   SITE_KEYWORDS,
   SITE_LANGUAGE,
   SITE_LOCALE,
   SITE_NAME,
+  SITE_URL,
   getCampaignKeywords,
   generateCampaignPageSchema,
   normalizeKeywords,
@@ -40,12 +45,13 @@ export function CampaignHead({
 }: CampaignHeadProps) {
   const pageTitle = title.includes("|") ? title : `${title} | ${campaignSite.shortName}`;
   const url = toAbsoluteUrl(path || "/");
+  const socialImage = toAbsoluteUrl(image);
   const mergedKeywords = getCampaignKeywords(keywords);
   const schema = generateCampaignPageSchema({
     title: pageTitle,
     description,
     url,
-    image,
+    image: socialImage,
     keywords: mergedKeywords,
     answerEngine,
     breadcrumbs:
@@ -71,23 +77,20 @@ export function CampaignHead({
       <meta property="og:description" content={description} />
       <meta property="og:type" content="website" />
       <meta property="og:url" content={url} />
-      <meta property="og:image" content={image} />
-      <meta property="og:image:secure_url" content={image} />
-      <meta property="og:image:type" content="image/png" />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
-      <meta
-        property="og:image:alt"
-        content="Dr. Kadri Obafemi Hamzat campaign preview for Lagos 2027"
-      />
+      <meta property="og:image" content={socialImage} />
+      <meta property="og:image:url" content={socialImage} />
+      <meta property="og:image:secure_url" content={socialImage} />
+      <meta property="og:image:type" content={SITE_IMAGE_TYPE} />
+      <meta property="og:image:width" content={String(SITE_IMAGE_WIDTH)} />
+      <meta property="og:image:height" content={String(SITE_IMAGE_HEIGHT)} />
+      <meta property="og:image:alt" content={SITE_IMAGE_ALT} />
       <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:url" content={url} />
+      <meta name="twitter:domain" content={new URL(SITE_URL).hostname} />
       <meta name="twitter:title" content={pageTitle} />
       <meta name="twitter:description" content={description} />
-      <meta name="twitter:image" content={image} />
-      <meta
-        name="twitter:image:alt"
-        content="Dr. Kadri Obafemi Hamzat campaign preview for Lagos 2027"
-      />
+      <meta name="twitter:image" content={socialImage} />
+      <meta name="twitter:image:alt" content={SITE_IMAGE_ALT} />
       <link rel="canonical" href={url} />
       <link rel="alternate" hrefLang={SITE_LANGUAGE} href={url} />
       <link rel="alternate" hrefLang="x-default" href={url} />
