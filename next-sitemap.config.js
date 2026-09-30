@@ -9,7 +9,7 @@ const campaignRoutes = [
 
 const CODA_API_BASE = process.env.CODA_API_BASE || 'https://coda.io/apis/v1';
 const CODA_TABLE_NAME = process.env.CODA_TABLE_NAME || 'Blog Posts';
-const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.kadriobafemihamzat.com')
+const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://obafemihamzat.vercel.app')
   .replace(/\/+$/, '');
 
 async function resolveBlogTableId() {

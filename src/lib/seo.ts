@@ -16,7 +16,7 @@ import type { BlogPost } from "@/types";
 const configuredSiteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim();
 
 export const SITE_URL = (
-  configuredSiteUrl || "https://www.kadriobafemihamzat.com"
+  configuredSiteUrl || "https://obafemihamzat.vercel.app"
 ).replace(/\/+$/, "");
 export const SITE_NAME = "Dr. Kadri Obafemi Hamzat";
 export const SITE_TITLE =
